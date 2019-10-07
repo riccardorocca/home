@@ -1,0 +1,91 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Sketchfab Viewer API example</title>
+  
+  <!-- Insert this script -->
+  <script type="text/javascript" src="https://static.sketchfab.com/api/sketchfab-viewer-1.5.1.js"></script>
+</head>
+
+<body>
+  <iframe style="position:fixed; width:100%; height:100%; border:0" src="" id="api-frame" sandbox="allow-scripts allow-same-origin allow-popups allow-forms" allow="autoplay; fullscreen; vr" allowvr allowfullscreen mozallowfullscreen="true" webkitallowfullscreen="true"></iframe>
+
+  <!-- Your new script -->
+  <script>
+    var model = 'b44279b6738246439818fa8a00b0f79a',
+    version = '1.5.1',
+    iframe = document.getElementById( 'api-frame' ),
+    client = new Sketchfab( version, iframe ),
+            
+    error = function () {
+      console.error( 'Sketchfab API Error!' );
+    },
+            
+    success = function( api ) {
+
+      api.start();
+
+      // Wait for viewer to be ready
+      api.addEventListener( 'viewerready', function() {
+
+        //Get the object nodes
+        api.getNodeMap( function ( err, nodes ) {
+          if ( !err ) {
+            console.log( 'got nodes:', nodes );
+            for ( var prop in nodes ) {
+              if ( nodes.hasOwnProperty( prop ) ) {
+                // Check nodes against object names
+                if ( nodes[prop].name === "Ball" && nodes[prop].type === "MatrixTransform") {
+                  var node_Ball = nodes[prop].instanceID;
+                }
+              }
+            }
+
+            if ( node_Ball ) {
+              api.addEventListener( 'click', function(info) {
+                if (info.instanceID) {
+                  x_Ball = info.position3D[0];
+                  y_Ball = info.position3D[1];
+                  z_Ball = info.position3D[2];
+                  api.translate(node_Ball, [x_Ball, z_Ball, -y_Ball]);
+                }
+              },
+              { pick: 'slow' });
+            }
+          }
+        });
+
+      });
+    };
+
+    // Load the model
+    console.log( 'loading a model' );
+    client.init( model, {
+      success: success,
+      error: error,
+      ui_infos: 0,
+      ui_controls: 0,
+      ui_stop: 1,
+      watermark: 1,
+      supersample: 0
+    });
+
+  </script>
+
+  <!-- Lastly, some CSS -->
+  <style type="text/css">
+
+    body {
+      margin: 0;
+    }
+
+    iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+    }
+
+  </style>
+</body>
