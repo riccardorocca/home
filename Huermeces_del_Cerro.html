@@ -1,0 +1,295 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Sketchfab Viewer API example</title>
+  
+  <!-- Insert this script -->
+  <script type="text/javascript" src="https://static.sketchfab.com/api/sketchfab-viewer-1.5.1.js"></script>
+</head>
+
+<body>
+
+  <iframe
+    src=""
+    id="api-frame"
+    sandbox="allow-scripts allow-same-origin allow-popups allow-forms"
+    allow="autoplay; fullscreen; vr"
+    allowvr allowfullscreen mozallowfullscreen="true"
+    webkitallowfullscreen="true">
+  </iframe>
+
+  <aside>
+    <button id="keyA">Cross-section</button>
+    <button id="keyB">Interpretation</button>
+    <button id="keyC">Topography</button>
+    <button id="keyD">Measure:</button>
+    <textarea id="textD" rows="5">Distance:&#13;&#10;D. horiz:&#13;&#10;D. vert.:&#13;&#10;Dip     :&#13;&#10;Azimuth :</textarea>
+  </aside>
+
+  <!-- Your new script -->
+  <script>
+    var model = 'f4c8a1cd3e6d48b5a929f86188dee0a7',
+
+    // Buttons
+    buttonA = document.getElementById( 'keyA' ),
+    buttonA_case = "SHOW",
+    buttonB = document.getElementById( 'keyB' ),
+    buttonB_case = "SHOW",
+    buttonC = document.getElementById( 'keyC' ),
+    buttonC_case = "SHOW",
+    buttonD = document.getElementById( 'keyD' ),
+    buttonD_case = "SHOW",
+    textD = document.getElementById( 'textD' ),
+            
+    version = '1.5.1',
+    iframe = document.getElementById( 'api-frame' ),
+    client = new Sketchfab( version, iframe ),
+
+    Ball_scale = 500,
+    Ball_switch = "Ball1",
+            
+    error = function () {
+      console.error( 'Sketchfab API Error!' );
+    },
+            
+    success = function( api ) {
+
+      var x1 = 0;
+      var y1 = 0;
+      var z1 = 0;
+
+      var x2 = 0;
+      var y2 = 0;
+      var z2 = 0;
+
+      textDdata = "Distance:\nD. horiz:\nD. vert.:\nDip     :\nAzimuth :";
+      textDempty = textDdata;
+
+      api.start();
+
+      // Wait for viewer to be ready
+      api.addEventListener( 'viewerready', function() {
+
+        //Get the object nodes
+        api.getNodeMap( function ( err, nodes ) {
+          if ( !err ) {
+            console.log( 'got nodes:', nodes );
+            for ( var prop in nodes ) {
+              if ( nodes.hasOwnProperty( prop ) ) {
+                // Check nodes against object names
+                if ( nodes[ prop ].name === "Geological_section" ) {
+                  var node_Section = nodes[prop].instanceID;
+                }
+                else if ( nodes[ prop ].name === "Fault" ) {
+                  var node1 = nodes[prop].instanceID;
+                }
+                else if ( nodes[ prop ].name === "Horizon1" ) {
+                  var node2 = nodes[prop].instanceID;
+                }
+                else if ( nodes[ prop ].name === "Horizon2" ) {
+                  var node3 = nodes[prop].instanceID;
+                }
+                else if ( nodes[prop].name === "Ball1" && nodes[prop].type === "MatrixTransform") {
+                  var node_Ball1 = nodes[prop].instanceID;
+                  api.setMatrix(node_Ball1, [Ball_scale,0,0,0,0,Ball_scale,0,0,0,0,Ball_scale,0,0,0,0,1]);
+                }
+                else if ( nodes[prop].name === "Ball2" && nodes[prop].type === "MatrixTransform") {
+                  var node_Ball2 = nodes[prop].instanceID;
+                  api.setMatrix(node_Ball2, [Ball_scale,0,0,0,0,Ball_scale,0,0,0,0,Ball_scale,0,0,0,0,1]);
+                }
+              }
+            }
+
+            if ( node_Section ) {
+              // Add button event
+              buttonA.addEventListener( 'click', function() {
+                switch(buttonA_case) {
+                  case "SHOW":
+                    api.hide( node_Section );
+                    buttonA.style.backgroundColor = "#888888";
+                    buttonA_case = "HIDE";
+                    break;
+                  case "HIDE":
+                    api.show( node_Section );
+                    buttonA.style.backgroundColor = "#1caad9";
+                    buttonA_case = "SHOW";
+                    break;
+                }
+              });
+            }
+
+            if ( node1 && node2 && node3 ) {
+              // Add button event
+              buttonB.addEventListener( 'click', function() {
+                switch(buttonB_case) {
+                  case "SHOW":
+                    api.hide( node1 );
+                    api.hide( node2 );
+                    api.hide( node3 );
+                    buttonB.style.backgroundColor = "#888888";
+                    buttonB_case = "HIDE";
+                    break;
+                  case "HIDE":
+                    api.show( node1 );
+                    api.show( node2 );
+                    api.show( node3 );
+                    buttonB.style.backgroundColor = "#1caad9";
+                    buttonB_case = "SHOW";
+                    break;
+                }
+              });
+            }
+
+            if ( node_Ball1 && node_Ball2) {
+              buttonD.addEventListener( 'click', function() {
+                switch(buttonD_case) {
+                  case "SHOW":
+                    api.hide( node_Ball1 );
+                    api.hide( node_Ball2 );
+                    textD.innerHTML = textDempty;
+                    buttonD.style.backgroundColor = "#888888";
+                    buttonD_case = "HIDE";
+                    break;
+                  case "HIDE":
+                    api.show( node_Ball1 );
+                    api.show( node_Ball2 );
+                    textD.innerHTML = textDdata;
+                    buttonD.style.backgroundColor = "#1caad9";
+                    buttonD_case = "SHOW";
+                    break;
+                }
+              });
+
+              api.addEventListener( 'click', function(info) {
+                if (info.instanceID && buttonD_case=="SHOW") {
+                  switch (Ball_switch) {
+                    case "Ball1":
+                      x1 = info.position3D[0];
+                      y1 = info.position3D[1];
+                      z1 = info.position3D[2];
+                      api.translate(node_Ball1, [x1, y1, z1]);
+                      Ball_switch = "Ball2";
+                      break;
+                    case "Ball2":
+                      x2 = info.position3D[0];
+                      y2 = info.position3D[1];
+                      z2 = info.position3D[2];
+                      api.translate(node_Ball2, [x2, y2, z2]);
+                      Ball_switch = "Ball1";
+                      break;
+                  }
+                  D = Math.sqrt(Math.pow((x1-x2),2) + Math.pow((y1-y2),2) + Math.pow((z1-z2),2))/100;
+                  Dh = Math.sqrt(Math.pow((x1-x2),2) + Math.pow((y1-y2),2))/100;
+                  Dv = Math.abs(z2-z1)/100;
+                  Dip = Math.atan((z2-z1)/(100*Dh))*180/Math.PI;
+                  Azi = Math.atan2((x2-x1),(y2-y1))*180/Math.PI;
+                  if (Azi<0) {Azi += 360}
+                  textDdata = "Distance: " + D.toFixed(1) + " m\n" +
+                              "D. horiz: " + Dh.toFixed(1) + " m\n" +
+                              "D. vert.: " + Dv.toFixed(1) + " m\n" +
+                              "Dip     : " + Dip.toFixed(0) + "º\n" +
+                              "Azimuth : " + Azi.toFixed(0) + "º";
+                  textD.innerHTML = textDdata;
+                }
+              },
+              { pick: 'slow' });
+
+            }
+          }
+        });
+
+        // Get the materials
+        api.getMaterialList(function(err,materials){
+          if ( !err ) {
+            for (var i=0; i<materials.length; i++){
+              if(materials[i].name == "Topography_texture"){
+                var material = materials[i];
+              };
+            };
+
+            if ( material ) {
+              // Add button event
+              buttonC.addEventListener( 'click', function() {
+                switch(buttonC_case) {
+                  case "SHOW":
+                    material.channels.DiffusePBR.factor = 0;
+                    material.channels.SpecularPBR.factor = 0.7;
+                    api.setMaterial(material, function() {});
+                    buttonC.style.backgroundColor = "#888888";
+                    buttonC_case = "HIDE";
+                    break;
+                  case "HIDE":
+                    material.channels.DiffusePBR.factor = 1;
+                    material.channels.SpecularPBR.factor = 0;
+                    api.setMaterial(material, function() {});
+                    buttonC.style.backgroundColor = "#1caad9";
+                    buttonC_case = "SHOW";
+                    break;
+                }
+              });
+            }
+          }
+        });
+
+      });
+    };
+
+    // Load the model
+    console.log( 'loading a model' );
+    client.init( model, {
+      success: success,
+      error: error,
+      ui_infos: 0,
+      ui_controls: 0,
+      ui_stop: 1,
+      watermark: 1,
+      supersample: 0
+    });
+
+  </script>
+
+  <!-- Lastly, some CSS -->
+  <style type="text/css">
+    body {
+      margin: 0;
+    }
+
+    iframe {
+      position: fixed;
+      width: 90%;
+      height: 100%;
+      border: none;
+    }
+
+    aside {
+      float: right;
+      width: 10%;
+      height: 100%;
+      border: none;
+      background: #FFFFFF;
+    }
+
+    button {
+      width: 100%;
+      height: 25px;
+      line-height: 21px;
+      /*text-transform: capitalize;*/
+      color: white;
+      border: 2;
+      border-radius: 5px;
+      text-align: center;
+      vertical-align: middle;
+      float: left;
+      margin-right: 5px;
+      background: #1caad9;
+    }
+
+    textarea {
+      height: auto;
+    }
+
+  </style>
+</body>
+</html>
