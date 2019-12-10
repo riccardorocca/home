@@ -1,0 +1,198 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Sketchfab Viewer API example</title>
+  
+  <!-- Insert this script -->
+  <script type="text/javascript" src="https://static.sketchfab.com/api/sketchfab-viewer-1.5.1.js"></script>
+</head>
+
+<body>
+  <iframe style="position:fixed; width:100%; height:100%; border:0" src="" id="api-frame" sandbox="allow-scripts allow-same-origin allow-popups allow-forms" allow="autoplay; fullscreen; vr" allowvr allowfullscreen mozallowfullscreen="true" webkitallowfullscreen="true"></iframe>
+
+  <div class="buttons">
+    <button id="keyA">Interpretation SHOW</button>
+    <button id="keyB">Topography TEXTURE</button>
+  </div>
+
+  <!-- Your new script -->
+  <script>
+    var model = 'a9603e44e2554845a9997208536cd913',
+
+    // Buttons
+    buttonA = document.getElementById( 'keyA' ),
+    buttonB = document.getElementById( 'keyB' ),
+            
+    version = '1.5.1',
+    iframe = document.getElementById( 'api-frame' ),
+    client = new Sketchfab( version, iframe ),
+            
+    error = function () {
+      console.error( 'Sketchfab API Error!' );
+    },
+            
+    success = function( api ) {
+      api.start();
+      // Wait for viewer to be ready
+      api.addEventListener( 'viewerready', function() {
+
+        // Get the object nodes
+        api.getNodeMap( function ( err, nodes ) {
+          if ( !err ) {
+            console.log( 'got nodes:', nodes );
+            for ( var prop in nodes ) {
+              if ( nodes.hasOwnProperty( prop ) ) {
+                // Check nodes against object names
+                if ( nodes[ prop ].name === "SB_Curve" ) {
+                  var node_SB = nodes[prop].instanceID;
+                }
+                if ( nodes[ prop ].name === "MFS1_Curve" ) {
+                  var node_MFS1 = nodes[prop].instanceID;
+                }
+                if ( nodes[ prop ].name === "MFS2_Curve" ) {
+                  var node_MFS2 = nodes[prop].instanceID;
+                }
+                if ( nodes[ prop ].name === "Text1" ) {
+                  var node_Text1 = nodes[prop].instanceID;
+                }
+                if ( nodes[ prop ].name === "Text2" ) {
+                  var node_Text2 = nodes[prop].instanceID;
+                }
+                if ( nodes[ prop ].name === "Text3" ) {
+                  var node_Text3 = nodes[prop].instanceID;
+                }
+              }
+            }
+
+            if ( node_SB && node_MFS1 && node_MFS2 && node_Text1 && node_Text2 && node_Text3 ) {
+              // Add button event
+              buttonA.addEventListener( 'click', function() {
+                switch(buttonA.innerHTML) {
+                  case "Interpretation SHOW":
+                    api.hide( node_SB );
+                    api.hide( node_MFS1 );
+                    api.hide( node_MFS2 );
+                    api.hide( node_Text1 );
+                    api.hide( node_Text2 );
+                    api.hide( node_Text3 );
+                    buttonA.innerHTML = "Interpretation HIDE";
+                    buttonA.style.backgroundColor = "#888888";
+                    break;
+                  case "Interpretation HIDE":
+                    api.show( node_SB );
+                    api.show( node_MFS1 );
+                    api.show( node_MFS2 );
+                    api.show( node_Text1 );
+                    api.show( node_Text2 );
+                    api.show( node_Text3 );
+                    buttonA.innerHTML = "Interpretation SHOW";
+                    buttonA.style.backgroundColor = "#1caad9";
+                    break;
+                };
+              });
+            };
+          };
+        });
+
+        // Get the materials
+        api.getMaterialList(function(err,materials){
+          if ( !err ) {
+            for (var i=0; i<materials.length; i++){
+              if(materials[i].name == "Topography__0"){
+                var material_Topography = materials[i];
+              };
+            };
+
+            if ( material_Topography ) {
+              // Add button event
+              buttonB.addEventListener( 'click', function() {
+                switch(buttonB.innerHTML) {
+                  case "Topography TEXTURE":
+                    material_Topography.channels.DiffusePBR.factor = 0;
+                    material_Topography.channels.SpecularPBR.factor = 0.7;
+                    api.setMaterial(material_Topography, function() {});
+                    buttonB.innerHTML = "Topography SHADING";
+                    buttonB.style.backgroundColor = "#888888";
+                    break;
+                  case "Topography SHADING":
+                    material_Topography.channels.DiffusePBR.factor = 1;
+                    material_Topography.channels.SpecularPBR.factor = 0;
+                    api.setMaterial(material_Topography, function() {});
+                    buttonB.innerHTML = "Topography TEXTURE";
+                    buttonB.style.backgroundColor = "#1caad9";
+                    break;
+                  }
+              });
+            }
+          };
+        });
+
+      });
+    };
+
+    // Load the model
+    console.log( 'loading a model' );
+    client.init( model, {
+      success: success,
+      error: error,
+      ui_infos: 0,
+      ui_controls: 0,
+      ui_stop: 1,
+      watermark: 1,
+      supersample: 0
+    });
+
+  </script>
+
+  <!-- Lastly, some CSS -->
+  <style type="text/css">
+
+    body {
+      margin: 0;
+    }
+
+    iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+    }
+
+    /* Button style */
+    .buttons {
+      margin: 32px 0;
+      left: 50%;
+      bottom: 0;
+      -webkit-transform: translate(-50%);
+      -ms-transform: translate(-50%);
+      transform: translate(-50%);
+      z-index: 1;
+      display: block;
+      position: absolute;
+    }
+
+    button {
+      width: 200px;
+      height: 25px;
+      line-height: 21px;
+      text-transform: capitalize;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      text-align: center;
+      vertical-align: middle;
+      float: left;
+      margin-right: 5px;
+    }
+
+    #keyA {
+      background: #1caad9;
+    }
+
+    #keyB {
+      background: #1caad9;
+    }
+
+  </style>
+</body>
