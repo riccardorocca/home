@@ -1,0 +1,68 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Sketchfab Viewer API example</title>
+
+  <!-- Insert this script -->
+  <script type="text/javascript" src="https://static.sketchfab.com/api/sketchfab-viewer-1.5.1.js"></script>
+</head>
+
+<body>
+  <iframe style="position:fixed; width:100%; height:100%; border:0" src="" id="api-frame" sandbox="allow-scripts allow-same-origin allow-popups allow-forms" allow="autoplay; fullscreen; vr" allowvr allowfullscreen mozallowfullscreen="true" webkitallowfullscreen="true"></iframe>
+
+  <!-- Your new script -->
+  <script>
+    var model = 'cde488b49a6746ce8246e3f3d80eef74',
+
+    version = '1.5.1',
+    iframe = document.getElementById( 'api-frame' ),
+    client = new Sketchfab( version, iframe ),
+
+    error = function () {
+      console.error( 'Sketchfab API Error!' );
+    },
+
+    success = function( api ) {
+      api.start();
+      // Wait for viewer to be ready
+      api.addEventListener( 'viewerready', function() {
+
+        api.setShadingStyle('matcap', {type: 'lit'}, function(err) {
+          if(!err) {
+            console.log('Shading style set');
+          }
+        });
+      });
+    };
+
+    // Load the model
+    console.log( 'loading a model' );
+    client.init( model, {
+      success: success,
+      error: error,
+      ui_infos: 0,
+      ui_controls: 0,
+      ui_stop: 1,
+      watermark: 1,
+      supersample: 0
+    });
+
+  </script>
+
+  <!-- Lastly, some CSS -->
+  <style type="text/css">
+
+    body {
+      margin: 0;
+    }
+
+    iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+    }
+
+  </style>
+</body>
