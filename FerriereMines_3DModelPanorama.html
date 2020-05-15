@@ -1,0 +1,160 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Sketchfab Viewer API example</title>
+
+  <!-- Insert this script -->
+  <script type="text/javascript" src="https://static.sketchfab.com/api/sketchfab-viewer-1.5.1.js"></script>
+</head>
+
+<body>
+  <iframe style="position:fixed; width:100%; height:100%; border:0" src="" id="api-frame" sandbox="allow-scripts allow-same-origin allow-popups allow-forms" allow="autoplay; fullscreen; vr" allowvr allowfullscreen mozallowfullscreen="true" webkitallowfullscreen="true"></iframe>
+
+  <div class="buttons">
+    <button id="keyA">Scalebar VISIBLE</button>
+    <button id="keyB">Topography TEXTURE</button>
+  </div>
+
+  <!-- Your new script -->
+  <script>
+    var model = 'cde488b49a6746ce8246e3f3d80eef74',
+
+    // Buttons
+    buttonA = document.getElementById( 'keyA' ),
+    buttonB = document.getElementById( 'keyB' ),
+
+    version = '1.5.1',
+    iframe = document.getElementById( 'api-frame' ),
+    client = new Sketchfab( version, iframe ),
+
+    error = function () {
+      console.error( 'Sketchfab API Error!' );
+    },
+
+    success = function( api ) {
+      api.start();
+      // Wait for viewer to be ready
+      api.addEventListener( 'viewerready', function() {
+
+        // Get the object nodes
+        api.getNodeMap( function ( err, nodes ) {
+          if ( !err ) {
+            console.log( 'got nodes:', nodes );
+            for ( var prop in nodes ) {
+              if ( nodes.hasOwnProperty( prop ) ) {
+                if ( nodes[ prop ].name === "GraphicScale" ) {
+                  var node_Scalebar = nodes[prop].instanceID;
+                  console.log( 'node: ' + node_Scalebar );
+                }
+                if ( nodes[ prop ].name === "Text" ) {
+                  var node_Scalebar_text = nodes[prop].instanceID;
+                  console.log( 'node: ' + node_Scalebar_text );
+                }
+              }
+            }
+
+            if ( node_Scalebar && node_Scalebar_text ) {
+              // Add button event
+              buttonA.addEventListener( 'click', function() {
+                switch(buttonA.innerHTML) {
+                  case "Scalebar VISIBLE":
+                    api.hide( node_Scalebar );
+                    api.hide( node_Scalebar_text );
+                    buttonA.innerHTML = "Scalebar INVISIBLE";
+                    buttonA.style.backgroundColor = "#888888";
+                    break;
+                  case "Scalebar INVISIBLE":
+                    api.show( node_Scalebar );
+                    api.show( node_Scalebar_text );
+                    buttonA.innerHTML = "Scalebar VISIBLE";
+                    buttonA.style.backgroundColor = "#1caad9";
+                    break;
+                }
+              });
+            }
+
+          }
+        });
+
+        // Add button event
+        buttonB.addEventListener( 'click', function() {
+          switch(buttonB.innerHTML) {
+            case "Topography TEXTURE":
+              api.setShadingStyle('matcap', {type: 'matcap'}, function(err) {});
+              buttonB.innerHTML = "Topography SHADING";
+              buttonB.style.backgroundColor = "#888888";
+              break;
+            case "Topography SHADING":
+              api.setShadingStyle('pbr', {type: 'lit'}, function(err) {});
+              buttonB.innerHTML = "Topography TEXTURE";
+              buttonB.style.backgroundColor = "#1caad9";
+              break;
+            }
+        });
+      });
+    };
+
+    // Load the model
+    console.log( 'loading a model' );
+    client.init( model, {
+      success: success,
+      error: error,
+      ui_infos: 0,
+      ui_controls: 0,
+      ui_stop: 1,
+      watermark: 1,
+      supersample: 0
+    });
+
+  </script>
+
+  <!-- Lastly, some CSS -->
+  <style type="text/css">
+
+    body {
+      margin: 0;
+    }
+
+    iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+    }
+
+    /* Button style */
+    .buttons {
+      margin: 35px 5px;
+      right: 0;
+      top: 0;
+      position: absolute;
+      z-index: 1;
+    }
+
+    button {
+      width: 160px;
+      height: 25px;
+      line-height: 21px;
+      text-transform: capitalize;
+      color: white;
+      opacity: 0.8;
+      border: none;
+      border-radius: 5px;
+      text-align: center;
+      vertical-align: middle;
+      display: block;
+      margin-top: 2px;
+      background: #1caad9;
+    }
+
+    button:hover {
+      opacity: 1;
+    }
+
+    button:active {
+      font-weight: bold;
+    }
+
+  </style>
+</body>
