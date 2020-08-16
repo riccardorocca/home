@@ -1,0 +1,469 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Sketchfab Viewer API example</title>
+
+  <!-- Insert this script -->
+  <script type="text/javascript" src="https://static.sketchfab.com/api/sketchfab-viewer-1.8.2.js"></script>
+</head>
+
+<body>
+  <iframe style="position:fixed; width:100%; height:100%; border:0" src="" id="api-frame" sandbox="allow-scripts allow-same-origin allow-popups allow-forms" allow="autoplay; fullscreen; vr" allowvr allowfullscreen mozallowfullscreen="true" webkitallowfullscreen="true"></iframe>
+
+  <div class="buttons">
+    <button id="keyA">Earthquake 2020</button>
+    <button id="keyB">Earthquake 1976</button>
+    <button id="keyC">Earthquakes 1976-77</button>
+    <button id="keyD">Fault</button>
+    <button id="keyE">Geological Section 1</button>
+    <button id="keyF">Geological Section 2</button>
+    <button id="keyG">Geological Section 4</button>
+    <button id="keyH">Geological Section 5</button>
+    <button id="keyI">Structural Map</button>
+    <button id="keyI1">Map</button>
+    <button id="keyI2">Sat.</button>
+    <button id="keyI3">B&W</button>
+    <button id="keyI4">Geo</button>
+    <button id="keyJ">Regional Section</button>
+    <button id="keyK">Regional Map</button>
+    <button id="keyL">Background Info</button>
+  </div>
+
+  <!-- Your new script -->
+  <script>
+    var model = '7c0235666170444e80a080e770ca341b',
+
+    // Buttons
+    buttonA = document.getElementById( 'keyA' ),
+    buttonB = document.getElementById( 'keyB' ),
+    buttonC = document.getElementById( 'keyC' ),
+    buttonD = document.getElementById( 'keyD' ),
+    buttonE = document.getElementById( 'keyE' ),
+    buttonF = document.getElementById( 'keyF' ),
+    buttonG = document.getElementById( 'keyG' ),
+    buttonH = document.getElementById( 'keyH' ),
+    buttonI = document.getElementById( 'keyI' ),
+    buttonI1 = document.getElementById( 'keyI1' ),
+    buttonI2 = document.getElementById( 'keyI2' ),
+    buttonI3 = document.getElementById( 'keyI3' ),
+    buttonI4 = document.getElementById( 'keyI4' ),
+    buttonJ = document.getElementById( 'keyJ' ),
+    buttonK = document.getElementById( 'keyK' ),
+    buttonL = document.getElementById( 'keyL' ),
+
+    // Variables
+    version = '1.8.2',
+    iframe = document.getElementById( 'api-frame' ),
+    client = new Sketchfab( version, iframe ),
+
+    error = function () {
+      console.error( 'Sketchfab API Error!' );
+    },
+
+    success = function( api ) {
+      api.start();
+      // Wait for viewer to be ready
+      api.addEventListener( 'viewerready', function() {
+
+        // Get the object nodes
+        api.getNodeMap( function ( err, nodes ) {
+          if ( !err ) {
+            for ( var prop in nodes ) {
+              if ( nodes.hasOwnProperty( prop ) ) {
+                if      ( nodes[ prop ].name === "Epicenter1976" && nodes[prop].type === "MatrixTransform") { var node_Epicenter1976 = nodes[prop].instanceID; }
+                else if ( nodes[ prop ].name === "Hypocenter1976" && nodes[prop].type === "MatrixTransform") { var node_Hypocenter1976 = nodes[prop].instanceID; }
+                else if ( nodes[ prop ].name === "Epicenter2020" && nodes[prop].type === "MatrixTransform") { var node_Epicenter2020 = nodes[prop].instanceID; }
+                else if ( nodes[ prop ].name === "Hypocenter2020" && nodes[prop].type === "MatrixTransform") { var node_Hypocenter2020 = nodes[prop].instanceID; }
+                else if ( nodes[ prop ].name === "Hypocenters1976-77" ) { var node_Hypocenter197677 = nodes[prop].instanceID; }
+                else if ( nodes[ prop ].name === "Fault" )              { var node_Fault = nodes[prop].instanceID; }
+                else if ( nodes[ prop ].name === "XSection1" )          { var node_XSection1 = nodes[prop].instanceID; }
+                else if ( nodes[ prop ].name === "XSection2" )          { var node_XSection2 = nodes[prop].instanceID; }
+                else if ( nodes[ prop ].name === "XSection4" )          { var node_XSection4 = nodes[prop].instanceID; }
+                else if ( nodes[ prop ].name === "XSection5" )          { var node_XSection5 = nodes[prop].instanceID; }
+                else if ( nodes[ prop ].name === "StructuralMap" )      { var node_StructuralMap = nodes[prop].instanceID; }
+                else if ( nodes[ prop ].name === "ScalebarH" )          { var node_ScalebarH = nodes[prop].instanceID; }
+                else if ( nodes[ prop ].name === "ScalebarHT" )         { var node_ScalebarHT = nodes[prop].instanceID; }
+                else if ( nodes[ prop ].name === "RegionalSection" )    { var node_RegionalSection = nodes[prop].instanceID; }
+                else if ( nodes[ prop ].name === "RegionalMap" )        { var node_RegionalMap = nodes[prop].instanceID; }
+              }
+            }
+
+            if ( node_Epicenter2020 && node_Hypocenter2020 ) {
+              let matrixEpi, matrixEpiBig, matrixHypo, matrixHypoBig, scale=4;
+              // Add button event
+              api.getMatrix(node_Epicenter2020, function(err, matrix) {
+                matrixEpi = matrix["local"].slice(0);
+                matrixEpiBig = matrix["local"].slice(0);
+                matrixEpiBig[0] = matrixEpi[0]*scale;
+                matrixEpiBig[6] = matrixEpi[6]*scale;
+                matrixEpiBig[9] = matrixEpi[9]*scale;
+              });
+
+              api.getMatrix(node_Hypocenter2020, function(err, matrix) {
+                matrixHypo = matrix["local"].slice(0);
+                matrixHypoBig = matrix["local"].slice(0);
+                matrixHypoBig[0] = matrixHypo[0]*scale;
+                matrixHypoBig[6] = matrixHypo[6]*scale;
+                matrixHypoBig[9] = matrixHypo[9]*scale;
+              });
+
+              buttonA.addEventListener( 'click', function() {
+                let i = 5; //number of flashes
+                let Timer = setInterval(function(){
+                  if ( i<0 ) {
+                    clearInterval(Timer);
+                    buttonA.style.backgroundColor = "#1caad9";
+                  }
+                  else {
+                    if ( i%2 == 0 ) {
+                      api.setMatrix(node_Epicenter2020, matrixEpi, function(){});
+                      api.setMatrix(node_Hypocenter2020, matrixHypo, function(){});
+                    }
+                    else {
+                      buttonA.style.backgroundColor = "#888888";
+                      api.setMatrix(node_Epicenter2020, matrixEpiBig, function(){});
+                      api.setMatrix(node_Hypocenter2020, matrixHypoBig, function(){});
+                    }
+                    i--;
+                  }
+                },200); //time interval = 200 ms
+              });
+            }
+
+            if ( node_Epicenter1976 && node_Hypocenter1976 ) {
+              let matrixEpi, matrixEpiBig, matrixHypo, matrixHypoBig, scale=4;
+              // Add button event
+              api.getMatrix(node_Epicenter1976, function(err, matrix) {
+                matrixEpi = matrix["local"].slice(0);
+                matrixEpiBig = matrix["local"].slice(0);
+                matrixEpiBig[0] = matrixEpi[0]*scale;
+                matrixEpiBig[6] = matrixEpi[6]*scale;
+                matrixEpiBig[9] = matrixEpi[9]*scale;
+              });
+
+              api.getMatrix(node_Hypocenter1976, function(err, matrix) {
+                matrixHypo = matrix["local"].slice(0);
+                matrixHypoBig = matrix["local"].slice(0);
+                matrixHypoBig[0] = matrixHypo[0]*scale;
+                matrixHypoBig[6] = matrixHypo[6]*scale;
+                matrixHypoBig[9] = matrixHypo[9]*scale;
+              });
+
+              buttonB.addEventListener( 'click', function() {
+                let i = 5; //number of flashes
+                let Timer = setInterval(function(){
+                  if ( i<0 ) {
+                    clearInterval(Timer);
+                    buttonB.style.backgroundColor = "#1caad9";
+                  }
+                  else {
+                    if ( i%2 == 0 ) {
+                      api.setMatrix(node_Epicenter1976, matrixEpi, function(){});
+                      api.setMatrix(node_Hypocenter1976, matrixHypo, function(){});
+                    }
+                    else {
+                      buttonB.style.backgroundColor = "#888888";
+                      api.setMatrix(node_Epicenter1976, matrixEpiBig, function(){});
+                      api.setMatrix(node_Hypocenter1976, matrixHypoBig, function(){});
+                    }
+                    i--;
+                  }
+                },200); //time interval = 200 ms
+              });
+            }
+
+            if ( node_Hypocenter197677 ) {
+              // Add button event
+              buttonC.addEventListener( 'click', function() {
+                switch(buttonC.innerHTML) {
+                  case "Earthquakes 1976-77":
+                    buttonC.innerHTML = " Earthquakes 1976-77 ";
+                    buttonC.style.backgroundColor = "#888888";
+                    api.hide(node_Hypocenter197677);
+                    break;
+                  case " Earthquakes 1976-77 ":
+                    buttonC.innerHTML = "Earthquakes 1976-77";
+                    buttonC.style.backgroundColor = "#1caad9";
+                    api.show(node_Hypocenter197677);
+                    break;
+                }
+              });
+            }
+
+            if ( node_Fault ) {
+              // Add button event
+              buttonD.addEventListener( 'click', function() {
+                switch(buttonD.innerHTML) {
+                  case "Fault":
+                    buttonD.innerHTML = " Fault ";
+                    buttonD.style.backgroundColor = "#888888";
+                    api.hide(node_Fault);
+                    break;
+                  case " Fault ":
+                    buttonD.innerHTML = "Fault";
+                    buttonD.style.backgroundColor = "#1caad9";
+                    api.show(node_Fault);
+                    break;
+                }
+              });
+            }
+
+            if ( node_XSection1 ) {
+              // Add button event
+              buttonE.addEventListener( 'click', function() {
+                switch(buttonE.innerHTML) {
+                  case "Geological Section 1":
+                    buttonE.innerHTML = " Geological Section 1 ";
+                    buttonE.style.backgroundColor = "#888888";
+                    api.hide(node_XSection1);
+                    break;
+                  case " Geological Section 1 ":
+                    buttonE.innerHTML = "Geological Section 1";
+                    buttonE.style.backgroundColor = "#1caad9";
+                    api.show(node_XSection1);
+                    break;
+                }
+              });
+            }
+
+            if ( node_XSection2 ) {
+              // Add button event
+              buttonF.addEventListener( 'click', function() {
+                switch(buttonF.innerHTML) {
+                  case "Geological Section 2":
+                    buttonF.innerHTML = " Geological Section 2 ";
+                    buttonF.style.backgroundColor = "#888888";
+                    api.hide(node_XSection2);
+                    break;
+                  case " Geological Section 2 ":
+                    buttonF.innerHTML = "Geological Section 2";
+                    buttonF.style.backgroundColor = "#1caad9";
+                    api.show(node_XSection2);
+                    break;
+                }
+              });
+            }
+
+            if ( node_XSection4 ) {
+              // Add button event
+              buttonG.addEventListener( 'click', function() {
+                switch(buttonG.innerHTML) {
+                  case "Geological Section 4":
+                    buttonG.innerHTML = " Geological Section 4 ";
+                    buttonG.style.backgroundColor = "#888888";
+                    api.hide(node_XSection4);
+                    break;
+                  case " Geological Section 4 ":
+                    buttonG.innerHTML = "Geological Section 4";
+                    buttonG.style.backgroundColor = "#1caad9";
+                    api.show(node_XSection4);
+                    break;
+                }
+              });
+            }
+
+            if ( node_XSection5 ) {
+              // Add button event
+              buttonH.addEventListener( 'click', function() {
+                switch(buttonH.innerHTML) {
+                  case "Geological Section 5":
+                    buttonH.innerHTML = " Geological Section 5 ";
+                    buttonH.style.backgroundColor = "#888888";
+                    api.hide(node_XSection5);
+                    break;
+                  case " Geological Section 5 ":
+                    buttonH.innerHTML = "Geological Section 5";
+                    buttonH.style.backgroundColor = "#1caad9";
+                    api.show(node_XSection5);
+                    break;
+                }
+              });
+            }
+
+            if ( node_StructuralMap ) {
+              // Add button event
+              buttonI.addEventListener( 'click', function() {
+                switch(buttonI.innerHTML) {
+                  case "Structural Map":
+                    buttonI.innerHTML = " Structural Map ";
+                    buttonI.style.backgroundColor = "#888888";
+                    api.hide(node_StructuralMap);
+                    api.hide(node_ScalebarH);
+                    api.hide(node_ScalebarHT);
+                    break;
+                  case " Structural Map ":
+                    buttonI.innerHTML = "Structural Map";
+                    buttonI.style.backgroundColor = "#1caad9";
+                    api.show(node_StructuralMap);
+                    api.show(node_ScalebarH);
+                    api.show(node_ScalebarHT);
+                    break;
+                }
+              });
+            }
+
+              if ( node_RegionalSection ) {
+                // Add button event
+                buttonJ.addEventListener( 'click', function() {
+                  switch(buttonJ.innerHTML) {
+                    case "Regional Section":
+                      buttonJ.innerHTML = " Regional Section ";
+                      buttonJ.style.backgroundColor = "#888888";
+                      api.hide(node_RegionalSection);
+                      break;
+                    case " Regional Section ":
+                      buttonJ.innerHTML = "Regional Section";
+                      buttonJ.style.backgroundColor = "#1caad9";
+                      api.show(node_RegionalSection);
+                      break;
+                  }
+                });
+              }
+
+              if ( node_RegionalMap ) {
+                // Add button event
+                buttonK.addEventListener( 'click', function() {
+                  switch(buttonK.innerHTML) {
+                    case "Regional Map":
+                      buttonK.innerHTML = " Regional Map ";
+                      buttonK.style.backgroundColor = "#888888";
+                      api.hide(node_RegionalMap);
+                      break;
+                    case " Regional Map ":
+                      buttonK.innerHTML = "Regional Map";
+                      buttonK.style.backgroundColor = "#1caad9";
+                      api.show(node_RegionalMap);
+                      break;
+                  }
+                });
+              }
+
+          }
+        });
+
+        api.getTextureList(function(err, textures) {
+          if(!err) {
+            for ( var prop in textures ) {
+              if (textures[prop].name === "Friuli_Earthquake_GoogleMap.jpg")            { var texture_Topo   = textures[prop].uid; }
+              if (textures[prop].name === "Friuli_Earthquake_RegionalSection1.jpg") { var texture_RegSec = textures[prop].uid; }
+            }
+
+            if ( texture_RegSec ) {
+              var i = 1; //number of flashes
+              setInterval(function(){
+                api.updateTexture('https://riccardorocca.github.io/home/Friuli_Earthquake_RegionalSection'+i+'.jpg', texture_RegSec, function(err, texture_RegSec) {});
+                i++;
+                if ( i>4 ) { i=1 };
+              },500); //time interval = 500 ms
+            }
+
+            if ( texture_Topo ) {
+              // Add button event
+              buttonI1.addEventListener( 'click', function() {
+                buttonI1.style.backgroundColor = "#1caad9";
+                buttonI2.style.backgroundColor = "#888888";
+                buttonI3.style.backgroundColor = "#888888";
+                buttonI4.style.backgroundColor = "#888888";
+                api.updateTexture('https://riccardorocca.github.io/home/Friuli_Earthquake_GoogleMap.jpg', texture_Topo, function(err, texture_Topo) {});
+              });
+
+              buttonI2.addEventListener( 'click', function() {
+                buttonI1.style.backgroundColor = "#888888";
+                buttonI2.style.backgroundColor = "#1caad9";
+                buttonI3.style.backgroundColor = "#888888";
+                buttonI4.style.backgroundColor = "#888888";
+                api.updateTexture('https://riccardorocca.github.io/home/Friuli_Earthquake_GoogleSat.jpg', texture_Topo, function(err, texture_Topo) {});
+              });
+
+              buttonI3.addEventListener( 'click', function() {
+                buttonI1.style.backgroundColor = "#888888";
+                buttonI2.style.backgroundColor = "#888888";
+                buttonI3.style.backgroundColor = "#1caad9";
+                buttonI4.style.backgroundColor = "#888888";
+                api.updateTexture('https://riccardorocca.github.io/home/Friuli_Earthquake_Gray.jpg', texture_Topo, function(err, texture_Topo) {});
+              });
+
+              buttonI4.addEventListener( 'click', function() {
+                buttonI1.style.backgroundColor = "#888888";
+                buttonI2.style.backgroundColor = "#888888";
+                buttonI3.style.backgroundColor = "#888888";
+                buttonI4.style.backgroundColor = "#1caad9";
+                api.updateTexture('https://riccardorocca.github.io/home/Friuli_Earthquake_Structural.jpg', texture_Topo, function(err, texture_Topo) {});
+              });
+            }
+
+          }
+        });
+
+        buttonL.addEventListener( 'click', function() {
+          window.open("https://sites.google.com/site/riccardorocca62/drone-projects/friuli-earthquake");
+        });
+
+      });
+    };
+
+    // Load the model
+    client.init( model, {
+      success: success,
+      error: error,
+      ui_infos: 0,
+      ui_controls: 0,
+      ui_stop: 1,
+      watermark: 1,
+      supersample: 0
+    });
+
+  </script>
+
+  <!-- Lastly, some CSS -->
+  <style type="text/css">
+
+    body {
+      margin: 0;
+    }
+
+    iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+    }
+
+    /* Button style */
+    .buttons {
+      margin: 35px 5px;
+      right: 0;
+      top: : 0;
+      z-index: 1;
+      position: absolute;
+    }
+
+    button {
+      width: 172px;
+      height: 25px;
+      line-height: 21px;
+      text-transform: capitalize;
+      color: white;
+      opacity: 0.8;
+      border: none;
+      border-radius: 5px;
+      text-align: center;
+      vertical-align: middle;
+      display: block;
+      margin-top: 2px;
+      background: #1caad9;
+    }
+
+    button:hover {opacity: 1;}
+    button:active {font-weight: bold;}
+    #keyE {background: #1caad9; margin-top: 10px;}
+    #keyI1 {background: #1caad9; width: 40px; display: inline; font-size: x-small;}
+    #keyI2 {background: #888888; width: 40px; display: inline; font-size: x-small;}
+    #keyI3 {background: #888888; width: 40px; display: inline; font-size: x-small;}
+    #keyI4 {background: #888888; width: 40px; display: inline; font-size: x-small;}
+    #keyJ {background: #1caad9; margin-top: 10px;}
+    #keyL {background: #1caad9; margin-top: 10px;}
+
+  </style>
+</body>
