@@ -1,0 +1,228 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Sketchfab Viewer API example</title>
+
+  <!-- Insert this script -->
+  <script type="text/javascript" src="https://static.sketchfab.com/api/sketchfab-viewer-1.5.1.js"></script>
+</head>
+
+<body>
+  <iframe style="position:fixed; width:100%; height:100%; border:0" src="" id="api-frame" sandbox="allow-scripts allow-same-origin allow-popups allow-forms" allow="autoplay; fullscreen; vr" allowvr allowfullscreen mozallowfullscreen="true" webkitallowfullscreen="true"></iframe>
+
+  <div class="buttons">
+    <button id="keyA">Topography</button>
+    <button id="keyA1">ON</button>
+    <button id="keyA2">70%</button>
+    <button id="keyA3">OFF</button>
+    <button id="keyB">Tunnels</button>
+    <button id="keyB1">ON</button>
+    <button id="keyB2">50%</button>
+    <button id="keyB3">OFF</button>
+    <button id="keyC">Scalebar</button>
+    <button id="keyD">Info</button>
+  </div>
+
+  <!-- Your new script -->
+  <script>
+    var model = '8650ad24df2f4afc8f07e87289b9337f',
+
+    // Buttons
+    buttonA1 = document.getElementById( 'keyA1' ),
+    buttonA2 = document.getElementById( 'keyA2' ),
+    buttonA3 = document.getElementById( 'keyA3' ),
+    buttonB1 = document.getElementById( 'keyB1' ),
+    buttonB2 = document.getElementById( 'keyB2' ),
+    buttonB3 = document.getElementById( 'keyB3' ),
+    buttonC = document.getElementById( 'keyC' ),
+    buttonD = document.getElementById( 'keyD' ),
+
+    // Variables
+    version = '1.7.1',
+    iframe = document.getElementById( 'api-frame' ),
+    client = new Sketchfab( version, iframe ),
+
+    error = function () {
+      console.error( 'Sketchfab API Error!' );
+    },
+
+    success = function( api ) {
+      api.start();
+      // Wait for viewer to be ready
+      api.addEventListener( 'viewerready', function() {
+
+        // Get the materials
+        api.getMaterialList(function(err,materials){
+          if ( !err ) {
+            for (var i=0; i<materials.length; i++){
+              if(materials[i].name == "Topo_material"){ var material_Topography = materials[i]; };
+              if(materials[i].name == "Tunnel_material")  { var material_Tunnels = materials[i]; };
+            };
+
+            if ( material_Topography ) {
+              // Add button event
+              buttonA1.addEventListener( 'click', function() {
+                material_Topography.channels.Opacity.factor = 1;
+                api.setMaterial(material_Topography, function() {});
+                buttonA1.style.backgroundColor = "#1caad9";
+                buttonA2.style.backgroundColor = "#888888";
+                buttonA3.style.backgroundColor = "#888888";
+              });
+              buttonA2.addEventListener( 'click', function() {
+                material_Topography.channels.Opacity.factor = 0.7;
+                api.setMaterial(material_Topography, function() {});
+                buttonA1.style.backgroundColor = "#888888";
+                buttonA2.style.backgroundColor = "#1caad9";
+                buttonA3.style.backgroundColor = "#888888";
+              });
+              buttonA3.addEventListener( 'click', function() {
+                material_Topography.channels.Opacity.factor = 0;
+                api.setMaterial(material_Topography, function() {});
+                buttonA1.style.backgroundColor = "#888888";
+                buttonA2.style.backgroundColor = "#888888";
+                buttonA3.style.backgroundColor = "#1caad9";
+              });
+            }
+
+            if ( material_Tunnels ) {
+              // Add button event
+              buttonB1.addEventListener( 'click', function() {
+                material_Tunnels.channels.Opacity.factor = 1;
+                api.setMaterial(material_Tunnels, function() {});
+                buttonB1.style.backgroundColor = "#1caad9";
+                buttonB2.style.backgroundColor = "#888888";
+                buttonB3.style.backgroundColor = "#888888";
+              });
+              buttonB2.addEventListener( 'click', function() {
+                material_Tunnels.channels.Opacity.factor = 0.5;
+                api.setMaterial(material_Tunnels, function() {});
+                buttonB1.style.backgroundColor = "#888888";
+                buttonB2.style.backgroundColor = "#1caad9";
+                buttonB3.style.backgroundColor = "#888888";
+              });
+              buttonB3.addEventListener( 'click', function() {
+                material_Tunnels.channels.Opacity.factor = 0;
+                api.setMaterial(material_Tunnels, function() {});
+                buttonB1.style.backgroundColor = "#888888";
+                buttonB2.style.backgroundColor = "#888888";
+                buttonB3.style.backgroundColor = "#1caad9";
+              });
+            }
+
+          }
+        });
+
+        // Get the object nodes
+        api.getNodeMap( function ( err, nodes ) {
+          if ( !err ) {
+            for ( var prop in nodes ) {
+              if ( nodes.hasOwnProperty( prop ) ) {
+                if      ( nodes[ prop ].name === "Scalebar" )   { var node_Scalebar = nodes[prop].instanceID; }
+                else if ( nodes[ prop ].name === "ScalebarT" )  { var node_ScalebarT = nodes[prop].instanceID; }
+              }
+            }
+
+            if ( node_Scalebar && node_ScalebarT ) {
+              // Add button event
+              buttonC.addEventListener( 'click', function() {
+                switch(buttonC.innerHTML) {
+                  case "Scalebar":
+                    buttonC.innerHTML = " Scalebar ";
+                    buttonC.style.backgroundColor = "#888888";
+                    api.hide(node_Scalebar);
+                    api.hide(node_ScalebarT);
+                    break;
+                  case " Scalebar ":
+                    buttonC.innerHTML = "Scalebar";
+                    buttonC.style.backgroundColor = "#1caad9";
+                    api.show(node_Scalebar);
+                    api.show(node_ScalebarT);
+                    break;
+                }
+              });
+            }
+
+          }
+        });
+
+        buttonD.addEventListener( 'click', function() {
+          window.open("https://speleominas.blogspot.com/2010/12/la-mina-indiana-de-bustarviejo-madrid.html");
+        });
+
+      });
+    };
+
+    // Load the model
+    client.init( model, {
+      success: success,
+      error: error,
+      ui_infos: 0,
+      ui_controls: 0,
+      ui_stop: 1,
+      watermark: 1,
+      supersample: 0
+    });
+
+  </script>
+
+  <!-- Lastly, some CSS -->
+  <style type="text/css">
+
+    body {
+      margin: 0;
+    }
+
+    iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+    }
+
+    /* Button style */
+    .buttons {
+      margin: 35px 5px;
+      right: 0;
+      top: : 0;
+      z-index: 1;
+      position: absolute;
+    }
+
+    button {
+      width: 150px;
+      height: 25px;
+      line-height: 21px;
+      text-transform: capitalize;
+      color: white;
+      opacity: 0.8;
+      border: none;
+      border-radius: 5px;
+      text-align: center;
+      vertical-align: middle;
+      display: block;
+      margin-top: 2px;
+      background: #1caad9;
+    }
+
+    button:hover {
+      opacity: 1;
+    }
+
+    button:active {
+      font-weight: bold;
+    }
+
+    #keyA  { background: #0000ff; font-size: large;  font-weight: bold; }
+    #keyA1 { background: #888888; width: 47px;       display: inline; }
+    #keyA2 { background: #1caad9; width: 47px;       display: inline; }
+    #keyA3 { background: #888888; width: 47px;       display: inline; }
+    #keyB  { background: #0000ff; font-size: large;  font-weight: bold; margin-top: 10px; }
+    #keyB1 { background: #1caad9; width: 47px;       display: inline; }
+    #keyB2 { background: #888888; width: 47px;       display: inline; }
+    #keyB3 { background: #888888; width: 47px;       display: inline; }
+    #keyC  { background: #1caad9; margin-top: 10px; }
+    #keyD  { background: #1caad9; }
+
+  </style>
+</body>
