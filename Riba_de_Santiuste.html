@@ -1,0 +1,257 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Sketchfab Viewer API example</title>
+
+  <!-- Insert this script -->
+  <script type="text/javascript" src="https://static.sketchfab.com/api/sketchfab-viewer-1.8.2.js"></script>
+</head>
+
+<body>
+  <iframe style="position:fixed; width:100%; height:100%; border:0" src="" id="api-frame" sandbox="allow-scripts allow-same-origin allow-popups allow-forms" allow="autoplay; fullscreen; vr" allowvr allowfullscreen mozallowfullscreen="true" webkitallowfullscreen="true"></iframe>
+
+  <div class="buttons">
+    <button id="keyA">West map</button>
+    <button id="keyB"> East map </button>
+    <br>
+    <button id="keyC1">Geo</button>
+    <button id="keyC2">Sat.</button>
+    <button id="keyC3">B&W</button>
+    <br>
+    <button id="keyD">Geological Section</button>
+    <button id="keyE">Scalebar</button>
+    <button id="keyF">Background Info</button>
+  </div>
+
+  <!-- Your new script -->
+  <script>
+    var model = 'df4ccdaf59ed4318a2e85a21b59f3a9b',
+
+    // Buttons
+    buttonA = document.getElementById( 'keyA' ),
+    buttonB = document.getElementById( 'keyB' ),
+    buttonC1 = document.getElementById( 'keyC1' ),
+    buttonC2 = document.getElementById( 'keyC2' ),
+    buttonC3 = document.getElementById( 'keyC3' ),
+    buttonC4 = document.getElementById( 'keyC4' ),
+    buttonD = document.getElementById( 'keyD' ),
+    buttonE = document.getElementById( 'keyE' ),
+    buttonF = document.getElementById( 'keyF' ),
+
+    // Variables
+    version = '1.8.2',
+    iframe = document.getElementById( 'api-frame' ),
+    client = new Sketchfab( version, iframe ),
+
+    error = function () {
+      console.error( 'Sketchfab API Error!' );
+    },
+
+    success = function( api ) {
+      api.start();
+      // Wait for viewer to be ready
+      api.addEventListener( 'viewerready', function() {
+        api.hideAnnotation(0);
+        api.hideAnnotation(1);
+
+        // Get the object nodes
+        api.getNodeMap( function ( err, nodes ) {
+          if ( !err ) {
+            for ( var prop in nodes ) {
+              if ( nodes.hasOwnProperty( prop ) ) {
+                if      ( nodes[ prop ].name === "BasemapW" )           { var node_BasemapW = nodes[prop].instanceID; }
+                else if ( nodes[ prop ].name === "BasemapE" )           { var node_BasemapE = nodes[prop].instanceID; }
+                else if ( nodes[ prop ].name === "Geological_section" ) { var node_GeoSection = nodes[prop].instanceID; }
+                else if ( nodes[ prop ].name === "Scalebar" )           { var node_Scalebar = nodes[prop].instanceID; }
+                else if ( nodes[ prop ].name === "ScalebarT" )          { var node_ScalebarT = nodes[prop].instanceID; }
+              }
+            }
+
+            if ( node_BasemapW ) {
+              // Add button event
+              buttonA.addEventListener( 'click', function() {
+                switch(buttonA.innerHTML) {
+                  case "West map":
+                    buttonA.innerHTML = " West map ";
+                    buttonA.style.backgroundColor = "#888888";
+                    api.hide(node_BasemapW);
+                    break;
+                  case " West map ":
+                    buttonA.innerHTML = "West map";
+                    buttonA.style.backgroundColor = "#1caad9";
+                    api.show(node_BasemapW);
+                    break;
+                }
+              });
+            }
+
+            if ( node_BasemapE ) {
+              api.hide(node_BasemapE);
+              // Add button event
+              buttonB.addEventListener( 'click', function() {
+                switch(buttonB.innerHTML) {
+                  case "East map":
+                    buttonB.innerHTML = " East map ";
+                    buttonB.style.backgroundColor = "#888888";
+                    api.hide(node_BasemapE);
+                    api.hideAnnotation(0);
+                    api.hideAnnotation(1);
+                    break;
+                  case " East map ":
+                    buttonB.innerHTML = "East map";
+                    buttonB.style.backgroundColor = "#1caad9";
+                    api.show(node_BasemapE);
+                    api.showAnnotation(0);
+                    api.showAnnotation(1);
+                    break;
+                }
+              });
+            }
+
+            if ( node_GeoSection ) {
+              // Add button event
+              buttonD.addEventListener( 'click', function() {
+                switch(buttonD.innerHTML) {
+                  case "Geological Section":
+                    buttonD.innerHTML = " Geological Section ";
+                    buttonD.style.backgroundColor = "#888888";
+                    api.hide(node_GeoSection);
+                    break;
+                  case " Geological Section ":
+                    buttonD.innerHTML = "Geological Section";
+                    buttonD.style.backgroundColor = "#1caad9";
+                    api.show(node_GeoSection);
+                    break;
+                }
+              });
+            }
+
+            if ( node_Scalebar && node_ScalebarT ) {
+              // Add button event
+              buttonE.addEventListener( 'click', function() {
+                switch(buttonE.innerHTML) {
+                  case "Scalebar":
+                    buttonE.innerHTML = " Scalebar ";
+                    buttonE.style.backgroundColor = "#888888";
+                    api.hide(node_Scalebar);
+                    api.hide(node_ScalebarT);
+                    break;
+                  case " Scalebar ":
+                    buttonE.innerHTML = "Scalebar";
+                    buttonE.style.backgroundColor = "#1caad9";
+                    api.show(node_Scalebar);
+                    api.show(node_ScalebarT);
+                    break;
+                }
+              });
+            }
+
+          }
+        });
+
+        api.getTextureList(function(err, textures) {
+          if(!err) {
+            for ( var prop in textures ) {
+              if (textures[prop].name === "RibaSantiuste_GeoMap.jpg") { var texture_Topo = textures[prop].uid; }
+            }
+
+            if ( texture_Topo ) {
+              // Add button event
+              buttonC1.addEventListener( 'click', function() {
+                buttonC1.style.backgroundColor = "#1caad9";
+                buttonC2.style.backgroundColor = "#888888";
+                buttonC3.style.backgroundColor = "#888888";
+                api.updateTexture('https://riccardorocca.github.io/home/RibaSantiuste_GeoMap.jpg', texture_Topo, function(err, texture_Topo) {});
+              });
+
+              buttonC2.addEventListener( 'click', function() {
+                buttonC1.style.backgroundColor = "#888888";
+                buttonC2.style.backgroundColor = "#1caad9";
+                buttonC3.style.backgroundColor = "#888888";
+                api.updateTexture('https://riccardorocca.github.io/home/RibaSantiuste_GoogleSat.jpg', texture_Topo, function(err, texture_Topo) {});
+              });
+
+              buttonC3.addEventListener( 'click', function() {
+                buttonC1.style.backgroundColor = "#888888";
+                buttonC2.style.backgroundColor = "#888888";
+                buttonC3.style.backgroundColor = "#1caad9";
+                api.updateTexture('https://riccardorocca.github.io/home/RibaSantiuste_Gray.jpg', texture_Topo, function(err, texture_Topo) {});
+              });
+            }
+
+          }
+        });
+
+        buttonF.addEventListener( 'click', function() {
+          window.open("http://www.sociedadgeologica.es/archivos_pdf/geolodia18/guias_geolodia18/gdia18gui_guadalajara.pdf");
+        });
+
+      });
+    };
+
+    // Load the model
+    client.init( model, {
+      success: success,
+      error: error,
+      ui_infos: 0,
+      ui_controls: 0,
+      ui_stop: 1,
+      watermark: 1,
+      supersample: 0
+    });
+
+  </script>
+
+  <!-- Lastly, some CSS -->
+  <style type="text/css">
+
+    body {
+      margin: 0;
+    }
+
+    iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+    }
+
+    /* Button style */
+    .buttons {
+      width: 160px;
+      margin: 35px 5px;
+      right: 0;
+      top: : 0;
+      z-index: 1;
+      position: absolute;
+    }
+
+    button {
+      width: 100%;
+      height: 25px;
+      line-height: 21px;
+      /*text-transform: capitalize;*/
+      color: white;
+      opacity: 0.8;
+      border: none;
+      border-radius: 5px;
+      text-align: center;
+      vertical-align: middle;
+      display: block;
+      margin-top: 2px;
+      background: #1caad9;
+    }
+
+    button:hover {opacity: 1;}
+    button:active {font-weight: bold;}
+    #keyA {width: 49%; display: inline;}
+    #keyB {background: #888888; width: 48%; display: inline;}
+    #keyC1 {background: #1caad9; width: 31%; display: inline; font-size: x-small;}
+    #keyC2 {background: #888888; width: 32%; display: inline; font-size: x-small;}
+    #keyC3 {background: #888888; width: 31%; display: inline; font-size: x-small;}
+    #keyD {margin-top: 10px;}
+    #keyF {margin-top: 10px;}
+
+  </style>
+</body>
