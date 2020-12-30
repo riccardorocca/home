@@ -1,0 +1,283 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Sketchfab Viewer API example</title>
+
+  <!-- Insert this script -->
+  <script type="text/javascript" src="https://static.sketchfab.com/api/sketchfab-viewer-1.8.2.js"></script>
+</head>
+
+<body>
+  <iframe style="position:fixed; width:100%; height:100%; border:0" src="" id="api-frame" sandbox="allow-scripts allow-same-origin allow-popups allow-forms" allow="autoplay; fullscreen; vr" allowvr allowfullscreen mozallowfullscreen="true" webkitallowfullscreen="true"></iframe>
+
+  <div class="buttons">
+    <button id="keyA">Chiesa esterno</button>
+    <button id="keyB"> Chiesa interno </button>
+    <button id="keyC">Edifici</button>
+    <button id="keyD">Planimetria 1800</button>
+    <button id="keyE"> Planimetria 1920 </button>
+  </div>
+
+  <!-- Your new script -->
+  <script>
+    var model = 'c0b80f0518fe48fc8704dea518c6f9e8';
+
+    // Buttons
+    buttonA = document.getElementById( 'keyA' );
+    buttonB = document.getElementById( 'keyB' );
+    buttonC = document.getElementById( 'keyC' );
+    buttonD = document.getElementById( 'keyD' );
+    buttonE = document.getElementById( 'keyE' );
+
+    // Variables
+    version = '1.8.2';
+    iframe = document.getElementById( 'api-frame' );
+    client = new Sketchfab( version, iframe );
+
+    error = function () {
+      console.error( 'Sketchfab API Error!' );
+    };
+
+    success = function( api ) {
+      api.start();
+      // Wait for viewer to be ready
+      api.addEventListener( 'viewerready', function() {
+        //api.hideAnnotation(0);
+        //api.hideAnnotation(1);
+
+        // Get the object nodes
+        api.getNodeMap( function ( err, nodes ) {
+          if ( !err ) {
+            for ( var prop in nodes ) {
+              if ( nodes.hasOwnProperty( prop ) ) {
+                //alert(nodes[prop].instanceID+" : "+nodes[prop].name+" : "+nodes[prop].nodeMask+" : "+nodes[prop].type+" : "+nodes[prop].localMatrix+" ; "+nodes[prop].worldMatrix);
+                if      ( nodes[ prop ].name === "Church_outside" ) { var node_Church_outside = nodes[prop].instanceID; }
+                else if ( nodes[ prop ].name === "Church_inside" )  { var node_Church_inside  = nodes[prop].instanceID; }
+                else if ( nodes[ prop ].name === "Buildings" )      { var node_Buildings      = nodes[prop].instanceID; }
+                else if ( nodes[ prop ].name === "Map1" )           { var node_Map1           = nodes[prop].instanceID; }
+                else if ( nodes[ prop ].name === "Map2" )           { var node_Map2           = nodes[prop].instanceID; }
+                else if ( nodes[ prop ].name === "Basemap" )        { var node_Basemap        = nodes[prop].instanceID; }
+              }
+            }
+
+            if ( node_Church_outside ) {
+              // Add button event
+              buttonA.addEventListener( 'click', function() {
+                switch(buttonA.innerHTML) {
+                  case "Chiesa esterno":
+                    buttonA.innerHTML = " Chiesa esterno ";
+                    buttonA.style.backgroundColor = "#888888";
+                    api.hide(node_Church_outside);
+                    break;
+                  case " Chiesa esterno ":
+                    buttonA.innerHTML = "Chiesa esterno";
+                    buttonA.style.backgroundColor = "#1caad9";
+                    api.show(node_Church_outside);
+                    break;
+                }
+              });
+            }
+
+            if ( node_Church_inside ) {
+              // Add button event
+              buttonB.addEventListener( 'click', function() {
+                switch(buttonB.innerHTML) {
+                  case "Chiesa interno":
+                    buttonB.innerHTML = " Chiesa interno ";
+                    buttonB.style.backgroundColor = "#888888";
+                    api.hide(node_Church_inside);
+                    break;
+                  case " Chiesa interno ":
+                    buttonB.innerHTML = "Chiesa interno";
+                    buttonB.style.backgroundColor = "#1caad9";
+                    api.show(node_Church_inside);
+                    buttonA.innerHTML = " Chiesa esterno ";
+                    buttonA.style.backgroundColor = "#888888";
+                    api.hide(node_Church_outside);
+                    api.setCameraLookAt([-615.6, -122.0, 949.5], [-1301.5, 113.0, 887.8], 4.3, function(err) {});
+
+                    //Vista iniziale
+                    //4151.57,-3000.27,1924.73
+                    //-165.03,158.47,1481.28
+
+                    //Vista all'interno
+                    //-615.63,-122.00,949.49
+                    //-1301.50,112.96,887.80
+
+                    break;
+                }
+              });
+            }
+
+            if ( node_Buildings ) {
+              // Add button event
+              buttonC.addEventListener( 'click', function() {
+                switch(buttonC.innerHTML) {
+                  case "Edifici":
+                    buttonC.innerHTML = " Edifici ";
+                    buttonC.style.backgroundColor = "#888888";
+                    api.hide(node_Buildings);
+                    break;
+                  case " Edifici ":
+                    buttonC.innerHTML = "Edifici";
+                    buttonC.style.backgroundColor = "#1caad9";
+                    api.show(node_Buildings);
+                    break;
+                }
+              });
+            }
+
+            if ( node_Map1 ) {
+              // Add button event
+              buttonD.addEventListener( 'click', function() {
+                switch(buttonD.innerHTML) {
+                  case "Planimetria 1800":
+                    buttonD.innerHTML = " Planimetria 1800 ";
+                    buttonD.style.backgroundColor = "#888888";
+                    api.hide(node_Map1);
+                    break;
+                  case " Planimetria 1800 ":
+                    buttonD.innerHTML = "Planimetria 1800";
+                    buttonD.style.backgroundColor = "#1caad9";
+                    api.show(node_Map1);
+                    buttonE.innerHTML = " Planimetria 1920 ";
+                    buttonE.style.backgroundColor = "#888888";
+                    api.hide(node_Map2);
+                    break;
+                }
+              });
+            }
+
+            if ( node_Map2 ) {
+              api.hide(node_Map2);
+              // Add button event
+              buttonE.addEventListener( 'click', function() {
+                switch(buttonE.innerHTML) {
+                  case "Planimetria 1920":
+                    buttonE.innerHTML = " Planimetria 1920 ";
+                    buttonE.style.backgroundColor = "#888888";
+                    api.hide(node_Map2);
+                    break;
+                  case " Planimetria 1920 ":
+                    buttonE.innerHTML = "Planimetria 1920";
+                    buttonE.style.backgroundColor = "#1caad9";
+                    api.show(node_Map2);
+                    buttonD.innerHTML = " Planimetria 1800 ";
+                    buttonD.style.backgroundColor = "#888888";
+                    api.hide(node_Map1);
+                    break;
+                }
+              });
+            }
+
+            if ( node_Scalebar && node_ScalebarT ) {
+              // Add button event
+              buttonG.addEventListener( 'click', function() {
+                switch(buttonG.innerHTML) {
+                  case "Scalebar":
+                    buttonG.innerHTML = " Scalebar ";
+                    buttonG.style.backgroundColor = "#888888";
+                    api.hide(node_Scalebar);
+                    api.hide(node_ScalebarT);
+                    break;
+                  case " Scalebar ":
+                    buttonG.innerHTML = "Scalebar";
+                    buttonG.style.backgroundColor = "#1caad9";
+                    api.show(node_Scalebar);
+                    api.show(node_ScalebarT);
+                    break;
+                }
+              });
+            }
+
+          }
+        });
+
+        buttonH.addEventListener( 'click', function() {
+
+          api.setCameraLookAt([-615.6, -122.0, 949.5], [-1301.5, 113.0, 887.8], 4.3, function(err) {});
+
+          /*
+          api.getCameraLookAt(function(err, camera) {
+            alert(camera.position); // [x, y, z]
+            alert(camera.target); // [x, y, z]
+          });
+          */
+
+          //window.open("http://www.sociedadgeologica.es/archivos_pdf/geolodia18/guias_geolodia18/gdia18gui_guadalajara.pdf");
+        });
+
+      });
+    };
+
+    // Load the model
+    client.init( model, {
+      success: success,
+      error: error,
+      ui_infos: 0,
+      ui_controls: 0,
+      ui_stop: 1,
+      watermark: 1,
+      supersample: 0
+    });
+
+  </script>
+
+  <!-- Lastly, some CSS -->
+  <style type="text/css">
+
+    body {
+      margin: 0;
+    }
+
+    iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+    }
+
+    /* Button style */
+    .buttons {
+      width: 160px;
+      margin: 35px 5px;
+      right: 0;
+      top: : 0;
+      z-index: 1;
+      position: absolute;
+    }
+
+    button {
+      width: 100%;
+      height: 25px;
+      line-height: 21px;
+      /*text-transform: capitalize;*/
+      color: white;
+      opacity: 0.8;
+      border: none;
+      border-radius: 5px;
+      text-align: center;
+      vertical-align: middle;
+      display: block;
+      margin-top: 2px;
+      background: #1caad9;
+    }
+
+    button:hover {opacity: 1;}
+    button:active {font-weight: bold;}
+    #keyB {background: #888888; }
+    #keyC {margin-bottom: 10px;}
+    #keyE {background: #888888; margin-bottom: 10px;}
+    /*
+    #keyA {width: 49%; display: inline;}
+    #keyB {background: #888888; width: 48%; display: inline;}
+    #keyC1 {background: #1caad9; width: 31%; display: inline; font-size: x-small;}
+    #keyC2 {background: #888888; width: 32%; display: inline; font-size: x-small;}
+    #keyC3 {background: #888888; width: 31%; display: inline; font-size: x-small;}
+    #keyD {margin-top: 10px;}
+    #keyF {margin-top: 10px;}
+    */
+
+  </style>
+</body>
