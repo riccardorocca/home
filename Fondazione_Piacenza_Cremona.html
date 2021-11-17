@@ -13,18 +13,24 @@
   <iframe style="position:fixed; width:100%; height:100%; border:0" src="" id="api-frame" sandbox="allow-scripts allow-same-origin allow-popups allow-forms" allow="autoplay; fullscreen; vr" allowvr allowfullscreen mozallowfullscreen="true" webkitallowfullscreen="true"></iframe>
 
   <div class="buttons">
-    <button id="keyA">Topografia</button>
-    <button id="keyB">Intera → Tagliata</button>
+    <button id="keyA">Mappa intera</button>
+    <button id="keyB">Topografia</button>
+    <button id="keyC">Piena</button>
+    <button id="keyD"> Sovrascorrimenti </button>
+    <button id="keyE">Sezione accesa</button>
     <button id="keyF">Informazioni</button>
   </div>
 
   <!-- Your new script -->
   <script>
-    var model = 'b5827a736b94494f966fd779cd2b1260';
+    var model = 'b8449455a81d49ab8494eb7b3dcc1a97';
 
     // Buttons
     buttonA = document.getElementById( 'keyA' );
     buttonB = document.getElementById( 'keyB' );
+    buttonC = document.getElementById( 'keyC' );
+    buttonD = document.getElementById( 'keyD' );
+    buttonE = document.getElementById( 'keyE' );
     buttonF = document.getElementById( 'keyF' );
 
     // Variables
@@ -67,34 +73,50 @@
 
             api.hide(node_Topo_clip);
             api.hide(node_Po_clip);
-            api.hide(node_Piena);
+            //api.hide(node_Piena);
             api.hide(node_Piena_clip);
             api.hide(node_Thrusts);
             api.hide(node_Thrusts_clip);
-            api.hide(node_Sezione);
+            //api.hide(node_Sezione);
             api.hide(node_Sezione_clip);
 
-            if ( node_Topo && node_Topo_clip && node_Po && node_Po_clip ) {
+            if ( node_Topo && node_Topo_clip && node_Po && node_Po_clip && node_Piena && node_Piena_clip && node_Thrusts && node_Thrusts_clip ) {
               buttonA.addEventListener( 'click', function() {
                 switch(buttonA.innerHTML) {
-                  case "Topografia":
-                    buttonA.innerHTML = " Topografia ";
+                  case "Mappa intera":
+                    buttonA.innerHTML = "Mappa tagliata";
                     buttonA.style.backgroundColor = "#888888";
                     api.hide(node_Topo);
                     api.hide(node_Po);
-                    api.hide(node_Topo_clip);
-                    api.hide(node_Po_clip);
-                    break;
-                  case " Topografia ":
-                    buttonA.innerHTML = "Topografia";
-                    buttonA.style.backgroundColor = "#1caad9";
-                    if (buttonB.innerHTML == "Tagliata → Intera") {
+                    api.hide(node_Piena);
+                    api.hide(node_Thrusts);
+                    if (buttonB.innerHTML == "Topografia") {
                       api.show(node_Topo_clip);
                       api.show(node_Po_clip);
                     }
-                    else {
+                    if (buttonC.innerHTML == "Piena") {
+                      api.show(node_Piena_clip);
+                    }
+                    if (buttonD.innerHTML == "Sovrascorrimenti") {
+                      api.show(node_Thrusts_clip);
+                    }
+                    break;
+                  case "Mappa tagliata":
+                    buttonA.innerHTML = "Mappa intera";
+                    buttonA.style.backgroundColor = "#1caad9";
+                    api.hide(node_Topo_clip);
+                    api.hide(node_Po_clip);
+                    api.hide(node_Piena);
+                    api.hide(node_Thrusts);
+                    if (buttonB.innerHTML == "Topografia") {
                       api.show(node_Topo);
                       api.show(node_Po);
+                    }
+                    if (buttonC.innerHTML == "Piena") {
+                      api.show(node_Piena);
+                    }
+                    if (buttonD.innerHTML == "Sovrascorrimenti") {
+                      api.show(node_Thrusts);
                     }
                     break;
                 }
@@ -104,25 +126,96 @@
             if ( node_Topo && node_Topo_clip && node_Po && node_Po_clip ) {
               buttonB.addEventListener( 'click', function() {
                 switch(buttonB.innerHTML) {
-                  case "Intera → Tagliata":
-                    buttonB.innerHTML = "Tagliata → Intera";
+                  case "Topografia":
+                    buttonB.innerHTML = " Topografia ";
                     buttonB.style.backgroundColor = "#888888";
                     api.hide(node_Topo);
                     api.hide(node_Po);
-                    if (buttonA.innerHTML == "Topografia") {
+                    api.hide(node_Topo_clip);
+                    api.hide(node_Po_clip);
+                    break;
+                  case " Topografia ":
+                    buttonB.innerHTML = "Topografia";
+                    buttonB.style.backgroundColor = "#1caad9";
+                    if (buttonA.innerHTML == "Mappa intera") {
+                      api.show(node_Topo);
+                      api.show(node_Po);
+                    }
+                    else {
                       api.show(node_Topo_clip);
                       api.show(node_Po_clip);
                     }
                     break;
-                  case "Tagliata → Intera":
-                    buttonB.innerHTML = "Intera → Tagliata";
-                    buttonB.style.backgroundColor = "#1caad9";
-                    if (buttonA.innerHTML == "Topografia") {
-                      api.show(node_Topo);
-                      api.show(node_Po);
+                }
+              });
+            }
+
+            if ( node_Piena && node_Piena_clip ) {
+              buttonC.addEventListener( 'click', function() {
+                switch(buttonC.innerHTML) {
+                  case "Piena":
+                    buttonC.innerHTML = " Piena ";
+                    buttonC.style.backgroundColor = "#888888";
+                    api.hide(node_Piena);
+                    api.hide(node_Piena_clip);
+                    break;
+                  case " Piena ":
+                    buttonC.innerHTML = "Piena";
+                    buttonC.style.backgroundColor = "#1caad9";
+                    if (buttonA.innerHTML == "Mappa intera") {
+                      api.show(node_Piena);
                     }
-                    api.hide(node_Topo_clip);
-                    api.hide(node_Po_clip);
+                    else {
+                      api.show(node_Piena_clip);
+                    }
+                    break;
+                }
+              });
+            }
+
+            if ( node_Thrusts && node_Thrusts_clip ) {
+              buttonD.addEventListener( 'click', function() {
+                switch(buttonD.innerHTML) {
+                  case "Sovrascorrimenti":
+                    buttonD.innerHTML = " Sovrascorrimenti ";
+                    buttonD.style.backgroundColor = "#888888";
+                    api.hide(node_Thrusts);
+                    api.hide(node_Thrusts_clip);
+                    break;
+                  case " Sovrascorrimenti ":
+                    buttonD.innerHTML = "Sovrascorrimenti";
+                    buttonD.style.backgroundColor = "#1caad9";
+                    if (buttonA.innerHTML == "Mappa intera") {
+                      api.show(node_Thrusts);
+                    }
+                    else {
+                      api.show(node_Thrusts_clip);
+                    }
+                    break;
+                }
+              });
+            }
+
+            if ( node_Sezione && node_Sezione_clip ) {
+              buttonE.addEventListener( 'click', function() {
+                switch(buttonE.innerHTML) {
+                  case "Sezione spenta":
+                    buttonE.innerHTML = "Sezione accesa";
+                    buttonE.style.backgroundColor = "#1caad9";
+                    api.show(node_Sezione);
+                    api.hide(node_Sezione_clip);
+                    break;
+                  case "Sezione accesa":
+                    buttonE.innerHTML = "Sezione tagliata";
+                    buttonE.style.backgroundColor = "#1caad9";
+                    api.hide(node_Sezione);
+                    api.show(node_Sezione_clip);
+                    break;
+                  case "Sezione tagliata":
+                    buttonE.innerHTML = "Sezione spenta";
+                    buttonE.style.backgroundColor = "#888888";
+                    api.hide(node_Sezione);
+                    api.hide(node_Sezione_clip);
                     break;
                 }
               });
@@ -192,12 +285,7 @@
 
     button:hover {opacity: 1;}
     button:active {font-weight: bold;}
-    #keyC {margin-bottom: 10px;}
-    #keyD2 {margin-top: 10px;}
     #keyE {margin-top: 10px; background: #888888;}
-    #keyE1 {background: #1caad9; width: 31%; display: inline; font-size: x-small;}
-    #keyE2 {background: #888888; width: 32%; display: inline; font-size: x-small;}
-    #keyE3 {background: #888888; width: 31%; display: inline; font-size: x-small;}
     #keyF {margin-top: 10px;}
 
   </style>
