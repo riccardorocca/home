@@ -13,19 +13,23 @@
   <iframe style="position:fixed; width:100%; height:100%; border:0" src="" id="api-frame" sandbox="allow-scripts allow-same-origin allow-popups allow-forms" allow="autoplay; fullscreen; vr" allowvr allowfullscreen mozallowfullscreen="true" webkitallowfullscreen="true"></iframe>
 
   <div class="buttons">
+    <button id="keyO">Città</button>
+    <button id="keyE">Sezione on</button>
     <button id="keyA">Mappa intera</button>
     <button id="keyB">Topografia</button>
-    <button id="keyC">Piena</button>
-    <button id="keyD"> Sovrascorrimenti </button>
-    <button id="keyE">Sezione accesa</button>
+    <button id="keyC">Inondazione on</button>
+    <button id="keyD"> Mappa faglie </button>
     <button id="keyF">Informazioni</button>
   </div>
 
   <!-- Your new script -->
   <script>
-    var model = 'b8449455a81d49ab8494eb7b3dcc1a97';
+    var model = '3bb1d5b6e64548dd81ec04279656f9ff';
+
+    //var timer;
 
     // Buttons
+    buttonO = document.getElementById( 'keyO' );
     buttonA = document.getElementById( 'keyA' );
     buttonB = document.getElementById( 'keyB' );
     buttonC = document.getElementById( 'keyC' );
@@ -55,18 +59,20 @@
             for ( var prop in nodes ) {
               if ( nodes.hasOwnProperty( prop ) ) {
                 //alert(nodes[prop].instanceID+" : "+nodes[prop].name+" : "+nodes[prop].nodeMask+" : "+nodes[prop].type+" : "+nodes[prop].localMatrix+" ; "+nodes[prop].worldMatrix);
-                if      ( nodes[ prop ].name === "Citta Piacenza SK" )                { var node_Piacenza      = nodes[prop].instanceID; }
-                else if ( nodes[ prop ].name === "Citta Cremona SK" )                 { var node_Cremona       = nodes[prop].instanceID; }
-                else if ( nodes[ prop ].name === "Mappa topografia SK" )              { var node_Topo          = nodes[prop].instanceID; }
-                else if ( nodes[ prop ].name === "Mappa topografia tagliata SK" )     { var node_Topo_clip     = nodes[prop].instanceID; }
-                else if ( nodes[ prop ].name === "Fiume Po SK" )                      { var node_Po            = nodes[prop].instanceID; }
-                else if ( nodes[ prop ].name === "Fiume Po tagliato SK" )             { var node_Po_clip       = nodes[prop].instanceID; }
-                else if ( nodes[ prop ].name === "Piena SK" )                         { var node_Piena         = nodes[prop].instanceID; }
-                else if ( nodes[ prop ].name === "Piena tagliata SK" )                { var node_Piena_clip    = nodes[prop].instanceID; }
-                else if ( nodes[ prop ].name === "Mappa accavallamenti SK" )          { var node_Thrusts       = nodes[prop].instanceID; }
-                else if ( nodes[ prop ].name === "Mappa accavallamenti tagliata SK" ) { var node_Thrusts_clip  = nodes[prop].instanceID; }
-                else if ( nodes[ prop ].name === "Sezione SK" )                       { var node_Sezione       = nodes[prop].instanceID; }
-                else if ( nodes[ prop ].name === "Sezione tagliata SK" )              { var node_Sezione_clip  = nodes[prop].instanceID; }
+                if      ( nodes[ prop ].name === "Citta Piacenza SK" )                { var node_Piacenza       = nodes[prop].instanceID; }
+                else if ( nodes[ prop ].name === "Citta Piacenza label SK" )          { var node_Piacenza_label = nodes[prop].instanceID; }
+                else if ( nodes[ prop ].name === "Citta Cremona SK" )                 { var node_Cremona        = nodes[prop].instanceID; }
+                else if ( nodes[ prop ].name === "Citta Cremona label SK" )           { var node_Cremona_label  = nodes[prop].instanceID; }
+                else if ( nodes[ prop ].name === "Mappa topografia SK" )              { var node_Topo           = nodes[prop].instanceID; }
+                else if ( nodes[ prop ].name === "Mappa topografia tagliata SK" )     { var node_Topo_clip      = nodes[prop].instanceID; }
+                else if ( nodes[ prop ].name === "Fiume Po SK" )                      { var node_Po             = nodes[prop].instanceID; }
+                else if ( nodes[ prop ].name === "Fiume Po tagliato SK" )             { var node_Po_clip        = nodes[prop].instanceID; }
+                else if ( nodes[ prop ].name === "Piena SK" && nodes[prop].type === "MatrixTransform" )                         { var node_Piena         = nodes[prop].instanceID; }
+                else if ( nodes[ prop ].name === "Piena tagliata SK" && nodes[prop].type === "MatrixTransform" )                { var node_Piena_clip    = nodes[prop].instanceID; }
+                else if ( nodes[ prop ].name === "Mappa accavallamenti SK" )          { var node_Thrusts        = nodes[prop].instanceID; }
+                else if ( nodes[ prop ].name === "Mappa accavallamenti tagliata SK" ) { var node_Thrusts_clip   = nodes[prop].instanceID; }
+                else if ( nodes[ prop ].name === "Sezione SK" )                       { var node_Sezione        = nodes[prop].instanceID; }
+                else if ( nodes[ prop ].name === "Sezione tagliata SK" )              { var node_Sezione_clip   = nodes[prop].instanceID; }
 
               }
             }
@@ -79,6 +85,29 @@
             api.hide(node_Thrusts_clip);
             //api.hide(node_Sezione);
             api.hide(node_Sezione_clip);
+
+            if ( node_Piacenza && node_Piacenza_label && node_Cremona && node_Cremona_label ) {
+              buttonO.addEventListener( 'click', function() {
+                switch(buttonO.innerHTML) {
+                  case "Città":
+                    buttonO.innerHTML = " Città ";
+                    buttonO.style.backgroundColor = "#888888";
+                    api.hide(node_Piacenza);
+                    api.hide(node_Piacenza_label);
+                    api.hide(node_Cremona);
+                    api.hide(node_Cremona_label);
+                    break;
+                  case " Città ":
+                    buttonO.innerHTML = "Città";
+                    buttonO.style.backgroundColor = "#1caad9";
+                    api.show(node_Piacenza);
+                    api.show(node_Piacenza_label);
+                    api.show(node_Cremona);
+                    api.show(node_Cremona_label);
+                    break;
+                }
+              });
+            }
 
             if ( node_Topo && node_Topo_clip && node_Po && node_Po_clip && node_Piena && node_Piena_clip && node_Thrusts && node_Thrusts_clip ) {
               buttonA.addEventListener( 'click', function() {
@@ -94,10 +123,10 @@
                       api.show(node_Topo_clip);
                       api.show(node_Po_clip);
                     }
-                    if (buttonC.innerHTML == "Piena") {
+                    if (buttonC.innerHTML != "Inondazione off") {
                       api.show(node_Piena_clip);
                     }
-                    if (buttonD.innerHTML == "Sovrascorrimenti") {
+                    if (buttonD.innerHTML == "Mappa faglie") {
                       api.show(node_Thrusts_clip);
                     }
                     break;
@@ -106,16 +135,16 @@
                     buttonA.style.backgroundColor = "#1caad9";
                     api.hide(node_Topo_clip);
                     api.hide(node_Po_clip);
-                    api.hide(node_Piena);
-                    api.hide(node_Thrusts);
+                    api.hide(node_Piena_clip);
+                    api.hide(node_Thrusts_clip);
                     if (buttonB.innerHTML == "Topografia") {
                       api.show(node_Topo);
                       api.show(node_Po);
                     }
-                    if (buttonC.innerHTML == "Piena") {
+                    if (buttonC.innerHTML != "Inondazione off") {
                       api.show(node_Piena);
                     }
-                    if (buttonD.innerHTML == "Sovrascorrimenti") {
+                    if (buttonD.innerHTML == "Mappa faglie") {
                       api.show(node_Thrusts);
                     }
                     break;
@@ -151,17 +180,24 @@
             }
 
             if ( node_Piena && node_Piena_clip ) {
+              var baselevel = -5500;
+              var timer;
+              start_timer();
               buttonC.addEventListener( 'click', function() {
                 switch(buttonC.innerHTML) {
-                  case "Piena":
-                    buttonC.innerHTML = " Piena ";
+                  case "Inondazione max":
+                    buttonC.innerHTML = "Inondazione off";
                     buttonC.style.backgroundColor = "#888888";
+                    clearInterval(timer);
                     api.hide(node_Piena);
                     api.hide(node_Piena_clip);
+                    api.translate(node_Piena, [0,0,baselevel], {duration: 0, easing: 'easeOutQuad'});
+                    api.translate(node_Piena_clip, [0,0,baselevel], {duration: 0, easing: 'easeOutQuad'});
                     break;
-                  case " Piena ":
-                    buttonC.innerHTML = "Piena";
+                  case "Inondazione off":
+                    buttonC.innerHTML = "Inondazione on";
                     buttonC.style.backgroundColor = "#1caad9";
+                    start_timer();
                     if (buttonA.innerHTML == "Mappa intera") {
                       api.show(node_Piena);
                     }
@@ -169,21 +205,48 @@
                       api.show(node_Piena_clip);
                     }
                     break;
+                    case "Inondazione on":
+                      buttonC.innerHTML = "Inondazione max";
+                      buttonC.style.backgroundColor = "#1caad9";
+                      clearInterval(timer);
+                      api.translate(node_Piena, [0,0,0], {duration: 0, easing: 'easeOutQuad'});
+                      api.translate(node_Piena_clip, [0,0,0], {duration: 0, easing: 'easeOutQuad'});
+                      if (buttonA.innerHTML == "Mappa intera") {
+                        api.show(node_Piena);
+                        api.hide(node_Piena_clip);
+                      }
+                      else {
+                        api.show(node_Piena_clip);
+                        api.hide(node_Piena);
+                      }
+                      break;
                 }
               });
+
+              function start_timer () {
+                alpha = 0;
+                timer = setInterval(function(){
+                  alpha += Math.PI/100;
+                  if ( alpha >= 2*Math.PI ) { alpha = 0 };
+                  var z = baselevel * (Math.cos(alpha)+1)/2;
+                  api.translate(node_Piena, [0,0,z], {duration: 0, easing: 'easeOutQuad'});
+                  api.translate(node_Piena_clip, [0,0,z], {duration: 0, easing: 'easeOutQuad'});
+                }, 50); //time interval = 500 ms
+              }
+
             }
 
             if ( node_Thrusts && node_Thrusts_clip ) {
               buttonD.addEventListener( 'click', function() {
                 switch(buttonD.innerHTML) {
-                  case "Sovrascorrimenti":
-                    buttonD.innerHTML = " Sovrascorrimenti ";
+                  case "Mappa faglie":
+                    buttonD.innerHTML = " Mappa faglie ";
                     buttonD.style.backgroundColor = "#888888";
                     api.hide(node_Thrusts);
                     api.hide(node_Thrusts_clip);
                     break;
-                  case " Sovrascorrimenti ":
-                    buttonD.innerHTML = "Sovrascorrimenti";
+                  case " Mappa faglie ":
+                    buttonD.innerHTML = "Mappa faglie";
                     buttonD.style.backgroundColor = "#1caad9";
                     if (buttonA.innerHTML == "Mappa intera") {
                       api.show(node_Thrusts);
@@ -199,20 +262,20 @@
             if ( node_Sezione && node_Sezione_clip ) {
               buttonE.addEventListener( 'click', function() {
                 switch(buttonE.innerHTML) {
-                  case "Sezione spenta":
-                    buttonE.innerHTML = "Sezione accesa";
+                  case "Sezione off":
+                    buttonE.innerHTML = "Sezione on";
                     buttonE.style.backgroundColor = "#1caad9";
                     api.show(node_Sezione);
                     api.hide(node_Sezione_clip);
                     break;
-                  case "Sezione accesa":
-                    buttonE.innerHTML = "Sezione tagliata";
+                  case "Sezione on":
+                    buttonE.innerHTML = "Sezione clip";
                     buttonE.style.backgroundColor = "#1caad9";
                     api.hide(node_Sezione);
                     api.show(node_Sezione_clip);
                     break;
-                  case "Sezione tagliata":
-                    buttonE.innerHTML = "Sezione spenta";
+                  case "Sezione clip":
+                    buttonE.innerHTML = "Sezione off";
                     buttonE.style.backgroundColor = "#888888";
                     api.hide(node_Sezione);
                     api.hide(node_Sezione_clip);
@@ -241,6 +304,16 @@
       watermark: 1,
       supersample: 0
     });
+
+/*
+    function alpha() {
+      timer = setInterval(function(){
+        a += Math.PI/100;
+        if ( a >= 2*Math.PI ) { a = 0 };
+      }, 50); //time interval = 500 ms
+      return a;
+    }
+*/
 
   </script>
 
@@ -286,7 +359,7 @@
     button:hover {opacity: 1;}
     button:active {font-weight: bold;}
     #keyD {background: #888888;}
-    #keyE {margin-top: 10px;}
+    #keyA {margin-top: 10px;}
     #keyF {margin-top: 10px;}
 
   </style>
