@@ -1,0 +1,161 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Sketchfab Viewer API example</title>
+
+  <!-- Insert this script -->
+  <script type="text/javascript" src="https://static.sketchfab.com/api/sketchfab-viewer-1.8.2.js"></script>
+</head>
+
+<body>
+  <iframe style="position:fixed; width:100%; height:100%; border:0" src="" id="api-frame" sandbox="allow-scripts allow-same-origin allow-popups allow-forms" allow="autoplay; fullscreen; vr" allowvr allowfullscreen mozallowfullscreen="true" webkitallowfullscreen="true"></iframe>
+
+  <div class="buttons">
+    <button id="keyC">Ghiacciaio on</button>
+    <!-- <button id="keyY">Look At</button> -->
+  </div>
+
+  <!-- Your new script -->
+  <script>
+
+    var model = '6430b0b196d94212ad7aa59b97eda7bb';
+
+    //var timer;
+
+    // Buttons
+    buttonC = document.getElementById( 'keyC' );
+    // Variables
+    version = '1.8.2';
+    iframe = document.getElementById( 'api-frame' );
+    client = new Sketchfab( version, iframe );
+
+    error = function () {
+      console.error( 'Sketchfab API Error!' );
+    };
+
+    success = function( api ) {
+      api.start();
+
+      // Wait for viewer to be ready
+      api.addEventListener( 'viewerready', function() {
+
+        // Get the object nodes
+        api.getNodeMap( function ( err, nodes ) {
+          if ( !err ) {
+            for ( var prop in nodes ) {
+              if ( nodes.hasOwnProperty( prop ) ) {
+                //alert(nodes[prop].instanceID+" : "+nodes[prop].name+" : "+nodes[prop].nodeMask+" : "+nodes[prop].type+" : "+nodes[prop].localMatrix+" ; "+nodes[prop].worldMatrix);
+                if      ( nodes[ prop ].name === "Topography" )                                          { var node_Topography = nodes[prop].instanceID; }
+                else if ( nodes[ prop ].name === "Glacier"  && nodes[prop].type === "MatrixTransform" )  { var node_Glacier    = nodes[prop].instanceID; }
+                else if ( nodes[ prop ].name === "River" )                                               { var node_River      = nodes[prop].instanceID; }
+                else if ( nodes[ prop ].name === "City_blob" )                                           { var node_City_blob  = nodes[prop].instanceID; }
+                else if ( nodes[ prop ].name === "City_text" )                                           { var node_City_text  = nodes[prop].instanceID; }
+              }
+            }
+
+            if ( node_Glacier ) {
+              var toplevel = 180000
+              var baselevel = 70000;
+              api.translate(node_Glacier, [0,0,baselevel], {duration: 0, easing: 'easeOutQuad'});
+              var timer;
+              start_timer();
+              buttonC.addEventListener( 'click', function() {
+                switch(buttonC.innerHTML) {
+                  case "Ghiacciaio min":
+                    buttonC.innerHTML = "Ghiacciaio on";
+                    buttonC.style.backgroundColor = "#1caad9";
+                    start_timer();
+                    break;
+                  case "Ghiacciaio on":
+                    buttonC.innerHTML = "Ghiacciaio max";
+                    buttonC.style.backgroundColor = "#1caad9";
+                    clearInterval(timer);
+                    api.translate(node_Glacier, [0,0,toplevel], {duration: 0, easing: 'easeOutQuad'});
+                    break;
+                  case "Ghiacciaio max":
+                    buttonC.innerHTML = "Ghiacciaio min";
+                    buttonC.style.backgroundColor = "#888888";
+                    clearInterval(timer);
+                    api.translate(node_Glacier, [0,0,baselevel], {duration: 0, easing: 'easeOutQuad'});
+                    break;
+                }
+              });
+
+              function start_timer () {
+                alpha = Math.PI;
+                timer = setInterval(function(){
+                  alpha += Math.PI/100;
+                  if ( alpha >= 2*Math.PI ) { alpha = 0 };
+                  var z = baselevel + (toplevel - baselevel) * (Math.cos(alpha)+1)/2;
+                  api.translate(node_Glacier, [0,0,z], {duration: 0, easing: 'easeOutQuad'});
+                }, 50); //time interval = 500 ms
+              }
+
+            }
+
+          }
+        });
+
+      });
+    };
+
+    // Load the model
+    client.init( model, {
+      camera: 0,
+      success: success,
+      error: error,
+      ui_infos: 0,
+      ui_controls: 0,
+      ui_stop: 1,
+      watermark: 1,
+      supersample: 0
+    });
+
+  </script>
+
+  <!-- Lastly, some CSS -->
+  <style type="text/css">
+
+    body {
+      margin: 0;
+    }
+
+    iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+    }
+
+    /* Button style */
+    .buttons {
+      width: 160px;
+      margin: 35px 5px;
+      right: 0;
+      top: : 0;
+      z-index: 1;
+      position: absolute;
+    }
+
+    button {
+      width: 100%;
+      height: 25px;
+      line-height: 21px;
+      /*text-transform: capitalize;*/
+      color: white;
+      opacity: 0.8;
+      border: none;
+      border-radius: 5px;
+      text-align: center;
+      vertical-align: middle;
+      display: block;
+      margin-top: 2px;
+      background: #1caad9;
+    }
+
+    button:hover {opacity: 1;}
+    button:active {font-weight: bold;}
+
+  </style>
+</body>
