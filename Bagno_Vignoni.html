@@ -13,15 +13,21 @@
   <iframe style="position:fixed; width:100%; height:100%; border:0" src="" id="api-frame" sandbox="allow-scripts allow-same-origin allow-popups allow-forms" allow="autoplay; fullscreen; vr" allowvr allowfullscreen mozallowfullscreen="true" webkitallowfullscreen="true"></iframe>
 
   <div class="buttons">
-    <button id="keyA">Large</button>
+    <button id="keyA">Modello Grande</button>
+    <button id="keyB">Edifici</button>
+    <button id="keyC">Etichette</button>
+    <button id="keyF">Informazioni</button>
   </div>
 
   <!-- Your new script -->
   <script>
-    var model = 'bf617db013c5457eb1881951d5d5bd31',
+    var model = '9900ccfb9a034c7abf044dce2c3897c5',
 
     // Buttons
     buttonA = document.getElementById( 'keyA' ),
+    buttonB = document.getElementById( 'keyB' ),
+    buttonC = document.getElementById( 'keyC' ),
+    buttonF = document.getElementById( 'keyF' ),
 
     // Variables
     version = '1.7.1',
@@ -44,6 +50,28 @@
                 //alert(nodes[prop].instanceID+" : "+nodes[prop].name+" : "+nodes[prop].nodeMask+" : "+nodes[prop].type+" : "+nodes[prop].localMatrix+" ; "+nodes[prop].worldMatrix);
                 if      ( nodes[ prop ].name === "Model1ed" )                                          { var node_Model1 = nodes[prop].instanceID; }
                 else if ( nodes[ prop ].name === "Model2ed" )                                          { var node_Model2 = nodes[prop].instanceID; }
+                else if ( nodes[ prop ].name === "Mulino di mezzo" )                                   { var node_build01 = nodes[prop].instanceID; }
+                else if ( nodes[ prop ].name === "Mulino da piedi" )                                   { var node_build02 = nodes[prop].instanceID; }
+                else if ( nodes[ prop ].name === "Mulino buca" )                                       { var node_build03 = nodes[prop].instanceID; }
+                else if ( nodes[ prop ].name === "Mulino di sopra" )                                   { var node_build04 = nodes[prop].instanceID; }
+                else if ( nodes[ prop ].name === "Mulino di mezzo - Vasca di accumulo" )               { var node_build05 = nodes[prop].instanceID; }
+                else if ( nodes[ prop ].name === "Mulino da piedi - Vasca di accumulo" )               { var node_build06 = nodes[prop].instanceID; }
+                else if ( nodes[ prop ].name === "Mulino buca - Vasca di accumulo" )                   { var node_build07 = nodes[prop].instanceID; }
+                else if ( nodes[ prop ].name === "Mulino di sopra - Vasca di accumulo 1" )             { var node_build08 = nodes[prop].instanceID; }
+                else if ( nodes[ prop ].name === "Mulino di sopra - Vasca di accumulo 2 " )            { var node_build09 = nodes[prop].instanceID; }
+                else if ( nodes[ prop ].name === "Docce" )                                             { var node_build10 = nodes[prop].instanceID; }
+                else if ( nodes[ prop ].name === "Torre" )                                             { var node_build11 = nodes[prop].instanceID; }
+                else if ( nodes[ prop ].name === "Mulino di mezzo - Text" )                            { var node_text01 = nodes[prop].instanceID; }
+                else if ( nodes[ prop ].name === "Mulino da piedi - Text" )                            { var node_text02 = nodes[prop].instanceID; }
+                else if ( nodes[ prop ].name === "Mulino buca - Text" )                                { var node_text03 = nodes[prop].instanceID; }
+                else if ( nodes[ prop ].name === "Mulino di sopra - Text" )                            { var node_text04 = nodes[prop].instanceID; }
+                else if ( nodes[ prop ].name === "Mulino di mezzo - Vasca di accumulo - Text" )        { var node_text05 = nodes[prop].instanceID; }
+                else if ( nodes[ prop ].name === "Mulino da piedi - Vasca di accumulo - Text" )        { var node_text06 = nodes[prop].instanceID; }
+                else if ( nodes[ prop ].name === "Mulino buca - Vasca di accumulo - Text" )            { var node_text07 = nodes[prop].instanceID; }
+                else if ( nodes[ prop ].name === "Mulino di sopra - Vasca di accumulo 1 - Text" )      { var node_text08 = nodes[prop].instanceID; }
+                else if ( nodes[ prop ].name === "Mulino di sopra - Vasca di accumulo 2 - Text" )      { var node_text09 = nodes[prop].instanceID; }
+                else if ( nodes[ prop ].name === "Docce - Text" )                                      { var node_text10 = nodes[prop].instanceID; }
+                else if ( nodes[ prop ].name === "Torre - Text" )                                      { var node_text11 = nodes[prop].instanceID; }
               }
             }
 
@@ -54,13 +82,13 @@
               // Add button event
               buttonA.addEventListener( 'click', function() {
                 switch(buttonA.innerHTML) {
-                  case "Large":
-                    buttonA.innerHTML = "Detailed";
+                  case "Modello Grande":
+                    buttonA.innerHTML = "Modello Dettagli";
                     api.show(node_Model2);
                     api.hide(node_Model1);
                     break;
-                  case "Detailed":
-                    buttonA.innerHTML = "Large";
+                  case "Modello Dettagli":
+                    buttonA.innerHTML = "Modello Grande";
                     api.show(node_Model1);
                     api.hide(node_Model2);
                     break;
@@ -68,6 +96,88 @@
               });
 
             }
+
+            if (node_build01 && node_build02 && node_build03 && node_build04 && node_build05 && node_build06 && node_build07 && node_build08 && node_build09 && node_build10 && node_build11 ) {
+              // Add button event
+              buttonB.addEventListener( 'click', function() {
+                switch(buttonB.innerHTML) {
+                  case "Edifici":
+                    buttonB.innerHTML = " Edifici ";
+                    buttonB.style.backgroundColor = "#888888";
+                    api.hide(node_build01);
+                    api.hide(node_build02);
+                    api.hide(node_build03);
+                    api.hide(node_build04);
+                    api.hide(node_build05);
+                    api.hide(node_build06);
+                    api.hide(node_build07);
+                    api.hide(node_build08);
+                    api.hide(node_build09);
+                    api.hide(node_build10);
+                    api.hide(node_build11);
+                    break;
+                  case " Edifici ":
+                    buttonB.innerHTML = "Edifici";
+                    buttonB.style.backgroundColor = "#1caad9";
+                    api.show(node_build01);
+                    api.show(node_build02);
+                    api.show(node_build03);
+                    api.show(node_build04);
+                    api.show(node_build05);
+                    api.show(node_build06);
+                    api.show(node_build07);
+                    api.show(node_build08);
+                    api.show(node_build09);
+                    api.show(node_build10);
+                    api.show(node_build11);
+                    break;
+                }
+              });
+
+            }
+
+            if (node_text01 && node_text02 && node_text03 && node_text04 && node_text05 && node_text06 && node_text07 && node_text08 && node_text09 && node_text10 && node_text11 ) {
+              // Add button event
+              buttonC.addEventListener( 'click', function() {
+                switch(buttonC.innerHTML) {
+                  case "Etichette":
+                    buttonC.innerHTML = " Etichette ";
+                    buttonC.style.backgroundColor = "#888888";
+                    api.hide(node_text01);
+                    api.hide(node_text02);
+                    api.hide(node_text03);
+                    api.hide(node_text04);
+                    api.hide(node_text05);
+                    api.hide(node_text06);
+                    api.hide(node_text07);
+                    api.hide(node_text08);
+                    api.hide(node_text09);
+                    api.hide(node_text10);
+                    api.hide(node_text11);
+                    break;
+                  case " Etichette ":
+                    buttonC.innerHTML = "Etichette";
+                    buttonC.style.backgroundColor = "#1caad9";
+                    api.show(node_text01);
+                    api.show(node_text02);
+                    api.show(node_text03);
+                    api.show(node_text04);
+                    api.show(node_text05);
+                    api.show(node_text06);
+                    api.show(node_text07);
+                    api.show(node_text08);
+                    api.show(node_text09);
+                    api.show(node_text10);
+                    api.show(node_text11);
+                    break;
+                }
+              });
+
+            }
+
+            buttonF.addEventListener( 'click', function() {
+              window.open("http://www.comunesanquirico.it/area-turismo/il-parco-dei-mulini-a-bagno-vignoni/");
+            });
 
           }
         });
