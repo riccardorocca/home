@@ -13,7 +13,7 @@
   <iframe style="position:fixed; width:100%; height:100%; border:0" src="" id="api-frame" sandbox="allow-scripts allow-same-origin allow-popups allow-forms" allow="autoplay; fullscreen; vr" allowvr allowfullscreen mozallowfullscreen="true" webkitallowfullscreen="true"></iframe>
 
   <div class="buttons">
-    <button id="keyA">Modello Grande</button>
+    <button id="keyA">Modello Esteso</button>
     <button id="keyC">Etichette</button>
     <button id="keyB">Edifici</button>
     <button id="keyF">Informazioni</button>
@@ -82,13 +82,13 @@
               // Add button event
               buttonA.addEventListener( 'click', function() {
                 switch(buttonA.innerHTML) {
-                  case "Modello Grande":
-                    buttonA.innerHTML = "Modello Dettagli";
+                  case "Modello Esteso":
+                    buttonA.innerHTML = "Modello Dettagliato";
                     api.show(node_Model2);
                     api.hide(node_Model1);
                     break;
-                  case "Modello Dettagli":
-                    buttonA.innerHTML = "Modello Grande";
+                  case "Modello Dettagliato":
+                    buttonA.innerHTML = "Modello Esteso";
                     api.show(node_Model1);
                     api.hide(node_Model2);
                     break;
