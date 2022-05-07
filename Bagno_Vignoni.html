@@ -15,7 +15,7 @@
   <div class="buttons">
     <button id="keyA">Modello Esteso</button>
     <button id="keyC">Etichette</button>
-    <button id="keyB">Edifici</button>
+    <button id="keyB">Strutture</button>
     <button id="keyF">Informazioni</button>
   </div>
 
@@ -101,8 +101,8 @@
               // Add button event
               buttonB.addEventListener( 'click', function() {
                 switch(buttonB.innerHTML) {
-                  case "Edifici":
-                    buttonB.innerHTML = " Edifici ";
+                  case "Strutture":
+                    buttonB.innerHTML = " Strutture ";
                     buttonB.style.backgroundColor = "#888888";
                     api.hide(node_build01);
                     api.hide(node_build02);
@@ -116,8 +116,8 @@
                     api.hide(node_build10);
                     api.hide(node_build11);
                     break;
-                  case " Edifici ":
-                    buttonB.innerHTML = "Edifici";
+                  case " Strutture ":
+                    buttonB.innerHTML = "Strutture";
                     buttonB.style.backgroundColor = "#1caad9";
                     api.show(node_build01);
                     api.show(node_build02);
