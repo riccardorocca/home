@@ -88,11 +88,35 @@
                     buttonA.innerHTML = "Modello Dettagliato";
                     api.show(node_Model2);
                     api.hide(node_Model1);
+                    api.hide(node_build02);
+                    api.hide(node_build06);
+                    api.hide(node_build08);
+                    api.hide(node_build09);
+                    api.hide(node_build10);
+                    api.hide(node_text02);
+                    api.hide(node_text06);
+                    api.hide(node_text08);
+                    api.hide(node_text09);
+                    api.hide(node_text10);
                     break;
                   case "Modello Dettagliato":
                     buttonA.innerHTML = "Modello Esteso";
                     api.show(node_Model1);
                     api.hide(node_Model2);
+                    if ( buttonB.innerHTML == "Strutture" ) {
+                      api.show(node_build02);
+                      api.show(node_build06);
+                      api.show(node_build08);
+                      api.show(node_build09);
+                      api.show(node_build10);
+                    }
+                    if ( buttonC.innerHTML == "Etichette" ) {
+                      api.show(node_text02);
+                      api.show(node_text06);
+                      api.show(node_text08);
+                      api.show(node_text09);
+                      api.show(node_text10);
+                    }
                     break;
                 }
               });
