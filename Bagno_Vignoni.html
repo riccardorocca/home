@@ -23,7 +23,7 @@
 
   <!-- Your new script -->
   <script>
-    var model = '9900ccfb9a034c7abf044dce2c3897c5',
+    var model = 'ceb63344da7748c5929358d1e3fc135b',
 
     // Buttons
     buttonA = document.getElementById( 'keyA' ),
@@ -52,30 +52,28 @@
             for ( var prop in nodes ) {
               if ( nodes.hasOwnProperty( prop ) ) {
                 //alert(nodes[prop].instanceID+" : "+nodes[prop].name+" : "+nodes[prop].nodeMask+" : "+nodes[prop].type+" : "+nodes[prop].localMatrix+" ; "+nodes[prop].worldMatrix);
-                if      ( nodes[ prop ].name === "Model1ed" )                                          { var node_Model1 = nodes[prop].instanceID; }
-                else if ( nodes[ prop ].name === "Model2ed" )                                          { var node_Model2 = nodes[prop].instanceID; }
-                else if ( nodes[ prop ].name === "Mulino di mezzo" )                                   { var node_build01 = nodes[prop].instanceID; }
-                else if ( nodes[ prop ].name === "Mulino da piedi" )                                   { var node_build02 = nodes[prop].instanceID; }
-                else if ( nodes[ prop ].name === "Mulino buca" )                                       { var node_build03 = nodes[prop].instanceID; }
-                else if ( nodes[ prop ].name === "Mulino di sopra" )                                   { var node_build04 = nodes[prop].instanceID; }
-                else if ( nodes[ prop ].name === "Mulino di mezzo - Vasca di accumulo" )               { var node_build05 = nodes[prop].instanceID; }
-                else if ( nodes[ prop ].name === "Mulino da piedi - Vasca di accumulo" )               { var node_build06 = nodes[prop].instanceID; }
-                else if ( nodes[ prop ].name === "Mulino buca - Vasca di accumulo" )                   { var node_build07 = nodes[prop].instanceID; }
-                else if ( nodes[ prop ].name === "Mulino di sopra - Vasca di accumulo 1" )             { var node_build08 = nodes[prop].instanceID; }
-                else if ( nodes[ prop ].name === "Mulino di sopra - Vasca di accumulo 2 " )            { var node_build09 = nodes[prop].instanceID; }
-                else if ( nodes[ prop ].name === "Docce" )                                             { var node_build10 = nodes[prop].instanceID; }
-                else if ( nodes[ prop ].name === "Torre" )                                             { var node_build11 = nodes[prop].instanceID; }
-                else if ( nodes[ prop ].name === "Mulino di mezzo - Text" )                            { var node_text01 = nodes[prop].instanceID; }
-                else if ( nodes[ prop ].name === "Mulino da piedi - Text" )                            { var node_text02 = nodes[prop].instanceID; }
-                else if ( nodes[ prop ].name === "Mulino buca - Text" )                                { var node_text03 = nodes[prop].instanceID; }
-                else if ( nodes[ prop ].name === "Mulino di sopra - Text" )                            { var node_text04 = nodes[prop].instanceID; }
-                else if ( nodes[ prop ].name === "Mulino di mezzo - Vasca di accumulo - Text" )        { var node_text05 = nodes[prop].instanceID; }
-                else if ( nodes[ prop ].name === "Mulino da piedi - Vasca di accumulo - Text" )        { var node_text06 = nodes[prop].instanceID; }
-                else if ( nodes[ prop ].name === "Mulino buca - Vasca di accumulo - Text" )            { var node_text07 = nodes[prop].instanceID; }
-                else if ( nodes[ prop ].name === "Mulino di sopra - Vasca di accumulo 1 - Text" )      { var node_text08 = nodes[prop].instanceID; }
-                else if ( nodes[ prop ].name === "Mulino di sopra - Vasca di accumulo 2 - Text" )      { var node_text09 = nodes[prop].instanceID; }
-                else if ( nodes[ prop ].name === "Docce - Text" )                                      { var node_text10 = nodes[prop].instanceID; }
-                else if ( nodes[ prop ].name === "Torre - Text" )                                      { var node_text11 = nodes[prop].instanceID; }
+                if      ( nodes[ prop ].name === "Model1ed" )                            { var node_Model1 = nodes[prop].instanceID; }
+                else if ( nodes[ prop ].name === "Model2ed" )                            { var node_Model2 = nodes[prop].instanceID; }
+                else if ( nodes[ prop ].name === "Mulino di mezzo" )                     { var node_build01 = nodes[prop].instanceID; }
+                else if ( nodes[ prop ].name === "Mulino da piedi" )                     { var node_build02 = nodes[prop].instanceID; }
+                else if ( nodes[ prop ].name === "Mulino buca" )                         { var node_build03 = nodes[prop].instanceID; }
+                else if ( nodes[ prop ].name === "Mulino di sopra" )                     { var node_build04 = nodes[prop].instanceID; }
+                else if ( nodes[ prop ].name === "Mulino di mezzo - Vasca" )             { var node_build05 = nodes[prop].instanceID; }
+                else if ( nodes[ prop ].name === "Mulino da piedi - Vasca" )             { var node_build06 = nodes[prop].instanceID; }
+                else if ( nodes[ prop ].name === "Mulino buca - Vasca" )                 { var node_build07 = nodes[prop].instanceID; }
+                else if ( nodes[ prop ].name === "Mulino di sopra - Vasca" )             { var node_build08 = nodes[prop].instanceID; }
+                else if ( nodes[ prop ].name === "Docce" )                               { var node_build09 = nodes[prop].instanceID; }
+                else if ( nodes[ prop ].name === "Torre" )                               { var node_build10 = nodes[prop].instanceID; }
+                else if ( nodes[ prop ].name === "Mulino di mezzo - Text" )              { var node_text01 = nodes[prop].instanceID; }
+                else if ( nodes[ prop ].name === "Mulino da piedi - Text" )              { var node_text02 = nodes[prop].instanceID; }
+                else if ( nodes[ prop ].name === "Mulino buca - Text" )                  { var node_text03 = nodes[prop].instanceID; }
+                else if ( nodes[ prop ].name === "Mulino di sopra - Text" )              { var node_text04 = nodes[prop].instanceID; }
+                else if ( nodes[ prop ].name === "Mulino di mezzo - Vasca - Text" )      { var node_text05 = nodes[prop].instanceID; }
+                else if ( nodes[ prop ].name === "Mulino da piedi - Vasca - Text" )      { var node_text06 = nodes[prop].instanceID; }
+                else if ( nodes[ prop ].name === "Mulino buca - Vasca - Text" )          { var node_text07 = nodes[prop].instanceID; }
+                else if ( nodes[ prop ].name === "Mulino di sopra - Vasca - Text" )      { var node_text08 = nodes[prop].instanceID; }
+                else if ( nodes[ prop ].name === "Docce - Text" )                        { var node_text09 = nodes[prop].instanceID; }
+                else if ( nodes[ prop ].name === "Torre - Text" )                        { var node_text10 = nodes[prop].instanceID; }
               }
             }
 
@@ -101,7 +99,7 @@
 
             }
 
-            if (node_build01 && node_build02 && node_build03 && node_build04 && node_build05 && node_build06 && node_build07 && node_build08 && node_build09 && node_build10 && node_build11 ) {
+            if (node_build01 && node_build02 && node_build03 && node_build04 && node_build05 && node_build06 && node_build07 && node_build08 && node_build09 && node_build10 ) {
               // Add button event
               buttonB.addEventListener( 'click', function() {
                 switch(buttonB.innerHTML) {
@@ -118,7 +116,6 @@
                     api.hide(node_build08);
                     api.hide(node_build09);
                     api.hide(node_build10);
-                    api.hide(node_build11);
                     break;
                   case " Strutture ":
                     buttonB.innerHTML = "Strutture";
@@ -133,14 +130,13 @@
                     api.show(node_build08);
                     api.show(node_build09);
                     api.show(node_build10);
-                    api.show(node_build11);
                     break;
                 }
               });
 
             }
 
-            if (node_text01 && node_text02 && node_text03 && node_text04 && node_text05 && node_text06 && node_text07 && node_text08 && node_text09 && node_text10 && node_text11 ) {
+            if (node_text01 && node_text02 && node_text03 && node_text04 && node_text05 && node_text06 && node_text07 && node_text08 && node_text09 && node_text10 ) {
               // Add button event
               buttonC.addEventListener( 'click', function() {
                 switch(buttonC.innerHTML) {
@@ -157,7 +153,6 @@
                     api.hide(node_text08);
                     api.hide(node_text09);
                     api.hide(node_text10);
-                    api.hide(node_text11);
                     break;
                   case " Etichette ":
                     buttonC.innerHTML = "Etichette";
@@ -172,7 +167,6 @@
                     api.show(node_text08);
                     api.show(node_text09);
                     api.show(node_text10);
-                    api.show(node_text11);
                     break;
                 }
               });
