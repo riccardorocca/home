@@ -16,6 +16,8 @@
     <button id="keyA">Modello Esteso</button>
     <button id="keyC">Etichette</button>
     <button id="keyB">Strutture</button>
+    <button id="keyP1">Panorama 1</button>
+    <button id="keyP2">Panorama 2</button>
     <button id="keyF">Informazioni</button>
   </div>
 
@@ -27,6 +29,8 @@
     buttonA = document.getElementById( 'keyA' ),
     buttonB = document.getElementById( 'keyB' ),
     buttonC = document.getElementById( 'keyC' ),
+    buttonP1 = document.getElementById( 'keyP1' ),
+    buttonP2 = document.getElementById( 'keyP2' ),
     buttonF = document.getElementById( 'keyF' ),
 
     // Variables
@@ -174,6 +178,14 @@
               });
 
             }
+
+            buttonP2.addEventListener( 'click', function() {
+              window.open("https://roundme.com/tour/848592/view/2672567/");
+            });
+
+            buttonP1.addEventListener( 'click', function() {
+              window.open("https://roundme.com/tour/848586/view/2672556/");
+            });
 
             buttonF.addEventListener( 'click', function() {
               window.open("http://www.comunesanquirico.it/area-turismo/il-parco-dei-mulini-a-bagno-vignoni/");
