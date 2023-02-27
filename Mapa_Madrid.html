@@ -60,6 +60,7 @@
 <div class="menu">
   <button id="HtmlButton0">MAPAS</button>
   <button id="HtmlButton1">Murallas</button>
+  <button id="HtmlButton3">Batalla Ciudad Universitaria</button>
   <button id="HtmlButton2">Vista Satelitar</button>
 </div>
 
@@ -68,6 +69,7 @@
   var button0 = document.getElementById( 'HtmlButton0' );
   var button1 = document.getElementById( 'HtmlButton1' );
   var button2 = document.getElementById( 'HtmlButton2' );
+  var button3 = document.getElementById( 'HtmlButton3' );
   HideMaps();
 
 	mapboxgl.accessToken = 'pk.eyJ1Ijoicmljcm9jIiwiYSI6ImNpanZyajMxYTBhdmZ0dG01bmVsbG8ybzcifQ.RdmNKeWGLY_fqRmUrM9m4w';
@@ -129,6 +131,18 @@
       }
     };
 
+    button3.className = 'active';
+    button3.onclick = function () {
+      if (button3.className === 'active') {
+        map.setLayoutProperty('Batalla Ciudad Universitaria', 'visibility', 'none');
+        button3.className = 'inactive';
+      } else {
+        InactiveButtons();
+        map.setLayoutProperty('Batalla Ciudad Universitaria', 'visibility', 'visible');
+        button3.className = 'active';
+      }
+    };
+
     button2.onclick = function () {
       if (button2.className === 'active') {
         map.setLayoutProperty('Satelitar Google', 'visibility', 'none');
@@ -141,13 +155,16 @@
 
     function InactiveButtons() {
       map.setLayoutProperty('Murallas', 'visibility', 'none');
+      map.setLayoutProperty('Batalla Ciudad Universitaria', 'visibility', 'none');
       button1.className = 'inactive';
+      button3.className = 'inactive';
     }
 
     function ShowMaps() {
       button0.className = 'active';
       button1.style.display = "block";
       button2.style.display = "block";
+      button3.style.display = "block";
       return;
     }
 
@@ -155,6 +172,7 @@
       button0.className = 'inactive';
       button1.style.display = "none";
       button2.style.display = "none";
+      button3.style.display = "none";
       return;
     }
 
