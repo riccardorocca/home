@@ -1,0 +1,24 @@
+<?xml version='1.0' encoding='UTF-8' standalone='yes' ?>
+<gpx version="1.1" creator="Locus Map web planner" xsi:schemaLocation="http://www.topografix.com/GPX/1/1 http://www.topografix.com/GPX/1/1/gpx.xsd" xmlns="http://www.topografix.com/GPX/1/1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:locus="http://www.locusmap.eu" xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3" xmlns:gpxtrkx="http://www.garmin.com/xmlschemas/TrackStatsExtension/v1" xmlns:gpxtpx="http://www.garmin.com/xmlschemas/TrackPointExtension/v2">
+  <metadata>
+    <desc>File with points/tracks from LocusWorld/</desc>
+    <time>2023-04-21T11:02:41.766Z</time>
+  </metadata>
+  <trk>
+    <name>2023-04-21 11:02</name>
+    <extensions>
+      <locus:activity>no_activity</locus:activity>
+    </extensions>
+    <trkseg>
+      <trkpt lat="45.0533118" lon="9.7042150" />
+      <trkpt lat="45.0530691" lon="9.7035230" />
+      <trkpt lat="45.0519012" lon="9.7028954" />
+      <trkpt lat="45.0518633" lon="9.7029812" />
+      <trkpt lat="45.0516888" lon="9.7046603" />
+      <trkpt lat="45.0518860" lon="9.7048266" />
+      <trkpt lat="45.0520491" lon="9.7047944" />
+      <trkpt lat="45.0522197" lon="9.7048051" />
+      <trkpt lat="45.0533080" lon="9.7042097" />
+    </trkseg>
+  </trk>
+</gpx>
