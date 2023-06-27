@@ -1,0 +1,218 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Cerebro</title>
+
+  <!-- Insert this script -->
+  <script type="text/javascript" src="https://static.sketchfab.com/api/sketchfab-viewer-1.5.1.js"></script>
+</head>
+
+<body>
+  <iframe style="position:fixed; width:100%; height:100%; border:0" src="" id="api-frame" sandbox="allow-scripts allow-same-origin allow-popups allow-forms" allow="autoplay; fullscreen; vr" allowvr allowfullscreen mozallowfullscreen="true" webkitallowfullscreen="true"></iframe>
+
+  <div class="buttons">
+    <button id="keyA">Cerebro Rostral</button>
+    <button id="keyB">Cerebro Caudal</button>
+    <button id="keyE">Cortes</button>
+    <button id="keyC">Corte Rostral</button>
+    <button id="keyD">Corte Caudal</button>
+  </div>
+
+  <!-- Your new script -->
+  <script>
+    var model = '3ad042dd28cd4a6d89aea7d7ef3edecb',
+
+    // Buttons
+    buttonA = document.getElementById( 'keyA' ),
+    buttonB = document.getElementById( 'keyB' ),
+    buttonC = document.getElementById( 'keyC' ),
+    buttonD = document.getElementById( 'keyD' ),
+    buttonE = document.getElementById( 'keyE' ),
+
+    // Variables
+    version = '1.7.1',
+    iframe = document.getElementById( 'api-frame' ),
+    client = new Sketchfab( version, iframe ),
+
+    error = function () {
+      console.error( 'Sketchfab API Error!' );
+    },
+
+    success = function( api ) {
+      api.start();
+      // Wait for viewer to be ready
+      api.addEventListener( 'viewerready', function() {
+        // Get the object nodes
+        api.getNodeMap( function ( err, nodes ) {
+          if ( !err ) {
+            for ( var prop in nodes ) {
+              if ( nodes.hasOwnProperty( prop ) ) {
+                //alert(nodes[prop].instanceID+" : "+nodes[prop].name+" : "+nodes[prop].nodeMask+" : "+nodes[prop].type+" : "+nodes[prop].localMatrix+" ; "+nodes[prop].worldMatrix);
+                if      ( nodes[ prop ].name === "cerebro_caudal" )    { var node_cerebro_caudal = nodes[prop].instanceID; }
+                else if ( nodes[ prop ].name === "cerebro_rostral" )   { var node_cerebro_rostral = nodes[prop].instanceID; }
+                else if ( nodes[ prop ].name === "corte 13c" )         { var node_corte_caudal = nodes[prop].instanceID; }
+                else if ( nodes[ prop ].name === "corte 14r" )         { var node_corte_rostral = nodes[prop].instanceID; }
+                else if ( nodes[ prop ].name === "secciones" )         { var node_cortes = nodes[prop].instanceID; }
+              }
+            }
+
+            if (node_cerebro_rostral) {
+              buttonA.addEventListener( 'click', function() {
+                switch(buttonA.innerHTML) {
+                  case "Cerebro Rostral":
+                    buttonA.innerHTML = " Cerebro Rostral ";
+                    buttonA.style.backgroundColor = "#888888";
+                    api.hide(node_cerebro_rostral);
+                    break;
+                  case " Cerebro Rostral ":
+                    buttonA.innerHTML = "Cerebro Rostral";
+                    buttonA.style.backgroundColor = "#1caad9";
+                    api.show(node_cerebro_rostral);
+                    break;
+                }
+              });
+            }
+
+            if (node_cerebro_caudal) {
+              buttonB.addEventListener( 'click', function() {
+                switch(buttonB.innerHTML) {
+                  case "Cerebro Caudal":
+                    buttonB.innerHTML = " Cerebro Caudal ";
+                    buttonB.style.backgroundColor = "#888888";
+                    api.hide(node_cerebro_caudal);
+                    break;
+                  case " Cerebro Caudal ":
+                    buttonB.innerHTML = "Cerebro Caudal";
+                    buttonB.style.backgroundColor = "#1caad9";
+                    api.show(node_cerebro_caudal);
+                    break;
+                }
+              });
+            }
+
+            if (node_corte_rostral) {
+              buttonC.addEventListener( 'click', function() {
+                switch(buttonC.innerHTML) {
+                  case "Corte Rostral":
+                    buttonC.innerHTML = " Corte Rostral ";
+                    buttonC.style.backgroundColor = "#888888";
+                    api.hide(node_corte_rostral);
+                    break;
+                  case " Corte Rostral ":
+                    buttonC.innerHTML = "Corte Rostral";
+                    buttonC.style.backgroundColor = "#1caad9";
+                    api.show(node_corte_rostral);
+                    break;
+                }
+              });
+            }
+
+
+            if (node_corte_caudal) {
+              buttonD.addEventListener( 'click', function() {
+                switch(buttonD.innerHTML) {
+                  case "Corte Caudal":
+                    buttonD.innerHTML = " Corte Caudal ";
+                    buttonD.style.backgroundColor = "#888888";
+                    api.hide(node_corte_caudal);
+                    break;
+                  case " Corte Caudal ":
+                    buttonD.innerHTML = "Corte Caudal";
+                    buttonD.style.backgroundColor = "#1caad9";
+                    api.show(node_corte_caudal);
+                    break;
+                }
+              });
+            }
+
+            if (node_cortes) {
+              buttonE.addEventListener( 'click', function() {
+                switch(buttonE.innerHTML) {
+                  case "Cortes":
+                    buttonE.innerHTML = " Cortes ";
+                    buttonE.style.backgroundColor = "#888888";
+                    api.hide(node_cortes);
+                    break;
+                  case " Cortes ":
+                    buttonE.innerHTML = "Cortes";
+                    buttonE.style.backgroundColor = "#1caad9";
+                    api.show(node_cortes);
+                    break;
+                }
+              });
+            }
+
+          }
+        });
+
+      });
+    };
+
+    // Load the model
+    client.init( model, {
+      success: success,
+      error: error,
+      ui_infos: 0,
+      ui_controls: 0,
+      ui_stop: 1,
+      watermark: 1,
+      supersample: 0
+    });
+
+  </script>
+
+  <!-- Lastly, some CSS -->
+  <style type="text/css">
+
+    body {
+      margin: 0;
+    }
+
+    iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+    }
+
+    img {
+      width: 130px;
+      opacity: 0.8;
+    }
+
+    /* Button style */
+    .buttons {
+      margin: 35px 5px;
+      right: 0;
+      top: : 0;
+      z-index: 1;
+      position: absolute;
+    }
+
+    button {
+      width: 130px;
+      height: 50px;
+      line-height: 21px;
+      text-transform: capitalize;
+      color: white;
+      opacity: 0.8;
+      border: none;
+      border-radius: 5px;
+      text-align: center;
+      vertical-align: middle;
+      display: block;
+      margin-top: 2px;
+      background: #1caad9;
+    }
+
+    button:hover {opacity: 1;}
+    button:active {font-weight: bold;}
+    #keyA {width: 64px; display: inline;}
+    #keyB {width: 63px; display: inline;}
+    #keyE {height: 30px;}
+    #keyC {width: 64px; display: inline;}
+    #keyD {width: 63px; display: inline;}
+
+  </style>
+</body>
