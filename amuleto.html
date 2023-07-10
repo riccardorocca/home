@@ -1,0 +1,204 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Cerebro</title>
+
+  <!-- Insert this script -->
+  <script type="text/javascript" src="https://static.sketchfab.com/api/sketchfab-viewer-1.5.1.js"></script>
+</head>
+
+<body>
+  <iframe style="position:fixed; width:100%; height:100%; border:0" src="" id="api-frame" sandbox="allow-scripts allow-same-origin allow-popups allow-forms" allow="autoplay; fullscreen; vr" allowvr allowfullscreen mozallowfullscreen="true" webkitallowfullscreen="true"></iframe>
+
+  <div class="buttons">
+    <button id="keyA"> Sistro </button>
+    <button id="keyB"> Disco </button>
+    <button id="keyC"> Bastone </button>
+    <button id="keyD"> Martello </button>
+    <button id="keyE"> Delfino </button>
+    <button id="keyF"> Colonna </button>
+    <button id="keyG"> Colonnina </button>
+    <button id="keyH"> Clava </button>
+  </div>
+
+  <!-- Your new script -->
+  <script>
+    var model = '7744fd21cfd44795b10d837ed492a3a2',
+
+    // Buttons
+    buttonA = document.getElementById( 'keyA' ),
+    buttonB = document.getElementById( 'keyB' ),
+    buttonC = document.getElementById( 'keyC' ),
+    buttonD = document.getElementById( 'keyD' ),
+    buttonE = document.getElementById( 'keyE' ),
+    buttonF = document.getElementById( 'keyF' ),
+    buttonG = document.getElementById( 'keyG' ),
+    buttonH = document.getElementById( 'keyH' ),
+
+    // Variables
+    version = '1.7.1',
+    iframe = document.getElementById( 'api-frame' ),
+    client = new Sketchfab( version, iframe ),
+
+    error = function () {
+      console.error( 'Sketchfab API Error!' );
+    },
+
+    success = function( api ) {
+      api.start();
+      // Wait for viewer to be ready
+      api.addEventListener( 'viewerready', function() {
+        // Get the object nodes
+        api.getNodeMap( function ( err, nodes ) {
+          if ( !err ) {
+            for ( var prop in nodes ) {
+              if ( nodes.hasOwnProperty( prop ) ) {
+                //alert(nodes[prop].instanceID+" : "+nodes[prop].name+" : "+nodes[prop].nodeMask+" : "+nodes[prop].type+" : "+nodes[prop].localMatrix+" ; "+nodes[prop].worldMatrix);
+                if      ( nodes[ prop ].name === "sistro" )     { var node_sistro = nodes[prop].instanceID; }
+                else if ( nodes[ prop ].name === "sistroA" )    { var node_sistroA = nodes[prop].instanceID; }
+                else if ( nodes[ prop ].name === "disco" )      { var node_disco = nodes[prop].instanceID; }
+                else if ( nodes[ prop ].name === "discoA" )     { var node_discoA = nodes[prop].instanceID; }
+                else if ( nodes[ prop ].name === "bastone" )    { var node_bastone = nodes[prop].instanceID; }
+                else if ( nodes[ prop ].name === "bastoneA" )   { var node_bastoneA = nodes[prop].instanceID; }
+                else if ( nodes[ prop ].name === "martello" )   { var node_martello = nodes[prop].instanceID; }
+                else if ( nodes[ prop ].name === "martelloA" )  { var node_martelloA = nodes[prop].instanceID; }
+                else if ( nodes[ prop ].name === "delfino" )    { var node_delfino = nodes[prop].instanceID; }
+                else if ( nodes[ prop ].name === "delfinoA" )   { var node_delfinoA = nodes[prop].instanceID; }
+                else if ( nodes[ prop ].name === "colonna" )    { var node_colonna = nodes[prop].instanceID; }
+                else if ( nodes[ prop ].name === "colonnaA" )   { var node_colonnaA = nodes[prop].instanceID; }
+                else if ( nodes[ prop ].name === "colonnina" )   { var node_colonnina = nodes[prop].instanceID; }
+                else if ( nodes[ prop ].name === "colonninaA" ) { var node_colonninaA = nodes[prop].instanceID; }
+                else if ( nodes[ prop ].name === "clava" )      { var node_clava = nodes[prop].instanceID; }
+                else if ( nodes[ prop ].name === "clavaA" )     { var node_clavaA = nodes[prop].instanceID; }
+              }
+            }
+
+            if (node_sistro && node_disco && node_bastone && node_martello && node_delfino && node_colonna && node_colonnina && node_clava) {
+              api.hide(node_sistro);
+              api.hide(node_disco);
+              api.hide(node_bastone);
+              api.hide(node_martello);
+              api.hide(node_delfino);
+              api.hide(node_colonna);
+              api.hide(node_colonnina);
+              api.hide(node_clava);
+            }
+
+            buttonA.style.backgroundColor = "#888888";
+            buttonB.style.backgroundColor = "#888888";
+            buttonC.style.backgroundColor = "#888888";
+            buttonD.style.backgroundColor = "#888888";
+            buttonE.style.backgroundColor = "#888888";
+            buttonF.style.backgroundColor = "#888888";
+            buttonG.style.backgroundColor = "#888888";
+            buttonH.style.backgroundColor = "#888888";
+
+            if (node_sistro && node_sistroA) {buttonA.addEventListener( 'click', function() {switch(buttonA.innerHTML) {
+                  case "Sistro": buttonA.innerHTML = " Sistro "; buttonA.style.backgroundColor = "#888888"; api.hide(node_sistro); api.show(node_sistroA); break;
+                  case " Sistro ": buttonA.innerHTML = "Sistro"; buttonA.style.backgroundColor = "#1caad9"; api.hide(node_sistroA); api.show(node_sistro); break;
+            } }); }
+
+            if (node_disco && node_discoA) {buttonB.addEventListener( 'click', function() {switch(buttonB.innerHTML) {
+                  case "Disco": buttonB.innerHTML = " Disco "; buttonB.style.backgroundColor = "#888888"; api.hide(node_disco); api.show(node_discoA); break;
+                  case " Disco ": buttonB.innerHTML = "Disco"; buttonB.style.backgroundColor = "#1caad9"; api.hide(node_discoA); api.show(node_disco); break;
+            } }); }
+
+            if (node_bastone && node_bastoneA) {buttonC.addEventListener( 'click', function() {switch(buttonC.innerHTML) {
+                  case "Bastone": buttonC.innerHTML = " Bastone "; buttonC.style.backgroundColor = "#888888"; api.hide(node_bastone); api.show(node_bastoneA); break;
+                  case " Bastone ": buttonC.innerHTML = "Bastone"; buttonC.style.backgroundColor = "#1caad9"; api.hide(node_bastoneA); api.show(node_bastone); break;
+            } }); }
+
+            if (node_martello && node_martelloA) {buttonD.addEventListener( 'click', function() {switch(buttonD.innerHTML) {
+                  case "Martello": buttonD.innerHTML = " Martello "; buttonD.style.backgroundColor = "#888888"; api.hide(node_martello); api.show(node_martelloA); break;
+                  case " Martello ": buttonD.innerHTML = "Martello"; buttonD.style.backgroundColor = "#1caad9"; api.hide(node_martelloA); api.show(node_martello); break;
+            } }); }
+
+            if (node_delfino && node_delfinoA) {buttonE.addEventListener( 'click', function() {switch(buttonE.innerHTML) {
+                  case "Delfino": buttonE.innerHTML = " Delfino "; buttonE.style.backgroundColor = "#888888"; api.hide(node_delfino); api.show(node_delfinoA); break;
+                  case " Delfino ": buttonE.innerHTML = "Delfino"; buttonE.style.backgroundColor = "#1caad9"; api.hide(node_delfinoA); api.show(node_delfino); break;
+            } }); }
+
+            if (node_colonna && node_colonnaA) {buttonF.addEventListener( 'click', function() {switch(buttonF.innerHTML) {
+                  case "Colonna": buttonF.innerHTML = " Colonna "; buttonF.style.backgroundColor = "#888888"; api.hide(node_colonna); api.show(node_colonnaA); break;
+                  case " Colonna ": buttonF.innerHTML = "Colonna"; buttonF.style.backgroundColor = "#1caad9"; api.hide(node_colonnaA); api.show(node_colonna); break;
+            } }); }
+
+            if (node_colonnina && node_colonninaA) {buttonG.addEventListener( 'click', function() {switch(buttonG.innerHTML) {
+                  case "Colonnina": buttonG.innerHTML = " Colonnina "; buttonG.style.backgroundColor = "#888888"; api.hide(node_colonnina); api.show(node_colonninaA); break;
+                  case " Colonnina ": buttonG.innerHTML = "Colonnina"; buttonG.style.backgroundColor = "#1caad9"; api.hide(node_colonninaA); api.show(node_colonnina); break;
+            } }); }
+
+            if (node_clava && node_clavaA) {buttonH.addEventListener( 'click', function() {switch(buttonH.innerHTML) {
+                  case "Clava": buttonH.innerHTML = " Clava "; buttonH.style.backgroundColor = "#888888"; api.hide(node_clava); api.show(node_clavaA); break;
+                  case " Clava ": buttonH.innerHTML = "Clava"; buttonH.style.backgroundColor = "#1caad9"; api.hide(node_clavaA); api.show(node_clava); break;
+            } }); }
+
+          }
+        });
+
+      });
+    };
+
+    // Load the model
+    client.init( model, {
+      success: success,
+      error: error,
+      ui_infos: 0,
+      ui_controls: 0,
+      ui_stop: 1,
+      watermark: 1,
+      supersample: 0
+    });
+
+  </script>
+
+  <!-- Lastly, some CSS -->
+  <style type="text/css">
+
+    body {
+      margin: 0;
+    }
+
+    iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+    }
+
+    img {
+      width: 130px;
+      opacity: 0.8;
+    }
+
+    /* Button style */
+    .buttons {
+      margin: 35px 5px;
+      right: 0;
+      top: : 0;
+      z-index: 1;
+      position: absolute;
+    }
+
+    button {
+      width: 130px;
+      height: 50px;
+      line-height: 21px;
+      text-transform: capitalize;
+      color: white;
+      opacity: 0.8;
+      border: none;
+      border-radius: 5px;
+      text-align: center;
+      vertical-align: middle;
+      display: block;
+      margin-top: 2px;
+      background: #1caad9;
+    }
+
+    button:hover {opacity: 1;}
+    button:active {font-weight: bold;}
+
+  </style>
+</body>
