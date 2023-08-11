@@ -1,0 +1,129 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>San Salvatore di Morfasso</title>
+
+  <!-- Insert this script -->
+  <script type="text/javascript" src="https://static.sketchfab.com/api/sketchfab-viewer-1.5.1.js"></script>
+</head>
+
+<body>
+  <iframe style="position:fixed; width:100%; height:100%; border:0" src="" id="api-frame" sandbox="allow-scripts allow-same-origin allow-popups allow-forms" allow="autoplay; fullscreen; vr" allowvr allowfullscreen mozallowfullscreen="true" webkitallowfullscreen="true"></iframe>
+
+  <div class="buttons">
+    <button id="keyB">Torre</button>
+    <button id="keyA">Planimetria</button>
+  </div>
+
+  <!-- Your new script -->
+  <script>
+    var model = 'e8b653fcda814232b2704f2f5171eb46',
+
+    // Buttons
+    buttonA = document.getElementById( 'keyA' ),
+    buttonB = document.getElementById( 'keyB' ),
+
+    // Variables
+    version = '1.7.1',
+    iframe = document.getElementById( 'api-frame' ),
+    client = new Sketchfab( version, iframe ),
+
+    error = function () {
+      console.error( 'Sketchfab API Error!' );
+    },
+
+    success = function( api ) {
+      api.start();
+      // Wait for viewer to be ready
+      api.addEventListener( 'viewerready', function() {
+        // Get the object nodes
+        api.getNodeMap( function ( err, nodes ) {
+          if ( !err ) {
+            for ( var prop in nodes ) {
+              if ( nodes.hasOwnProperty( prop ) ) {
+                //alert(nodes[prop].instanceID+" : "+nodes[prop].name+" : "+nodes[prop].nodeMask+" : "+nodes[prop].type+" : "+nodes[prop].localMatrix+" ; "+nodes[prop].worldMatrix);
+                if ( nodes[ prop ].name === "mappa" ) { var node_mappa = nodes[prop].instanceID; }
+                if ( nodes[ prop ].name === "torre" ) { var node_torre = nodes[prop].instanceID; }
+              }
+            }
+
+            if (node_mappa) {buttonA.addEventListener( 'click', function() {switch(buttonA.innerHTML) {
+                  case "Planimetria": buttonA.innerHTML = " Planimetria "; buttonA.style.backgroundColor = "#888888"; api.hide(node_mappa); break;
+                  case " Planimetria ": buttonA.innerHTML = "Planimetria"; buttonA.style.backgroundColor = "#1caad9"; api.show(node_mappa); break;
+            } }); }
+
+            if (node_torre) {buttonB.addEventListener( 'click', function() {switch(buttonB.innerHTML) {
+                  //alert("ciao");
+                  case "Torre": buttonB.innerHTML = " Torre "; buttonB.style.backgroundColor = "#888888"; api.hide(node_torre); break;
+                  case " Torre ": buttonB.innerHTML = "Torre"; buttonB.style.backgroundColor = "#1caad9"; api.show(node_torre); break;
+            } }); }
+
+          }
+        });
+
+      });
+    };
+
+    // Load the model
+    client.init( model, {
+      success: success,
+      error: error,
+      ui_infos: 0,
+      ui_controls: 0,
+      ui_stop: 1,
+      watermark: 1,
+      supersample: 0
+    });
+
+  </script>
+
+  <!-- Lastly, some CSS -->
+  <style type="text/css">
+
+    body {
+      margin: 0;
+    }
+
+    iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+    }
+
+    img {
+      width: 130px;
+      opacity: 0.8;
+    }
+
+    /* Button style */
+    .buttons {
+      margin: 35px 5px;
+      right: 0;
+      top: : 0;
+      z-index: 1;
+      position: absolute;
+    }
+
+    button {
+      width: 80px;
+      height: 50px;
+      line-height: 21px;
+      text-transform: capitalize;
+      color: white;
+      opacity: 0.8;
+      border: none;
+      border-radius: 5px;
+      text-align: center;
+      vertical-align: middle;
+      display: block;
+      margin-top: 2px;
+      background: #1caad9;
+    }
+
+    button:hover {opacity: 1;}
+    button:active {font-weight: bold;}
+
+  </style>
+</body>
