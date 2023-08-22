@@ -1,0 +1,269 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Cerebro</title>
+
+  <!-- Insert this script -->
+  <script type="text/javascript" src="https://static.sketchfab.com/api/sketchfab-viewer-1.5.1.js"></script>
+</head>
+
+<body>
+  <iframe style="position:fixed; width:100%; height:100%; border:0" src="" id="api-frame" sandbox="allow-scripts allow-same-origin allow-popups allow-forms" allow="autoplay; fullscreen; vr" allowvr allowfullscreen mozallowfullscreen="true" webkitallowfullscreen="true"></iframe>
+
+  <div class="buttons">
+    <button id="keyA">Slices</button>
+    <button id="keyB">Rostral</button>
+    <button id="keyC"> Caudal </button>
+    <button id="keyD"><==</button>
+    <button id="keyE">==></button>
+  </div>
+
+  <!-- Your new script -->
+  <script>
+    var model = 'ac5d63322a234589982bf3bbad456c7e',
+
+    // Buttons
+    buttonA = document.getElementById( 'keyA' ),
+    buttonB = document.getElementById( 'keyB' ),
+    buttonC = document.getElementById( 'keyC' ),
+    buttonD = document.getElementById( 'keyD' ),
+    buttonE = document.getElementById( 'keyE' ),
+
+    // Variables
+    version = '1.7.1',
+    iframe = document.getElementById( 'api-frame' ),
+    client = new Sketchfab( version, iframe ),
+
+    error = function () {
+      console.error( 'Sketchfab API Error!' );
+    },
+
+    success = function( api ) {
+      api.start();
+      // Wait for viewer to be ready
+      api.addEventListener( 'viewerready', function() {
+        // Get the object nodes
+        api.getNodeMap( function ( err, nodes ) {
+          if ( !err ) {
+            for ( var prop in nodes ) {
+              if ( nodes.hasOwnProperty( prop ) ) {
+                //alert(nodes[prop].instanceID+" : "+nodes[prop].name+" : "+nodes[prop].nodeMask+" : "+nodes[prop].type+" : "+nodes[prop].localMatrix+" ; "+nodes[prop].worldMatrix);
+                if      ( nodes[ prop ].name === "s1" )   { var node_s1 = nodes[prop].instanceID; }
+                else if ( nodes[ prop ].name === "s2" )   { var node_s2 = nodes[prop].instanceID; }
+                else if ( nodes[ prop ].name === "s3" )   { var node_s3 = nodes[prop].instanceID; }
+                else if ( nodes[ prop ].name === "s4" )   { var node_s4 = nodes[prop].instanceID; }
+                else if ( nodes[ prop ].name === "s5" )   { var node_s5 = nodes[prop].instanceID; }
+                else if ( nodes[ prop ].name === "s6" )   { var node_s6 = nodes[prop].instanceID; }
+                else if ( nodes[ prop ].name === "s7" )   { var node_s7 = nodes[prop].instanceID; }
+                else if ( nodes[ prop ].name === "s8" )   { var node_s8 = nodes[prop].instanceID; }
+                else if ( nodes[ prop ].name === "s9" )   { var node_s9 = nodes[prop].instanceID; }
+                else if ( nodes[ prop ].name === "s10" )   { var node_s10 = nodes[prop].instanceID; }
+                else if ( nodes[ prop ].name === "s11" )   { var node_s11 = nodes[prop].instanceID; }
+                else if ( nodes[ prop ].name === "s12" )   { var node_s12 = nodes[prop].instanceID; }
+                else if ( nodes[ prop ].name === "s13" )   { var node_s13 = nodes[prop].instanceID; }
+                else if ( nodes[ prop ].name === "s14" )   { var node_s14 = nodes[prop].instanceID; }
+                else if ( nodes[ prop ].name === "s15" )   { var node_s15 = nodes[prop].instanceID; }
+                else if ( nodes[ prop ].name === "s16" )   { var node_s16 = nodes[prop].instanceID; }
+                else if ( nodes[ prop ].name === "s17" )   { var node_s17 = nodes[prop].instanceID; }
+                else if ( nodes[ prop ].name === "s18" )   { var node_s18 = nodes[prop].instanceID; }
+                else if ( nodes[ prop ].name === "s19" )   { var node_s19 = nodes[prop].instanceID; }
+                else if ( nodes[ prop ].name === "s20" )   { var node_s20 = nodes[prop].instanceID; }
+                else if ( nodes[ prop ].name === "s21" )   { var node_s21 = nodes[prop].instanceID; }
+                else if ( nodes[ prop ].name === "s22" )   { var node_s22 = nodes[prop].instanceID; }
+                else if ( nodes[ prop ].name === "s23" )   { var node_s23 = nodes[prop].instanceID; }
+                else if ( nodes[ prop ].name === "c1" )   { var node_c1 = nodes[prop].instanceID; }
+                else if ( nodes[ prop ].name === "c2" )   { var node_c2 = nodes[prop].instanceID; }
+                else if ( nodes[ prop ].name === "c3" )   { var node_c3 = nodes[prop].instanceID; }
+                else if ( nodes[ prop ].name === "c4" )   { var node_c4 = nodes[prop].instanceID; }
+                else if ( nodes[ prop ].name === "c5" )   { var node_c5 = nodes[prop].instanceID; }
+                else if ( nodes[ prop ].name === "c6" )   { var node_c6 = nodes[prop].instanceID; }
+                else if ( nodes[ prop ].name === "c7" )   { var node_c7 = nodes[prop].instanceID; }
+                else if ( nodes[ prop ].name === "c8" )   { var node_c8 = nodes[prop].instanceID; }
+                else if ( nodes[ prop ].name === "c9" )   { var node_c9 = nodes[prop].instanceID; }
+                else if ( nodes[ prop ].name === "c10" )   { var node_c10 = nodes[prop].instanceID; }
+                else if ( nodes[ prop ].name === "c11" )   { var node_c11 = nodes[prop].instanceID; }
+                else if ( nodes[ prop ].name === "c12" )   { var node_c12 = nodes[prop].instanceID; }
+                else if ( nodes[ prop ].name === "c13" )   { var node_c13 = nodes[prop].instanceID; }
+                else if ( nodes[ prop ].name === "c14" )   { var node_c14 = nodes[prop].instanceID; }
+                else if ( nodes[ prop ].name === "c15" )   { var node_c15 = nodes[prop].instanceID; }
+                else if ( nodes[ prop ].name === "c16" )   { var node_c16 = nodes[prop].instanceID; }
+                else if ( nodes[ prop ].name === "c17" )   { var node_c17 = nodes[prop].instanceID; }
+                else if ( nodes[ prop ].name === "c18" )   { var node_c18 = nodes[prop].instanceID; }
+                else if ( nodes[ prop ].name === "c19" )   { var node_c19 = nodes[prop].instanceID; }
+                else if ( nodes[ prop ].name === "c20" )   { var node_c20 = nodes[prop].instanceID; }
+                else if ( nodes[ prop ].name === "c21" )   { var node_c21 = nodes[prop].instanceID; }
+                else if ( nodes[ prop ].name === "c22" )   { var node_c22 = nodes[prop].instanceID; }
+                else if ( nodes[ prop ].name === "cc" )   { var node_cc = nodes[prop].instanceID; }
+              }
+            }
+
+            /*api.hide(node_s1);*/ api.hide(node_c1);
+            /*api.hide(node_s2);*/ api.hide(node_c2);
+            /*api.hide(node_s3);*/ api.hide(node_c3);
+            /*api.hide(node_s4);*/ api.hide(node_c4);
+            /*api.hide(node_s5);*/ api.hide(node_c5);
+            /*api.hide(node_s6);*/ api.hide(node_c6);
+            /*api.hide(node_s7);*/ api.hide(node_c7);
+            /*api.hide(node_s8);*/ api.hide(node_c8);
+            /*api.hide(node_s9);*/ api.hide(node_c9);
+            /*api.hide(node_s10);*/ api.hide(node_c10);
+            /*api.hide(node_s11); api.hide(node_c11);*/
+            api.hide(node_s12); api.hide(node_c12);
+            api.hide(node_s13); api.hide(node_c13);
+            api.hide(node_s14); api.hide(node_c14);
+            api.hide(node_s15); api.hide(node_c15);
+            api.hide(node_s16); api.hide(node_c16);
+            api.hide(node_s17); api.hide(node_c17);
+            api.hide(node_s18); api.hide(node_c18);
+            api.hide(node_s19); api.hide(node_c19);
+            api.hide(node_s20); api.hide(node_c20);
+            api.hide(node_s21); api.hide(node_c21);
+            api.hide(node_s22); api.hide(node_c22);
+            api.hide(node_s23); //api.hide(node_cc);
+
+            index = 11;
+
+            if (node_cc) {buttonA.addEventListener( 'click', function() {switch(buttonA.innerHTML) {
+                  case "Slices": buttonA.innerHTML = " Slices "; buttonA.style.backgroundColor = "#888888"; api.hide(node_cc); break;
+                  case " Slices ": buttonA.innerHTML = "Slices"; buttonA.style.backgroundColor = "#1caad9"; api.show(node_cc); break;
+            } }); }
+
+            buttonB.addEventListener( 'click', function() {switch(buttonB.innerHTML) {
+                  case "Rostral": buttonB.innerHTML = " Rostral "; buttonB.style.backgroundColor = "#888888"; update_display(index); break;
+                  case " Rostral ": buttonB.innerHTML = "Rostral"; buttonB.style.backgroundColor = "#1caad9"; update_display(index); break;
+            } });
+
+            buttonC.addEventListener( 'click', function() {switch(buttonC.innerHTML) {
+                  case "Caudal": buttonC.innerHTML = " Caudal "; buttonC.style.backgroundColor = "#888888"; update_display(index); break;
+                  case " Caudal ": buttonC.innerHTML = "Caudal"; buttonC.style.backgroundColor = "#1caad9"; update_display(index); break;
+            } });
+
+            buttonD.addEventListener( 'click', function() { if (index > 1) {index = index - 1}; update_display(index);});
+
+            buttonE.addEventListener( 'click', function() { if (index < 22) {index = index + 1}; update_display(index);});
+
+            function update_display(i) {
+              if (i == 1) {api.show(node_c1)} else {api.hide(node_c1)};
+              if (i == 2) {api.show(node_c2)} else {api.hide(node_c2)};
+              if (i == 3) {api.show(node_c3)} else {api.hide(node_c3)};
+              if (i == 4) {api.show(node_c4)} else {api.hide(node_c4)};
+              if (i == 5) {api.show(node_c5)} else {api.hide(node_c5)};
+              if (i == 6) {api.show(node_c6)} else {api.hide(node_c6)};
+              if (i == 7) {api.show(node_c7)} else {api.hide(node_c7)};
+              if (i == 8) {api.show(node_c8)} else {api.hide(node_c8)};
+              if (i == 9) {api.show(node_c9)} else {api.hide(node_c9)};
+              if (i == 10) {api.show(node_c10)} else {api.hide(node_c10)};
+              if (i == 11) {api.show(node_c11)} else {api.hide(node_c11)};
+              if (i == 12) {api.show(node_c12)} else {api.hide(node_c12)};
+              if (i == 13) {api.show(node_c13)} else {api.hide(node_c13)};
+              if (i == 14) {api.show(node_c14)} else {api.hide(node_c14)};
+              if (i == 15) {api.show(node_c15)} else {api.hide(node_c15)};
+              if (i == 16) {api.show(node_c16)} else {api.hide(node_c16)};
+              if (i == 17) {api.show(node_c17)} else {api.hide(node_c17)};
+              if (i == 18) {api.show(node_c18)} else {api.hide(node_c18)};
+              if (i == 19) {api.show(node_c19)} else {api.hide(node_c19)};
+              if (i == 20) {api.show(node_c20)} else {api.hide(node_c20)};
+              if (i == 21) {api.show(node_c21)} else {api.hide(node_c21)};
+              if (i == 22) {api.show(node_c22)} else {api.hide(node_c22)};
+
+              if ((buttonC.innerHTML == "Caudal" && i < 1) || (buttonB.innerHTML == "Rostral" && i >= 1)) {api.show(node_s1)} else {api.hide(node_s1)};
+              if ((buttonC.innerHTML == "Caudal" && i < 2) || (buttonB.innerHTML == "Rostral" && i >= 2)) {api.show(node_s2)} else {api.hide(node_s2)};
+              if ((buttonC.innerHTML == "Caudal" && i < 3) || (buttonB.innerHTML == "Rostral" && i >= 3)) {api.show(node_s3)} else {api.hide(node_s3)};
+              if ((buttonC.innerHTML == "Caudal" && i < 4) || (buttonB.innerHTML == "Rostral" && i >= 4)) {api.show(node_s4)} else {api.hide(node_s4)};
+              if ((buttonC.innerHTML == "Caudal" && i < 5) || (buttonB.innerHTML == "Rostral" && i >= 5)) {api.show(node_s5)} else {api.hide(node_s5)};
+              if ((buttonC.innerHTML == "Caudal" && i < 6) || (buttonB.innerHTML == "Rostral" && i >= 6)) {api.show(node_s6)} else {api.hide(node_s6)};
+              if ((buttonC.innerHTML == "Caudal" && i < 7) || (buttonB.innerHTML == "Rostral" && i >= 7)) {api.show(node_s7)} else {api.hide(node_s7)};
+              if ((buttonC.innerHTML == "Caudal" && i < 8) || (buttonB.innerHTML == "Rostral" && i >= 8)) {api.show(node_s8)} else {api.hide(node_s8)};
+              if ((buttonC.innerHTML == "Caudal" && i < 9) || (buttonB.innerHTML == "Rostral" && i >= 9)) {api.show(node_s9)} else {api.hide(node_s9)};
+              if ((buttonC.innerHTML == "Caudal" && i < 10) || (buttonB.innerHTML == "Rostral" && i >= 10)) {api.show(node_s10)} else {api.hide(node_s10)};
+              if ((buttonC.innerHTML == "Caudal" && i < 11) || (buttonB.innerHTML == "Rostral" && i >= 11)) {api.show(node_s11)} else {api.hide(node_s11)};
+              if ((buttonC.innerHTML == "Caudal" && i < 14) || (buttonB.innerHTML == "Rostral" && i >= 14)) {api.show(node_s14)} else {api.hide(node_s14)};
+              if ((buttonC.innerHTML == "Caudal" && i < 12) || (buttonB.innerHTML == "Rostral" && i >= 12)) {api.show(node_s12)} else {api.hide(node_s12)};
+              if ((buttonC.innerHTML == "Caudal" && i < 13) || (buttonB.innerHTML == "Rostral" && i >= 13)) {api.show(node_s13)} else {api.hide(node_s13)};
+              if ((buttonC.innerHTML == "Caudal" && i < 16) || (buttonB.innerHTML == "Rostral" && i >= 16)) {api.show(node_s16)} else {api.hide(node_s16)};
+              if ((buttonC.innerHTML == "Caudal" && i < 15) || (buttonB.innerHTML == "Rostral" && i >= 15)) {api.show(node_s15)} else {api.hide(node_s15)};
+              if ((buttonC.innerHTML == "Caudal" && i < 17) || (buttonB.innerHTML == "Rostral" && i >= 17)) {api.show(node_s17)} else {api.hide(node_s17)};
+              if ((buttonC.innerHTML == "Caudal" && i < 18) || (buttonB.innerHTML == "Rostral" && i >= 18)) {api.show(node_s18)} else {api.hide(node_s18)};
+              if ((buttonC.innerHTML == "Caudal" && i < 19) || (buttonB.innerHTML == "Rostral" && i >= 19)) {api.show(node_s19)} else {api.hide(node_s19)};
+              if ((buttonC.innerHTML == "Caudal" && i < 20) || (buttonB.innerHTML == "Rostral" && i >= 20)) {api.show(node_s20)} else {api.hide(node_s20)};
+              if ((buttonC.innerHTML == "Caudal" && i < 21) || (buttonB.innerHTML == "Rostral" && i >= 21)) {api.show(node_s21)} else {api.hide(node_s21)};
+              if ((buttonC.innerHTML == "Caudal" && i < 22) || (buttonB.innerHTML == "Rostral" && i >= 22)) {api.show(node_s22)} else {api.hide(node_s22)};
+              if ((buttonC.innerHTML == "Caudal" && i < 23) || (buttonB.innerHTML == "Rostral" && i >= 23)) {api.show(node_s23)} else {api.hide(node_s23)};
+
+              return;
+            }
+
+          }
+        });
+
+      });
+    };
+
+    // Load the model
+    client.init( model, {
+      success: success,
+      error: error,
+      ui_infos: 0,
+      ui_controls: 0,
+      ui_stop: 1,
+      watermark: 1,
+      supersample: 0
+    });
+
+  </script>
+
+  <!-- Lastly, some CSS -->
+  <style type="text/css">
+
+    body {
+      margin: 0;
+    }
+
+    iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+    }
+
+    img {
+      width: 130px;
+      opacity: 0.8;
+    }
+
+    /* Button style */
+    .buttons {
+      margin: 35px 5px;
+      right: 0;
+      top: : 0;
+      z-index: 1;
+      position: absolute;
+    }
+
+    button {
+      width: 200px;
+      height: 50px;
+      line-height: 21px;
+      text-transform: capitalize;
+      color: white;
+      opacity: 0.8;
+      border: none;
+      border-radius: 5px;
+      text-align: center;
+      vertical-align: middle;
+      display: block;
+      margin-top: 2px;
+      background: #1caad9;
+    }
+
+    button:hover {opacity: 1;}
+    button:active {font-weight: bold;}
+
+    #keyB {width: 48%; display: inline;}
+    #keyC {width: 49%; display: inline; background: #888888;}
+    #keyD {width: 48%; display: inline;}
+    #keyE {width: 49%; display: inline;}
+
+  </style>
+</body>
