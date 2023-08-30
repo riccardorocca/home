@@ -53,18 +53,20 @@
         api.getNodeMap( function ( err, nodes ) {
           if ( !err ) {
             for ( var prop in nodes ) {
-              if ( nodes.hasOwnProperty( prop ) ) {
+              if ( nodes.hasOwnProperty(prop) ) {
                 //alert(nodes[prop].instanceID+" : "+nodes[prop].name+" : "+nodes[prop].nodeMask+" : "+nodes[prop].type+" : "+nodes[prop].localMatrix+" ; "+nodes[prop].worldMatrix);
 
-                if ( nodes[ prop ].name === "cc" )   { var cuts_panel = nodes[prop].instanceID; }
+                if ( nodes[prop].name === "cc" )   { var cuts_panel = nodes[prop].instanceID; }
 
-                for(var i=1; i<=22; i++) {
-                  if ( nodes[ prop ].name === 'c' + i )   { cut[i] = nodes[prop].instanceID; }
+                else {
+                  var n1 = nodes[prop].name.substring(0,1);
+                  var n = Number(nodes[prop].name.substring(1));
+                  if (!Number.isNaN(n)) {
+                    if (n1 === 'c') {cut[n] = nodes[prop].instanceID;}
+                    else if (n1 === 's') {slice[n] = nodes[prop].instanceID;}
+                  }
                 }
 
-                for(var i=1; i<=23; i++) {
-                  if ( nodes[ prop ].name === 's' + i )   { slice[i] = nodes[prop].instanceID; }
-                }
               }
             }
 
@@ -73,7 +75,7 @@
             for(var i=1; i<=22; i++) { if (i != index) {api.hide(cut[i]); }}
             for(var i=1; i<=23; i++) { if (i > index) {api.hide(slice[i]); }}
 
-            if (cuts) {buttonA.addEventListener( 'click', function() {switch(buttonA.innerHTML) {
+            if (cuts_panel) {buttonA.addEventListener( 'click', function() {switch(buttonA.innerHTML) {
                   case "Slices": buttonA.innerHTML = " Slices "; buttonA.style.backgroundColor = "#888888"; api.hide(cuts_panel); break;
                   case " Slices ": buttonA.innerHTML = "Slices"; buttonA.style.backgroundColor = "#1caad9"; api.show(cuts_panel); break;
             } }); }
@@ -95,11 +97,12 @@
             function update_display(i) {
 
               for(var j=1; j<=22; j++) {
-                if (i == j) {api.show(cut[j])} else {api.hide(cut[j])};
+                if (cut[j] && i == j) {api.show(cut[j])} else {api.hide(cut[j])};
               }
 
               for(var j=1; j<=23; j++) {
-                if ((buttonC.innerHTML == "Caudal" && i < j) || (buttonB.innerHTML == "Rostral" && i >= j)) {api.show(slice[j])} else {api.hide(slice[j])};
+                if (slice[j] && ((buttonC.innerHTML == "Caudal" && i < j) || (buttonB.innerHTML == "Rostral" && i >= j)))
+                  {api.show(slice[j])} else {api.hide(slice[j])};
               }
 
               return;
