@@ -45,8 +45,10 @@
       // Wait for viewer to be ready
       api.addEventListener( 'viewerready', function() {
         // Get the object nodes
-        var slice = [];
+
+        //define variables to store cuts and slices nodes
         var cut = [];
+        var slice = [];
 
         api.getNodeMap( function ( err, nodes ) {
           if ( !err ) {
@@ -54,7 +56,7 @@
               if ( nodes.hasOwnProperty( prop ) ) {
                 //alert(nodes[prop].instanceID+" : "+nodes[prop].name+" : "+nodes[prop].nodeMask+" : "+nodes[prop].type+" : "+nodes[prop].localMatrix+" ; "+nodes[prop].worldMatrix);
 
-                if ( nodes[ prop ].name === "cc" )   { var cuts = nodes[prop].instanceID; }
+                if ( nodes[ prop ].name === "cc" )   { var cuts_panel = nodes[prop].instanceID; }
 
                 for(var i=1; i<=22; i++) {
                   if ( nodes[ prop ].name === 'c' + i )   { cut[i] = nodes[prop].instanceID; }
@@ -72,8 +74,8 @@
             for(var i=1; i<=23; i++) { if (i > index) {api.hide(slice[i]); }}
 
             if (cuts) {buttonA.addEventListener( 'click', function() {switch(buttonA.innerHTML) {
-                  case "Slices": buttonA.innerHTML = " Slices "; buttonA.style.backgroundColor = "#888888"; api.hide(cuts); break;
-                  case " Slices ": buttonA.innerHTML = "Slices"; buttonA.style.backgroundColor = "#1caad9"; api.show(cuts); break;
+                  case "Slices": buttonA.innerHTML = " Slices "; buttonA.style.backgroundColor = "#888888"; api.hide(cuts_panel); break;
+                  case " Slices ": buttonA.innerHTML = "Slices"; buttonA.style.backgroundColor = "#1caad9"; api.show(cuts_panel); break;
             } }); }
 
             buttonB.addEventListener( 'click', function() {switch(buttonB.innerHTML) {
