@@ -1,0 +1,187 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Cerebro</title>
+
+  <!-- Insert this script -->
+  <script type="text/javascript" src="https://static.sketchfab.com/api/sketchfab-viewer-1.5.1.js"></script>
+</head>
+
+<body>
+  <iframe style="position:fixed; width:100%; height:100%; border:0" src="" id="api-frame" sandbox="allow-scripts allow-same-origin allow-popups allow-forms" allow="autoplay; fullscreen; vr" allowvr allowfullscreen mozallowfullscreen="true" webkitallowfullscreen="true"></iframe>
+
+  <div class="buttons">
+    <button id="keyA"> Rostral </button>
+    <button id="keyB">Caudal</button>
+    <button id="keyC">Limpio</button>
+    <button id="keyD"> Numeros </button>
+    <button id="keyE"> Etiquetas1 </button>
+    <button id="keyF"> Etiquetas2 </button>
+  </div>
+
+  <!-- Your new script -->
+  <script>
+    var model = '30ac370d2bf24a929e351a337c3946cf',
+
+    // Buttons
+    buttonA = document.getElementById( 'keyA' ),
+    buttonB = document.getElementById( 'keyB' ),
+    buttonC = document.getElementById( 'keyC' ),
+    buttonD = document.getElementById( 'keyD' ),
+    buttonE = document.getElementById( 'keyE' ),
+    buttonF = document.getElementById( 'keyF' ),
+
+    // Variables
+    version = '1.7.1',
+    iframe = document.getElementById( 'api-frame' ),
+    client = new Sketchfab( version, iframe ),
+
+    error = function () {
+      console.error( 'Sketchfab API Error!' );
+    },
+
+    success = function( api ) {
+      api.start();
+      // Wait for viewer to be ready
+      api.addEventListener( 'viewerready', function() {
+        // Get the object nodes
+
+        //define variables to store cuts and slices nodes
+        var cut = [];
+        var slice = [];
+
+        api.getNodeMap( function ( err, nodes ) {
+          if ( !err ) {
+            for ( var prop in nodes ) {
+              if ( nodes.hasOwnProperty(prop) ) {
+                //alert(nodes[prop].instanceID+" : "+nodes[prop].name+" : "+nodes[prop].nodeMask+" : "+nodes[prop].type+" : "+nodes[prop].localMatrix+" ; "+nodes[prop].worldMatrix);
+
+                if      ( nodes[prop].name === "cerebro_c7_rostral" )  { var cerebro_rostral = nodes[prop].instanceID; }
+                else if ( nodes[prop].name === "cerebro_c7_caudal" )   { var cerebro_caudal = nodes[prop].instanceID; }
+                else if ( nodes[prop].name === "c7+blank" )            { var corte_limpio = nodes[prop].instanceID; }
+                else if ( nodes[prop].name === "c7+numbers" )          { var corte_numeros = nodes[prop].instanceID; }
+                else if ( nodes[prop].name === "c7+labelsA" )          { var corte_etiquetas1 = nodes[prop].instanceID; }
+                else if ( nodes[prop].name === "c7+labelsB" )          { var corte_etiquetas2 = nodes[prop].instanceID; }
+
+              }
+            }
+
+            api.hide(cerebro_rostral);
+            api.hide(corte_numeros);
+            api.hide(corte_etiquetas1);
+            api.hide(corte_etiquetas2);
+
+            if (cerebro_rostral) {buttonA.addEventListener( 'click', function() {switch(buttonA.innerHTML) {
+                  case "Rostral": buttonA.innerHTML = " Rostral "; buttonA.style.backgroundColor = "#888888"; api.hide(cerebro_rostral); break;
+                  case " Rostral ": buttonA.innerHTML = "Rostral"; buttonA.style.backgroundColor = "#1caad9"; api.show(cerebro_rostral); break;
+            } }); }
+
+            if (cerebro_caudal) {buttonB.addEventListener( 'click', function() {switch(buttonB.innerHTML) {
+                  case "Caudal": buttonB.innerHTML = " Caudal "; buttonB.style.backgroundColor = "#888888"; api.hide(cerebro_caudal); break;
+                  case " Caudal ": buttonB.innerHTML = "Caudal"; buttonB.style.backgroundColor = "#1caad9"; api.show(cerebro_caudal); break;
+            } }); }
+
+            if (corte_limpio) {buttonC.addEventListener( 'click', function() {update_display(1); switch(buttonC.innerHTML) {
+                  case "Limpio": buttonC.innerHTML = " Limpio "; buttonC.style.backgroundColor = "#888888"; api.hide(corte_limpio); break;
+                  case " Limpio ": buttonC.innerHTML = "Limpio"; buttonC.style.backgroundColor = "#1caad9"; api.show(corte_limpio); break;
+            } }); }
+
+            if (corte_numeros) {buttonD.addEventListener( 'click', function() {update_display(2); switch(buttonD.innerHTML) {
+                  case "Numeros": buttonD.innerHTML = " Numeros "; buttonD.style.backgroundColor = "#888888"; api.hide(corte_numeros); break;
+                  case " Numeros ": buttonD.innerHTML = "Numeros"; buttonD.style.backgroundColor = "#1caad9"; api.show(corte_numeros); break;
+            } }); }
+
+            if (corte_etiquetas1) {buttonE.addEventListener( 'click', function() {update_display(3); switch(buttonE.innerHTML) {
+                  case "Etiquetas1": buttonE.innerHTML = " Etiquetas1 "; buttonE.style.backgroundColor = "#888888"; api.hide(corte_etiquetas1); break;
+                  case " Etiquetas1 ": buttonE.innerHTML = "Etiquetas1"; buttonE.style.backgroundColor = "#1caad9"; api.show(corte_etiquetas1); break;
+            } }); }
+
+            if (corte_etiquetas2) {buttonF.addEventListener( 'click', function() {update_display(4); switch(buttonF.innerHTML) {
+                  case "Etiquetas2": buttonF.innerHTML = " Etiquetas2 "; buttonF.style.backgroundColor = "#888888"; api.hide(corte_etiquetas2); break;
+                  case " Etiquetas2 ": buttonF.innerHTML = "Etiquetas2"; buttonF.style.backgroundColor = "#1caad9"; api.show(corte_etiquetas2); break;
+            } }); }
+
+            function update_display(i) {
+              if (i != 1) {api.hide(corte_limpio); buttonC.innerHTML = " Limpio "; buttonC.style.backgroundColor = "#888888";}
+              if (i != 2) {api.hide(corte_numeros); buttonD.innerHTML = " Numeros "; buttonD.style.backgroundColor = "#888888";}
+              if (i != 3) {api.hide(corte_etiquetas1); buttonE.innerHTML = " Etiquetas1 "; buttonE.style.backgroundColor = "#888888";}
+              if (i != 4) {api.hide(corte_etiquetas2); buttonF.innerHTML = " Etiquetas2 "; buttonF.style.backgroundColor = "#888888";}
+              return;
+            }
+
+          }
+        });
+
+      });
+    };
+
+    // Load the model
+    client.init( model, {
+      success: success,
+      error: error,
+      ui_infos: 0,
+      ui_controls: 0,
+      ui_stop: 1,
+      watermark: 1,
+      supersample: 0
+    });
+
+  </script>
+
+  <!-- Lastly, some CSS -->
+  <style type="text/css">
+
+    body {
+      margin: 0;
+    }
+
+    iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+    }
+
+    img {
+      width: 130px;
+      opacity: 0.8;
+    }
+
+    /* Button style */
+    .buttons {
+      margin: 35px 5px;
+      right: 0;
+      top: : 0;
+      z-index: 1;
+      position: absolute;
+    }
+
+    button {
+      width: 200px;
+      height: 50px;
+      line-height: 21px;
+      text-transform: capitalize;
+      color: white;
+      opacity: 0.8;
+      border: none;
+      border-radius: 5px;
+      text-align: center;
+      vertical-align: middle;
+      display: block;
+      margin-top: 2px;
+      background: #1caad9;
+    }
+
+    button:hover {opacity: 1;}
+    button:active {font-weight: bold;}
+
+    #keyA {width: 48%; display: inline; background: #888888;}
+    #keyB {width: 49%; display: inline;}
+    #keyC {width: 23%; display: inline;}
+    #keyD {width: 24%; display: inline; background: #888888;}
+    #keyE {width: 24%; display: inline; background: #888888;}
+    #keyF {width: 23%; display: inline; background: #888888;}
+
+  </style>
+</body>
