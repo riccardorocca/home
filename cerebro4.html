@@ -19,18 +19,18 @@
     <button id="keyD"> Numeros </button>
     <button id="keyE"> Etiquetas1 </button>
     <button id="keyF"> Etiquetas2 </button>
-    <button id="keyT">
-      1: Cuerpo calloso <br>
-      2: Cápsula interna <br>
-      3: Nc. Caudado <br>
-      4: Ventriculo lateral <br>
-      5: Septo <br>
-      6: Comisura blanca <br>
-      7: Quiasma óptico <br>
-      8: Pallidum <br>
-      9: Putamen <br>
-      10: Claustro <br>
-    </button>
+    <table id="tableT">
+      <tr>1: Cuerpo calloso</tr>
+      <tr>2: Cápsula interna</tr>
+      <tr>3: Nc. Caudado </tr>
+      <tr>4: Ventriculo lateral </tr>
+      <tr>5: Septo </tr>
+      <tr>6: Comisura blanca </tr>
+      <tr>7: Quiasma óptico </tr>
+      <tr>8: Pallidum </tr>
+      <tr>9: Putamen </tr>
+      <tr>10: Claustro </tr>
+    </table>
   </div>
 
   <!-- Your new script -->
@@ -44,7 +44,7 @@
     buttonD = document.getElementById( 'keyD' ),
     buttonE = document.getElementById( 'keyE' ),
     buttonF = document.getElementById( 'keyF' ),
-    buttonT = document.getElementById( 'keyT' ),
+    tableT = document.getElementById( 'tableT' ),
 
     // Variables
     version = '1.7.1',
@@ -102,8 +102,8 @@
             } }); }
 
             if (corte_numeros) {buttonD.addEventListener( 'click', function() {update_display(2); switch(buttonD.innerHTML) {
-                  case "Numeros": buttonD.innerHTML = " Numeros "; buttonD.style.backgroundColor = "#888888"; buttonT.style.color = "#FFFFFF"; api.hide(corte_numeros); break;
-                  case " Numeros ": buttonD.innerHTML = "Numeros"; buttonD.style.backgroundColor = "#1caad9"; buttonT.style.color = "#000000"; api.show(corte_numeros); break;
+                  case "Numeros": buttonD.innerHTML = " Numeros "; buttonD.style.backgroundColor = "#888888"; tableT.style.color = "#FFFFFF"; api.hide(corte_numeros); break;
+                  case " Numeros ": buttonD.innerHTML = "Numeros"; buttonD.style.backgroundColor = "#1caad9"; tableT.style.color = "#000000"; api.show(corte_numeros); break;
             } }); }
 
             if (corte_etiquetas1) {buttonE.addEventListener( 'click', function() {update_display(3); switch(buttonE.innerHTML) {
@@ -118,7 +118,7 @@
 
             function update_display(i)  {
               if (i != 1) {api.hide(corte_limpio); buttonC.innerHTML = " Limpio "; buttonC.style.backgroundColor = "#888888";}
-              if (i != 2) {api.hide(corte_numeros); buttonD.innerHTML = " Numeros "; buttonD.style.backgroundColor = "#888888"; buttonT.style.color = "#FFFFFF";}
+              if (i != 2) {api.hide(corte_numeros); buttonD.innerHTML = " Numeros "; buttonD.style.backgroundColor = "#888888"; tableT.style.color = "#FFFFFF";}
               if (i != 3) {api.hide(corte_etiquetas1); buttonE.innerHTML = " Etiquetas1 "; buttonE.style.backgroundColor = "#888888";}
               if (i != 4) {api.hide(corte_etiquetas2); buttonF.innerHTML = " Etiquetas2 "; buttonF.style.backgroundColor = "#888888";}
               return;
@@ -186,6 +186,15 @@
       background: #1caad9;
     }
 
+    table {
+      width: 200px;
+      height: 220px;
+      color: white;
+      background: black;
+      opacity: 0.8;
+      text-align: right;
+    }
+
     button:hover {opacity: 1;}
     button:active {font-weight: bold;}
 
@@ -195,7 +204,7 @@
     #keyD {width: 24%; display: inline; background: #888888;}
     #keyE {width: 24%; display: inline; background: #888888;}
     #keyF {width: 23%; display: inline; background: #888888;}
-    #keyT {width: 98%; height: 220px; color: white; background: white;}
+    #tableT {width: 98%; height: 220px; color: white; background: white;}
 
   </style>
 </body>
