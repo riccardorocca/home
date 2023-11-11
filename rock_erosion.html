@@ -1,0 +1,145 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Rock erosion</title>
+
+  <!-- Insert this script -->
+  <script type="text/javascript" src="https://static.sketchfab.com/api/sketchfab-viewer-1.5.1.js"></script>
+</head>
+
+<body>
+  <iframe style="position:fixed; width:100%; height:100%; border:0" src="" id="api-frame" sandbox="allow-scripts allow-same-origin allow-popups allow-forms" allow="autoplay; fullscreen; vr" allowvr allowfullscreen mozallowfullscreen="true" webkitallowfullscreen="true"></iframe>
+
+  <div class="buttons">
+    <button id="keyD"><==</button>
+    <button id="keyI">1</button>
+    <button id="keyE">==></button>
+  </div>
+
+  <!-- Your new script -->
+  <script>
+    var model = 'a77d52a0defb4ab7b760dbba30a3ac36',
+
+    // Buttons
+    buttonD = document.getElementById( 'keyD' ),
+    buttonI = document.getElementById( 'keyI' ),
+    buttonE = document.getElementById( 'keyE' ),
+
+    // Variables
+    version = '1.7.1',
+    iframe = document.getElementById( 'api-frame' ),
+    client = new Sketchfab( version, iframe ),
+
+    error = function () {
+      console.error( 'Sketchfab API Error!' );
+    },
+
+    success = function( api ) {
+      api.start();
+      // Wait for viewer to be ready
+      api.addEventListener( 'viewerready', function() {
+        // Get the object nodes
+
+        //define variables to store cuts and slices nodes
+        var rock = [];
+
+        api.getNodeMap( function ( err, nodes ) {
+          if ( !err ) {
+            for ( var prop in nodes ) {
+              if ( nodes.hasOwnProperty(prop) ) {
+                //alert(nodes[prop].instanceID+" : "+nodes[prop].name+" : "+nodes[prop].nodeMask+" : "+nodes[prop].type+" : "+nodes[prop].localMatrix+" ; "+nodes[prop].worldMatrix);
+
+                var n = Number(nodes[prop].name.substring(4,5));
+                if (!Number.isNaN(n)) {
+                  //alert(n);
+                  rock[n] = nodes[prop].instanceID;
+                }
+              }
+            }
+
+            index = 1;
+            update_display(index);
+
+            buttonD.addEventListener( 'click', function() { if (index > 1) {index = index - 1}; update_display(index);});
+
+            buttonE.addEventListener( 'click', function() { if (index < 7) {index = index + 1}; update_display(index);});
+
+            function update_display(i) {
+
+              buttonI.innerHTML = i;
+
+              for(var j=1; j<=7; j++) {
+                if (rock[j] && i == j) {api.show(rock[j])} else {api.hide(rock[j])};
+              }
+
+              return;
+            }
+
+          }
+        });
+
+      });
+    };
+
+    // Load the model
+    client.init( model, {
+      success: success,
+      error: error,
+      ui_infos: 0,
+      ui_controls: 0,
+      ui_stop: 1,
+      watermark: 1,
+      supersample: 0
+    });
+
+  </script>
+
+  <!-- Lastly, some CSS -->
+  <style type="text/css">
+
+    body {
+      margin: 0;
+    }
+
+    iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+    }
+
+    /* Button style */
+    .buttons {
+      margin: 35px 5px;
+      right: 0;
+      top:   0;
+      z-index: 1;
+      position: absolute;
+    }
+
+    button {
+      width: 200px;
+      height: 50px;
+      line-height: 21px;
+      text-transform: capitalize;
+      color: white;
+      opacity: 0.8;
+      border: none;
+      border-radius: 5px;
+      text-align: center;
+      vertical-align: middle;
+      display: block;
+      margin-top: 2px;
+      background: #1caad9;
+    }
+
+    button:hover {opacity: 1;}
+    button:active {font-weight: bold;}
+
+    #keyD {width: 60px; display: inline;}
+    #keyI {width: 60px; display: inline; color: black; background: white;}
+    #keyE {width: 60px; display: inline;}
+
+  </style>
+</body>
