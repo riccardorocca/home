@@ -62,13 +62,13 @@
             index = 1;
             update_display(index);
 
-            buttonD.addEventListener( 'click', function() { if (index > 1) {index = index - 1}; update_display(index);});
+            buttonD.addEventListener( 'click', function() { if (index > 1) {index = index - 2}; update_display(index);});
 
-            buttonE.addEventListener( 'click', function() { if (index < 7) {index = index + 1}; update_display(index);});
+            buttonE.addEventListener( 'click', function() { if (index < 7) {index = index + 2}; update_display(index);});
 
             function update_display(i) {
 
-              buttonI.innerHTML = i;
+              buttonI.innerHTML = (i + 1) / 2;
 
               for(var j=1; j<=7; j++) {
                 if (rock[j] && i == j) {api.show(rock[j])} else {api.hide(rock[j])};
