@@ -1,0 +1,174 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>test lights</title>
+
+  <!-- Insert this script -->
+  <script type="text/javascript" src="https://static.sketchfab.com/api/sketchfab-viewer-1.5.1.js"></script>
+</head>
+
+<body>
+  <iframe style="position:fixed; width:100%; height:100%; border:0" src="" id="api-frame" sandbox="allow-scripts allow-same-origin allow-popups allow-forms" allow="autoplay; fullscreen; vr" allowvr allowfullscreen mozallowfullscreen="true" webkitallowfullscreen="true"></iframe>
+
+  <div class="buttons">
+    <button id="keyA">Azimuth +</button>
+    <button id="keyB">Azimuth -</button>
+    <button id="keyC">Elevation +</button>
+    <button id="keyD">Elevation -</button>
+  </div>
+
+  <!-- Your new script -->
+  <script>
+  //var model = '4827a1b541544623ab2b98bbc5632e11',
+    var model = '985f9cdcd72a416d999ee7dc384b2896',
+    elevation = 50,
+    azimuth = 0,
+
+    // Buttons
+    buttonA = document.getElementById( 'keyA' ),
+    buttonB = document.getElementById( 'keyB' ),
+    buttonC = document.getElementById( 'keyC' ),
+    buttonD = document.getElementById( 'keyD' ),
+
+    // Variables
+    version = '1.7.1',
+    iframe = document.getElementById( 'api-frame' ),
+    client = new Sketchfab( version, iframe ),
+
+    error = function () {
+      console.error( 'Sketchfab API Error!' );
+    },
+
+    success = function( api ) {
+      api.start();
+      // Wait for viewer to be ready
+
+      api.addEventListener( 'viewerready', function() {
+        // Spatial Transformation Matrix
+        // https://www.brainvoyager.com/bv/doc/UsersGuide/CoordsAndTransforms/SpatialTransformationMatrices.html
+        // https://math.stackexchange.com/questions/1882276/combining-all-three-rotation-matrices
+        // https://en.wikipedia.org/wiki/Rotation_matrix
+        // https://stackoverflow.com/questions/38096685/how-to-flip-only-one-axis-of-transformation-matrix
+
+        setSun(elevation, azimuth);
+
+        buttonA.addEventListener( 'click', function() {
+          if (azimuth >= 360) {azimuth = 0}
+          azimuth += 10;
+          setSun(elevation, azimuth);
+        });
+
+        buttonB.addEventListener( 'click', function() {
+          if (azimuth <= 0) {azimuth = 360}
+          azimuth -= 10;
+          setSun(elevation, azimuth);
+        });
+
+        buttonC.addEventListener( 'click', function() {
+          elevation += 10;
+          if (elevation > 90) {elevation = 90}
+          setSun(elevation, azimuth);
+        });
+
+        buttonD.addEventListener( 'click', function() {
+          elevation -= 10;
+          if (elevation < 0) {elevation = 0}
+          setSun(elevation, azimuth);
+        });
+
+      });
+
+      function setSun(elevation, azimuth) {
+        elevation = 90 - elevation;
+        azimuth = -azimuth;
+        var sinEl = Math.sin(elevation * Math.PI/180);
+        var cosEl = Math.cos(elevation * Math.PI/180);
+        var sinAz = Math.sin(azimuth * Math.PI/180);
+        var cosAz = Math.cos(azimuth * Math.PI/180);
+
+        var  i0 = (cosAz).toFixed(3);
+        var  i1 = (sinAz).toFixed(3);
+        var  i4 = (-cosEl * sinAz).toFixed(3);
+        var  i5 = (cosEl * cosAz).toFixed(3);
+        var  i6 = (sinEl).toFixed(3);
+        var  i8 = (sinEl * sinAz).toFixed(3);
+        var  i9 = (-sinEl * cosAz).toFixed(3);
+        var i10 = (cosEl).toFixed(3);
+
+        rotomatrix = JSON.parse("["+i0+", "+i1+", 0, 0, "+i4+", "+i5+", "+i6+", 0, "+i8+", "+i9+", "+i10+", 0, 0, 0, 0, 1]");
+
+        api.setLight(1, {
+          matrix: rotomatrix,
+          enabled: true,
+          shadowEnabled: true,
+          color: [1, 1, 1],
+          intensity: 3
+        });
+
+      }
+    };
+
+    // Load the model
+    client.init( model, {
+      success: success,
+      error: error,
+      ui_infos: 0,
+      ui_controls: 0,
+      ui_stop: 1,
+      watermark: 1,
+      supersample: 0
+    });
+
+  </script>
+
+  <!-- Lastly, some CSS -->
+  <style type="text/css">
+
+    body {
+      margin: 0;
+    }
+
+    iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+    }
+
+    img {
+      width: 130px;
+      height: 40px;
+      opacity: 0.8;
+    }
+
+    /* Button style */
+    .buttons {
+      margin: 35px 5px;
+      right: 0;
+      top: : 0;
+      z-index: 1;
+      position: absolute;
+    }
+
+    button {
+      width: 130px;
+      height: 50px;
+      line-height: 21px;
+      text-transform: capitalize;
+      color: white;
+      opacity: 0.8;
+      border: none;
+      border-radius: 5px;
+      text-align: center;
+      vertical-align: middle;
+      display: block;
+      margin-top: 2px;
+      background: #1caad9;
+    }
+
+    button:hover {opacity: 1;}
+    button:active {font-weight: bold;}
+
+  </style>
+</body>
