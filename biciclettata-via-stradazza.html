@@ -50,6 +50,8 @@
 
   <div class="menu">
     <button id="HtmlButton0">INFO</button>
+    <button id="HtmlButton1">I Pilastri</button>
+    <button id="HtmlButton2">Acque di Trebbia</button>
     <button id="HtmlButton5">Mappa Satellitare</button>
   </div>
 
@@ -87,7 +89,7 @@
           'source': 'google-source',
           'paint': {"raster-resampling": "linear"}
         },
-        'Biciclettata'
+        'Acque di Trebbia'
       );
       map.setLayoutProperty('google-satellite', 'visibility', 'none');
 
@@ -113,6 +115,32 @@
     button0.addEventListener( 'click', function() {
       window.open("https://sites.google.com/view/riccardorocca/biciclettata-via-stradazza-info");
     });
+
+    var button1 = document.getElementById( 'HtmlButton1' );
+    button1.className = 'active';
+    button1.onclick = function () {
+      var visibility = map.getLayoutProperty('I Pilastri', 'visibility');
+      if (visibility === 'none') {
+        map.setLayoutProperty('I Pilastri', 'visibility', 'visible');
+        button1.className = 'active';
+      } else {
+        map.setLayoutProperty('I Pilastri', 'visibility', 'none');
+        button1.className = '';
+      }
+    };
+
+    var button2 = document.getElementById( 'HtmlButton2' );
+    button2.className = 'active';
+    button2.onclick = function () {
+      var visibility = map.getLayoutProperty('Acque di Trebbia', 'visibility');
+      if (visibility === 'none') {
+        map.setLayoutProperty('Acque di Trebbia', 'visibility', 'visible');
+        button2.className = 'active';
+      } else {
+        map.setLayoutProperty('Acque di Trebbia', 'visibility', 'none');
+        button2.className = '';
+      }
+    };
 
     var button5 = document.getElementById( 'HtmlButton5' );
     button5.className = 'inactive';
