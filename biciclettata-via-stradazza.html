@@ -50,6 +50,7 @@
 
   <div class="menu">
     <button id="HtmlButton0">INFO</button>
+    <button id="HtmlButton7"><img src="https://riccardorocca.github.io/home/legenda-stradazza.png"></button>
     <button id="HtmlButton1">I Pilastri</button>
     <button id="HtmlButton2">Acque di Trebbia</button>
     <button id="HtmlButton5">Mappa Satellitare</button>
@@ -92,11 +93,6 @@
         'Acque di Trebbia'
       );
       map.setLayoutProperty('google-satellite', 'visibility', 'none');
-
-      map.loadImage('https://riccardorocca.github.io/Ferrovia-Piacenza-Bettola/circle.png', function (error, image) {
-        if (error) throw error;
-        map.addImage('circle', image);
-      });
 
       // Change the cursor to a pointer when the mouse is over the places layer.
       map.on('mouseenter', 'places', function () {
