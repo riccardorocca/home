@@ -1,0 +1,308 @@
+<!DOCTYPE HTML>
+<html>
+<!--
+Export from Blenter: FBX, Selected Objects, Scale=0.01, Y Forward, Z Up
+Sketchfab:
+  Straighten model: 2Y, Near clipping distance: 0.0001, Background: #405958
+  Lights ON, 1: Spot-White-10, 2: Direction-White, 3: None, ENVIRONMENT OFF
+-->
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Ulaca</title> <!-- Nombre que queremos que salga en la pestaña del navegador -->
+</head>
+
+<body>
+  <iframe style="position:fixed; width:100%; height:100%; border:0" src="" id="api-frame"
+    sandbox="allow-scripts allow-same-origin allow-popups allow-forms" allow="autoplay; fullscreen; vr" allowvr
+    allowfullscreen mozallowfullscreen="true" webkitallowfullscreen="true"></iframe>
+
+  <div class="buttons"> <!--Estos son los botones que salen a la dch de la pantalla -->
+    <!-- <button class="showButton" id="buttonF" onclick="getView()">Get View</button> -->
+    <button class="showButton" id="buttonG1" onclick="setView(1)">Zoom 1</button>
+    <button class="showButton" id="buttonG2" onclick="setView(2)">Zoom 2</button>
+    <button class="showButton" id="buttonG3" onclick="setView(3)">Zoom 3</button>
+    <button class="showButton" id="buttonG4" onclick="setView(4)">Zoom 4</button>
+    <button class="showButton" id="buttonI" onclick="setColors()">Altar Colors</button>
+    <button class="showButton" id="buttonH" onclick="switchLight()">Switch Light</button>
+    <button class="showButton" id="buttonC" onclick="startSun(1)">Sun 1st run</button>
+    <button class="showButton" id="buttonD" onclick="startSun(2)">Sun 2nd run</button>
+    <!-- <button class="showButton" id="buttonE" onclick="startSun(3)">Sun full run</button> -->
+    <!-- <button class="showButton" id="buttonA" onclick="setAzimuth(+.01)">Azimuth +</button> -->
+    <!-- <button class="showButton" id="buttonB" onclick="setAzimuth(-.01)">Azimuth -</button> -->
+  </div>
+
+  <script type="text/javascript" src="https://static.sketchfab.com/api/sketchfab-viewer-1.5.1.js"></script>
+
+  <script>
+    const model = 'ba98acde388c424bbeb97f79d32a60c3'; // Modelo de referencia a Sketchfab,este fichero cuando lo abres irá al modelo de ese código
+
+    const iNodes = {}; // Objeto para guardar nombres de nodos, y si se debe mostrar o no. Ejemplo --> { "A" : { show: true, instanceId: 4} }
+    let apiRef; // Referencia a la api, para poder llamarla fuera del evetListener
+
+    var azimuth;
+
+    //INICIO Sketchfab
+    //Asi se llama a la versión de api que esté actualmente
+    iframe = document.getElementById('api-frame');
+    client = new Sketchfab( iframe);
+
+    error = function () {
+      console.error('Sketchfab API Error!');
+    },
+
+    success = function (api) {
+      apiRef = api; //Aquí ya estamos nombrando a la variable creada por nosotros
+                    //para poder usarla fuera de lo de Sketchfab
+      api.start();
+      // Wait for viewer to be ready
+      api.addEventListener('viewerready', function () {
+        // Get the object nodes
+        api.getNodeMap(function (err, nodes) {
+          if (!err) {
+            for ( const prop in nodes ) {
+              if ( nodes.hasOwnProperty( prop ) ) {
+                const name = nodes[ prop ].name;
+                const type = nodes[ prop ].type;
+                const baseName = name.split('_')[0]; //Nombre base, sin nombre de testura (_...)
+
+                if (name == baseName && type === "MatrixTransform") {
+                  iNodes[name] = {   //Aquí va rellenando nuestro objeto creado arriba
+                    show: true,
+                    instanceId : nodes[prop].instanceID
+                  };
+                }
+
+              };
+            };
+
+            setView(4);
+
+          };
+        });
+
+      });
+    };
+
+    client.init(model, {
+      success: success,
+      error: error,
+      ui_infos: 0,
+      ui_controls: 0,
+      ui_stop: 1,
+      watermark: 1,
+      supersample: 0
+    });
+    //FIN Sketchfab
+
+    // Funciones Propias
+    //creadas para solo tener que llamarlas desde el .HTML
+
+    function showAndHide(nodeName, buttonId) {
+      const btn = document.getElementById(buttonId);
+      iNodes[nodeName].show = !iNodes[nodeName].show;
+
+      if (iNodes[nodeName].show) {
+        btn.classList.replace("hideButton","showButton");
+        apiRef.show(iNodes[nodeName].instanceId)
+      } else {
+        btn.classList.replace("showButton", "hideButton");
+        apiRef.hide(iNodes[nodeName].instanceId)
+      };
+    };
+
+    function getView() {
+      apiRef.getCameraLookAt(function(err, camera) {
+        var Cx = camera.position[0];
+        var Cy = camera.position[1];
+        var Tx = camera.target[0];
+        var Ty = camera.target[1];
+        var azimuth = Math.atan2(Cy-Ty, Cx-Tx);
+        if (win) {win.close()};
+        var win = window.open("", "Title", "toolbar=no,location=no,directories=no,status=no,menubar=no,scrollbars=yes,resizable=yes,width=400,height=20,top="+(screen.height/2)+",left="+(screen.width/2-200));
+        win.document.body.innerHTML = camera.position[0].toFixed(4)+","+camera.position[1].toFixed(4)+","+camera.position[2].toFixed(4)+"\n"+camera.target[0].toFixed(4)+","+camera.target[1].toFixed(4)+","+camera.target[2].toFixed(4)+"\n"+azimuth.toFixed(4);
+      });
+    }
+
+    function setView(view) {
+      switch(view) {
+        case 1:
+          apiRef.setCameraLookAt([8.0351,-15.3209,201.2196], [8.0518,-18.2936,11.9875], 2);
+          break;
+        case 2:
+          apiRef.setCameraLookAt([-1.9061,7.0865,17.9386], [8.0518,-18.2936,11.9875], 2);
+          break;
+        case 3:
+          apiRef.setCameraLookAt([-0.1138,0.0143,14.4885], [-0.0224,-0.1284,14.3014], 2);
+          break;
+        case 4:
+          apiRef.setCameraLookAt([-0.0984,-0.0404,14.3655], [-0.0443,-0.1430,14.3714], 2);
+          break;
+      }
+      azimuth = 2.56;
+      setSun();
+    }
+
+    function switchLight() {
+      const btn = document.getElementById("buttonH");
+      apiRef.getLight(1, function(err, state) {
+        if (state.enabled == true) {
+          btn.classList.replace("showButton","hideButton");
+          apiRef.setLight(1, {enabled: false});
+        }
+        else {
+          btn.classList.replace("hideButton","showButton");
+          apiRef.setLight(1, {enabled: true});
+        }
+      });
+    }
+
+    function setColors() {
+      const btn = document.getElementById("buttonI");
+      apiRef.getMaterialList(function (err, materials) {
+        for (var i = 0; i < materials.length; i++) {
+          if (materials[i].name == "altar 3D") {
+            var m = materials[i];
+            if (m.channels.AlbedoPBR.factor == 0.0) {
+              btn.classList.replace("hideButton","showButton");
+              m.channels.AlbedoPBR.factor = 1.0;
+            }
+            else {
+              btn.classList.replace("showButton","hideButton");
+              m.channels.AlbedoPBR.factor = 0.0;
+            }
+            apiRef.setMaterial(m);
+          }
+        }
+      });
+    }
+
+    function setAzimuth(increment) {
+      azimuth = azimuth + increment;
+      if (azimuth < 0) {azimuth += 2*Math.PI}
+      if (azimuth >= 2*Math.PI) {azimuth -= 2*Math.PI}
+      setSun();
+    }
+
+    function startSun(run) {
+      //Bucle: cada 0.1 secundos hace avanzar el sol
+      var finalAzimuth;
+      if (run == 1) { azimuth = 2.1; finalAzimuth = 2.55}
+      if (run == 2) { azimuth = 2.55; finalAzimuth = 3.4}
+      if (run == 3) { azimuth = 2.1; finalAzimuth = 4.2}
+      apiRef.show(iNodes["sol"].instanceId);
+      var intervalId = setInterval(function() {
+        azimuth += Math.PI/500;
+        if (azimuth >= finalAzimuth) {
+          clearInterval(intervalId);
+          if (run > 1) { apiRef.hide(iNodes["sol"].instanceId) }
+        }
+        setSun();
+      }, 100); //time interval in ms
+    }
+
+    function setSun() {
+      apiRef.show(iNodes["sol"].instanceId);
+
+      var azcos = Math.cos(azimuth);
+      var altitude = 0.1366*Math.pow(azcos,6) - 0.1328*Math.pow(azcos,5) - 0.3801*Math.pow(azcos,4) + 0.4283*Math.pow(azcos,3) + 0.4966*Math.pow(azcos,2) - 1.1601*azcos - 0.6655;
+
+      var d0 = 50000;     //distancia del modelo de sol
+      var x0 = -4.9969;   //coordenada x de la zona del Altar
+      var y0 = -15.0987;  //coordenada y de la zona del Altar
+      var z0 = 1435.7104; //coordenada z de la zona del Altar
+
+      var zSun = z0 + d0 * Math.sin(altitude);
+      var rSun = d0 * Math.cos(altitude);
+      var xSun = x0 + rSun * Math.cos(Math.PI/2 - azimuth);
+      var ySun = y0 + rSun * Math.sin(Math.PI/2 - azimuth);
+      apiRef.translate(iNodes["sol"].instanceId, [xSun, ySun, zSun], 1.0, 'easeOutQuad');
+
+      var dLight = 0.99 * d0;
+      var zLight = (z0 + dLight * Math.sin(altitude)) / 100;
+      var rLight = dLight * Math.cos(altitude);
+      var xLight = (x0 + rLight * Math.cos(Math.PI/2 - azimuth)) / 100;
+      var yLight = (y0 + rLight * Math.sin(Math.PI/2 - azimuth)) / 100;
+
+      var altitudeLight = Math.PI/2 - altitude;
+      var azimuthLight = Math.PI - azimuth;
+      var sinEl = Math.sin(altitudeLight);
+      var cosEl = Math.cos(altitudeLight);
+      var sinAz = Math.sin(azimuthLight);
+      var cosAz = Math.cos(azimuthLight);
+
+      var  i0 = (cosAz).toFixed(3);
+      var  i1 = (sinAz).toFixed(3);
+      var  i4 = (-cosEl * sinAz).toFixed(3);
+      var  i5 = (cosEl * cosAz).toFixed(3); 
+      var  i6 = (sinEl).toFixed(3);
+      var  i8 = (sinEl * sinAz).toFixed(3);
+      var  i9 = (-sinEl * cosAz).toFixed(3);
+      var i10 = (cosEl).toFixed(3);
+
+      rotomatrix = JSON.parse("["+i0    +", "+i1    +", 0, 0, "
+                                 +i4    +", "+i5    +", "+i6+", 0, "
+                                 +i8    +", "+i9    +", "+i10+", 0, "
+                                 +xLight+", "+yLight+", "+zLight+", 1]");
+      apiRef.setLight(0, { matrix: rotomatrix });
+
+    }
+
+  </script>
+
+  <style>
+    body {
+      margin: 0;
+    }
+
+    iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+    }
+
+    /* Button style, Para cambiar el estilo de los botones */
+    .buttons {
+      position: absolute;
+      margin: 45px 5px;
+      right: 0;
+      top: 0px;
+      z-index: 1;
+    }
+
+    button {
+      width: 150px;
+      height: 38px;
+      line-height: 21px;
+      text-transform: capitalize;
+      color: white;
+      opacity: 0.8;
+      border: none;
+      border-radius: 5px;
+      text-align: center;
+      display: block;
+      margin-top: 2px;
+    }
+
+    /* Para poder elegir el color del boton cuando se enciende */
+    .showButton {
+      background: #1caad9;
+    }
+
+    /* Para poder elegir el color del boton cuando se apaga */
+    .hideButton {
+      background: #888888;
+    }
+
+    /*Esto hace que cuando pasa el raton por encima se ilumine levemente el botón*/
+    button:hover {
+      opacity: 1;
+    }
+
+    button:active {
+      font-weight: bold;
+    }
+  </style>
+</body>
+</html>
