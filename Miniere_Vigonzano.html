@@ -1,0 +1,248 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Sketchfab Viewer API example</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+
+  <!-- Insert this script -->
+  <script type="text/javascript" src="https://static.sketchfab.com/api/sketchfab-viewer-1.5.1.js"></script>
+</head>
+
+<body>
+  <iframe style="position:fixed; width:100%; height:100%; border:0" src="" id="api-frame" sandbox="allow-scripts allow-same-origin allow-popups allow-forms" allow="autoplay; fullscreen; vr" allowvr allowfullscreen mozallowfullscreen="true" webkitallowfullscreen="true"></iframe>
+
+  <div class="buttons">
+    <button id="keyA1"><span class="material-symbols-outlined">radio_button_checked</span></button>
+    <button id="keyA2"><span class="material-symbols-outlined">radio_button_partial</span></button>
+    <button id="keyA3"><span class="material-symbols-outlined">radio_button_unchecked</span></button>
+    <br>
+    <button id="keyE"><span class="material-symbols-outlined">zoom_out_map</span></button>
+    <button id="keyF"><span class="material-symbols-outlined">recenter</span></button>
+    <br>
+    <button id="keyC"><span class="material-symbols-outlined">keyboard_double_arrow_left</span></button>
+    <button id="keyD"><span class="material-symbols-outlined">keyboard_double_arrow_right</span></button>
+    <!-- <button id="keyK">Camera</button> -->
+  </div>
+
+  <!-- Your new script -->
+  <script>
+    var model = '544d2f6cfb7b461199b81324b8ca2a46',
+
+    // Buttons
+    buttonA1 = document.getElementById( 'keyA1' ),
+    buttonA2 = document.getElementById( 'keyA2' ),
+    buttonA3 = document.getElementById( 'keyA3' ),
+    buttonC = document.getElementById( 'keyC' ),
+    buttonD = document.getElementById( 'keyD' ),
+    buttonE = document.getElementById( 'keyE' ),
+    buttonF = document.getElementById( 'keyF' ),
+    //buttonK = document.getElementById( 'keyK' ),
+
+    // Variables
+    version = '1.7.1',
+    iframe = document.getElementById( 'api-frame' ),
+    client = new Sketchfab( version, iframe ),
+
+    error = function () {
+      console.error( 'Sketchfab API Error!' );
+    },
+
+    success = function( api ) {
+      api.start();
+      // Wait for viewer to be ready
+      api.addEventListener( 'viewerready', function() {
+
+/*
+        //Muestra coordenadas y azimuth de la cámara
+        buttonK.addEventListener( 'click', function() {
+          api.getCameraLookAt(function(err, camera) {
+            var Cx = camera.position[0];
+            var Cy = camera.position[1];
+            var Tx = camera.target[0];
+            var Ty = camera.target[1];
+            var azimuth = Math.atan2(Cy-Ty, Cx-Tx);
+            if (win) {win.close()};
+            var win = window.open("", "Title", "toolbar=no,location=no,directories=no,status=no,menubar=no,scrollbars=yes,resizable=yes,width=400,height=20,top="+(screen.height/2)+",left="+(screen.width/2-200));
+            win.document.body.innerHTML = camera.position[0].toFixed(4)+","+camera.position[1].toFixed(4)+","+camera.position[2].toFixed(4)+"\n"+camera.target[0].toFixed(4)+","+camera.target[1].toFixed(4)+","+camera.target[2].toFixed(4)+"\n"+azimuth.toFixed(4);
+          });
+        });
+*/
+
+        buttonE.addEventListener( 'click', function() {
+          api.setCameraLookAt([-76.71,-111.10,89.29], [-2.47,-27.67,-52.80], 2);
+        });
+
+        buttonF.addEventListener( 'click', function() {
+          api.setCameraLookAt([-15.74,-16.67,-23.61], [-15.45,-16.32,-52.79], 2);
+        });
+
+        var XYZ = [];
+        XYZ.push([-1.25, -36.81, -56.97]);
+        XYZ.push([-3.45, -34.77, -56.97]);
+        XYZ.push([-7.19, -31.13, -56.97]);
+        XYZ.push([-11.22, -27.71, -56.97]);
+        XYZ.push([-16.84, -25.38, -56.97]);
+        XYZ.push([-20.33, -23.09, -56.97]);
+        XYZ.push([-23.62, -20.00, -56.97]);
+        XYZ.push([-25.17, -15.61, -56.97]);
+        XYZ.push([-25.17, -15.61, -56.67]);
+        XYZ.push([-25.54, -10.91, -56.97]);
+        XYZ.push([-24.59, -8.04, -56.97]);
+        XYZ.push([-21.43, -8.10, -56.97]);
+        XYZ.push([-18.39, -8.60, -56.97]);
+        XYZ.push([-17.72, -9.23, -56.97]);
+        XYZ.push([-18.20, -13.06, -56.97]);
+        XYZ.push([-16.44, -16.54, -56.97]);
+        XYZ.push([-19.53, -19.48, -56.97]);
+        XYZ.push([-22.53, -21.16, -56.97]);
+        XYZ.push([-19.91, -23.42, -56.97]);
+        XYZ.push([-16.50, -25.53, -56.97]);
+        XYZ.push([-11.60, -27.45, -56.97]);
+        XYZ.push([-7.87, -30.40, -56.97]);
+        XYZ.push([-3.93, -34.33, -56.97]);
+        XYZ.push([-1.84, -36.19, -56.97]);
+
+        i = 0
+        N = XYZ.length;
+
+        buttonC.addEventListener( 'click', function() {
+          if (i < N-2) { i++ }
+          else {i = 1}
+          api.setCameraLookAt(XYZ[i], XYZ[i+1], 2);
+        });
+
+        buttonD.addEventListener( 'click', function() {
+          if (i > 1) { i-- }
+          else {i = N-2}
+          api.setCameraLookAt(XYZ[i], XYZ[i+1], 2);
+        });
+
+        // Get the materials
+        api.getMaterialList(function(err,materials){
+          if ( !err ) {
+            for (var i=0; i<materials.length; i++){
+              if(materials[i].name == "Topography_texture"){
+                var material_Topography = materials[i];
+              };
+            };
+
+            if ( material_Topography ) {
+              material_Topography.channels.Opacity.enable = true;
+              material_Topography.channels.Opacity.factor = 1;
+              api.setMaterial(material_Topography);
+              // Add button event
+              buttonA1.addEventListener( 'click', function() {
+                material_Topography.channels.Opacity.factor = 1;
+                api.setMaterial(material_Topography);
+                buttonA1.style.backgroundColor = "#1caad9";
+                buttonA2.style.backgroundColor = "#888888";
+                buttonA3.style.backgroundColor = "#888888";
+              });
+              buttonA2.addEventListener( 'click', function() {
+                material_Topography.channels.Opacity.factor = 0.1;
+                api.setMaterial(material_Topography);
+                buttonA1.style.backgroundColor = "#888888";
+                buttonA2.style.backgroundColor = "#1caad9";
+                buttonA3.style.backgroundColor = "#888888";
+              });
+              buttonA3.addEventListener( 'click', function() {
+                material_Topography.channels.Opacity.factor = 0;
+                api.setMaterial(material_Topography);
+                buttonA1.style.backgroundColor = "#888888";
+                buttonA2.style.backgroundColor = "#888888";
+                buttonA3.style.backgroundColor = "#1caad9";
+              });
+            }
+
+          }
+        });
+
+      });
+    };
+
+    // Load the model
+    client.init( model, {
+      success: success,
+      error: error,
+      ui_infos: 0,
+      ui_controls: 0,
+      ui_stop: 1,
+      watermark: 1,
+      supersample: 0
+    });
+
+  </script>
+
+  <!-- Lastly, some CSS -->
+  <style type="text/css">
+
+    body {
+      margin: 0;
+    }
+
+    iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+    }
+
+    /* Button style */
+    .buttons {
+      width: 150px;
+      margin: 35px 5px;
+      right: 0;
+      top: : 0;
+      z-index: 1;
+      position: absolute;
+    }
+
+    button {
+      height: 25px;
+      line-height: 21px;
+      text-transform: capitalize;
+      color: white;
+      opacity: 0.8;
+      border: none;
+      border-radius: 5px;
+      text-align: center;
+      vertical-align: middle;
+      display: block;
+      margin-top: 2px;
+      background: #1caad9;
+    }
+
+    button:hover {
+      opacity: 1;
+    }
+
+    button:active {
+      font-weight: bold;
+    }
+
+    #keyA1 {
+      background: #1caad9;
+      width: 31%;
+      display: inline;
+    }
+
+    #keyA2 {
+      background: #888888;
+      width: 32%;
+      display: inline;
+    }
+
+    #keyA3 {
+      background: #888888;
+      width: 31%;
+      display: inline;
+    }
+
+    #keyC {width: 48%; display: inline;}
+    #keyD {width: 49%; display: inline;}
+    #keyE {width: 48%; display: inline;}
+    #keyF {width: 49%; display: inline;}
+
+  </style>
+</body>
