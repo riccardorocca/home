@@ -1,0 +1,166 @@
+<!DOCTYPE HTML>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Marzabotto Astronomica</title> <!-- Nombre que queremos que salga en la pestaña del navegador -->
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+  <iframe style="position:fixed; width:100%; height:100%; border:0" src="" id="api-frame"
+    sandbox="allow-scripts allow-same-origin allow-popups allow-forms" allow="autoplay; fullscreen; vr" allowvr
+    allowfullscreen mozallowfullscreen="true" webkitallowfullscreen="true"></iframe>
+
+  <div class="buttons"> <!--Estos son los botones que salen a la dch de la pantalla -->
+    <button class="showButton" id="keyA" onclick="showAndHide('keyA')">Combina</button>
+  </div>
+
+  <script type="text/javascript" src="https://static.sketchfab.com/api/sketchfab-viewer-1.5.1.js"></script>
+  <script>
+    const model = 'e1f0cc794e484bea8e10df1876834a9e'; // Modelo de referencia a Sketchfab,este fichero cuando lo abres irá al modelo de ese código
+
+    const filteredNodes = {}; // Objeto para guardar nombres de nodos, y si se debe mostrar o no. Ejemplo --> { "A" : { show: true, instanceId: 4} }
+    let apiRef; // Referencia a la api, para poder llamarla fuera del evetListener
+
+    //INICIO Sketchfab
+    //Asi se llama a la versión de api que esté actualmente
+    iframe = document.getElementById('api-frame');
+    client = new Sketchfab( iframe);
+
+    error = function () {
+      console.error('Sketchfab API Error!');
+    },
+
+    success = function (api) {
+      apiRef = api; //Aquí ya estamos nombrando a la variable creada por nosotros
+                    //para poder usarla fuera de lo de Sketchfab
+      api.start();
+      // Wait for viewer to be ready
+      api.addEventListener('viewerready', function () {
+        // Get the object nodes
+        api.getNodeMap(function (err, nodes) {
+          if (!err) {
+            for ( const prop in nodes ) {
+              if ( nodes.hasOwnProperty( prop ) ) {
+                const name = nodes[ prop ].name;
+                filteredNodes[name] = {   //Aquí va rellenando nuestro objeto creado arriba
+                  show: true,
+                  instanceId : nodes[prop].instanceID
+                };
+              };
+            };
+          };
+        });
+      });
+    };
+
+    client.init(model, {
+      success: success,
+      error: error,
+      ui_infos: 0,
+      ui_controls: 0,
+      ui_stop: 1,
+      watermark: 1,
+      supersample: 0
+    });
+    //FIN Sketchfab
+
+    // Funciones Propias
+    //creadas para solo tener que llamarlas desde el .HTML
+    function showAndHide(buttonId) {
+      const btn = document.getElementById(buttonId);
+      filteredNodes["Sole"].show = !filteredNodes["Sole"].show;
+
+      if (filteredNodes["Sole"].show) {
+        btn.classList.replace("hideButton","showButton");
+        apiRef.show(filteredNodes["Sole"].instanceId);
+        apiRef.show(filteredNodes["Estate - Asse di rotazione"].instanceId);
+        apiRef.show(filteredNodes["Estate - Direzione Tramonto"].instanceId);
+        apiRef.show(filteredNodes["Estate - Globo-Giorno"].instanceId);
+        apiRef.show(filteredNodes["Estate - Globo-Notte"].instanceId);
+        apiRef.show(filteredNodes["Estate - Marzabotto"].instanceId);
+        apiRef.show(filteredNodes["Estate - Parallelo"].instanceId);
+        apiRef.show(filteredNodes["Inverno - Asse di rotazione"].instanceId);
+        apiRef.show(filteredNodes["Inverno - Direzione Alba"].instanceId);
+        apiRef.show(filteredNodes["Inverno - Globo-Giorno"].instanceId);
+        apiRef.show(filteredNodes["Inverno - Globo-Notte"].instanceId);
+        apiRef.show(filteredNodes["Inverno - Marzabotto"].instanceId);
+        apiRef.show(filteredNodes["Inverno - Parallelo"].instanceId);
+      } else {
+        btn.classList.replace("showButton", "hideButton");
+        apiRef.hide(filteredNodes["Sole"].instanceId);
+        apiRef.hide(filteredNodes["Estate - Asse di rotazione"].instanceId);
+        apiRef.hide(filteredNodes["Estate - Direzione Tramonto"].instanceId);
+        apiRef.hide(filteredNodes["Estate - Globo-Giorno"].instanceId);
+        apiRef.hide(filteredNodes["Estate - Globo-Notte"].instanceId);
+        apiRef.hide(filteredNodes["Estate - Marzabotto"].instanceId);
+        apiRef.hide(filteredNodes["Estate - Parallelo"].instanceId);
+        apiRef.hide(filteredNodes["Inverno - Asse di rotazione"].instanceId);
+        apiRef.hide(filteredNodes["Inverno - Direzione Alba"].instanceId);
+        apiRef.hide(filteredNodes["Inverno - Globo-Giorno"].instanceId);
+        apiRef.hide(filteredNodes["Inverno - Globo-Notte"].instanceId);
+        apiRef.hide(filteredNodes["Inverno - Marzabotto"].instanceId);
+        apiRef.hide(filteredNodes["Inverno - Parallelo"].instanceId);
+      };
+    };
+  </script>
+
+  <style type="text/css">
+    body {
+      margin: 0;
+    }
+
+    iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+    }
+
+    /* Button style, Para cambiar el estilo de los botones */
+    .buttons {
+      position: absolute;
+      margin: 10px 5px;
+      right: 0;
+      top: 45px;
+      z-index: 1;
+    }
+
+    button {
+      width: 100px;
+      height: 38px;
+      line-height: 21px;
+      text-transform: capitalize;
+      color: white;
+      opacity: 0.8;
+      border: none;
+      border-radius: 5px;
+      text-align: center;
+      display: block;
+      margin-top: 2px;
+    }
+
+    /* Para poder elegir el color del boton cuando se enciende */
+    .showButton {
+      background: #1caad9;
+    }
+
+    /* Para poder elegir el color del boton cuando se apaga */
+    .hideButton {
+      background: #888888;
+    }
+
+    /*Esto hace que cuando pasa el raton por encima se ilumine levemente el botón*/
+    button:hover {
+      opacity: 1;
+    }
+
+    button:active {
+      font-weight: bold;
+    }
+
+    #keyH {height: 40px;}
+  </style>
+</body>
+</html>
