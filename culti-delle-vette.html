@@ -53,9 +53,10 @@
 
 	<div class="menu">
 		<button id="button00">Vista generale</button>
-		<button id="button01">Penna-Menegosa</button>
-		<button id="button02">Penna-Penice</button>
 		<button id="button03">Penna-Alfeo</button>
+		<button id="button02">Penna-Penice</button>
+		<button id="button01">Penna-Menegosa</button>
+		<button id="button04">da Monte Cimone</button>
 	</div>
 
 	<script>
@@ -65,8 +66,8 @@
 	  const map = new mapboxgl.Map({
 	      container: 'map',
 				style: 'mapbox://styles/ricroc/cm06j1ye900i901pdg4yk65m1',
-	      center: [9.963979, 44.509844],
-				zoom: 8.7,
+	      center: [9.976407, 44.521347],
+				zoom: 8.9,
 				pitch: 0,
 				bearing: 0,
 	  });
@@ -110,10 +111,11 @@
 			 });
 	  });
 
-		button00.onclick = function () {map.setCenter([9.963979, 44.509844]); map.setZoom( 8.7); map.setPitch( 0.0); map.setBearing(  0.0)};
-		button01.onclick = function () {map.setCenter([9.543587, 44.535758]); map.setZoom(12.6); map.setPitch(82.0); map.setBearing( 32.8)};
-		button02.onclick = function () {map.setCenter([9.471107, 44.533469]); map.setZoom(12.9); map.setPitch(85.0); map.setBearing(-17.6)};
-		button03.onclick = function () {map.setCenter([9.402504, 44.559733]); map.setZoom(12.0); map.setPitch(85.0); map.setBearing(-40.8)};
+		button00.onclick = function() {map.flyTo({center: [ 9.976407, 44.521347], zoom:  8.9,	pitch:  0.0, bearing:   0.0, duration: 1000, essential: true})}
+		button01.onclick = function() {map.flyTo({center: [ 9.543587, 44.535758], zoom: 12.6,	pitch: 82.0, bearing:  32.8, duration: 1000, essential: true})}
+		button02.onclick = function() {map.flyTo({center: [ 9.471107, 44.533469], zoom: 12.9,	pitch: 85.0, bearing: -17.6, duration: 1000, essential: true})}
+		button03.onclick = function() {map.flyTo({center: [ 9.402504, 44.559733], zoom: 12.0,	pitch: 85.0, bearing: -40.8, duration: 1000, essential: true})}
+		button04.onclick = function() {map.flyTo({center: [10.666309, 44.248917],	zoom: 12.8,	pitch: 79.5, bearing: -24.3, duration: 1000, essential: true})}
 
 	</script>
 
