@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>Battaglia del trebbia</title>
+	<meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no">
+	<link href="https://api.mapbox.com/mapbox-gl-js/v3.6.0/mapbox-gl.css" rel="stylesheet">
+	<script src="https://api.mapbox.com/mapbox-gl-js/v3.6.0/mapbox-gl.js"></script>
+
+	<style id="compiled-css" type="text/css">
+    body { margin: 0; padding: 0; }
+    #map { position: absolute; top: 0; bottom: 0; width: 100%; }
+    #coordinates {
+        position:absolute; top:10px; left: 10px; height: 30px; width: 380px;
+        background-color: #fff;
+        padding: 15px;
+        font-family: 'Courier New', Courier, monospace;
+    }
+		.menu {
+        position: fixed;
+        z-index: 1;
+        top: 80px;
+        left: 10px;
+        border-radius: 3px;
+        width: 150px;
+        border: 1px solid rgba(0,0,0,0.4);
+        font-family: 'Open Sans', sans-serif;
+        font-size: 16px;
+    }
+
+    button {
+        display: block;
+        margin: 0;
+        padding: 0;
+        padding: 5px;
+        text-decoration: none;
+        border-bottom: 1px solid rgba(0,0,0,0.25);
+        text-align: center;
+        width: 100%;
+        height: 30px;
+    }
+
+    button              {background: #ffffff; color: #404040;}
+    button:hover        {background: #f8f8f8; color: #404040;}
+    button.active       {background: #b3b3ff; color: #ffffff;}
+    button.active:hover {background: #9999ff; color: #ffffff;}
+	</style>
+</head>
+
+<body>
+	<div id="map"></div>
+	<div id="coordinates"></div>
+
+	<div class="menu">
+		<button id="button00">Mappa</button>
+	</div>
+
+	<script>
+		var button01 = document.getElementById( 'button01' );
+
+		mapboxgl.accessToken = 'pk.eyJ1Ijoicmljcm9jIiwiYSI6ImNpanZyajMxYTBhdmZ0dG01bmVsbG8ybzcifQ.RdmNKeWGLY_fqRmUrM9m4w';
+	  const map = new mapboxgl.Map({
+	      container: 'map',
+				style: 'mapbox://styles/ricroc/cm0i49khn004i01qvenuu6bo2',
+	      center: [9.581919, 44.953935],
+				zoom: 11.8,
+				pitch: 0,
+				bearing: 0,
+	  });
+
+		// Add geolocate control to the map.
+		var position = document.getElementById("position");
+
+		map.addControl(
+				new mapboxgl.GeolocateControl({
+						positionOptions: {enableHighAccuracy: true},
+						trackUserLocation: true
+				})
+		);
+
+		map.addControl(new mapboxgl.NavigationControl());
+
+		map.on("load", function() {
+				updateCoordinates();
+		});
+
+		map.on("moveend", function() {
+				updateCoordinates()
+		});
+
+		var updateCoordinates = function() {
+				var settings = 'Long Lat: ' + map.getCenter().lng.toFixed(6) + ', ' + map.getCenter().lat.toFixed(6) + '\nZoom: ' + map.getZoom().toFixed(1) + ' Pitch: ' + map.getPitch().toFixed(1) + ' Bearing: ' + map.getBearing().toFixed(1);
+				coordinates.innerText = settings;
+		};
+
+		// Load map.
+	  map.on('style.load', () => {
+	      map.addSource('mapbox-dem', {
+	          'type': 'raster-dem',
+	          'url': 'mapbox://mapbox.mapbox-terrain-dem-v1',
+	          'tileSize': 512,
+	          'maxzoom': 14
+	      });
+	      // add the DEM source as a terrain layer with exaggerated height
+	      map.setTerrain({ 'source': 'mapbox-dem', 'exaggeration': 5
+
+			 });
+	  });
+
+		button00.onclick = function() {map.flyTo({center: [ 9.976407, 44.521347], zoom:  8.9,	pitch:  0.0, bearing:   0.0, duration: 1000, essential: true})}
+		button01.onclick = function() {map.flyTo({center: [ 9.543587, 44.535758], zoom: 12.6,	pitch: 82.0, bearing:  32.8, duration: 1000, essential: true})}
+		button02.onclick = function() {map.flyTo({center: [ 9.471107, 44.533469], zoom: 12.9,	pitch: 85.0, bearing: -17.6, duration: 1000, essential: true})}
+		button03.onclick = function() {map.flyTo({center: [ 9.402504, 44.559733], zoom: 12.0,	pitch: 85.0, bearing: -40.8, duration: 1000, essential: true})}
+		button04.onclick = function() {map.flyTo({center: [10.666309, 44.248917],	zoom: 12.8,	pitch: 79.5, bearing: -24.3, duration: 1000, essential: true})}
+
+	</script>
+
+</body>
+</html>
