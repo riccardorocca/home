@@ -20,13 +20,16 @@
     <br>
     <button id="keyA">Chiesa</button>
     <button id="keyB"> Sezioni </button>
-    <button id="keyC">Mappa Antica</button>
+    <button id="keyC">Mappa XIX sec.</button>
     <button id="keyD"> Mappa Satellitare </button>
+    <button id="keyF1"><span class="material-symbols-outlined">first_page</span></button>
+    <button id="keyF2"><span class="material-symbols-outlined">chevron_right</span></button>
+    <button id="keyF3"><span class="material-symbols-outlined">chevron_left</span></button>
   </div>
 
   <!-- Your new script -->
   <script>
-    var model = 'f5403d059b67435c970b525135c5a4a8',
+    let model = 'f5403d059b67435c970b525135c5a4a8',
 
     // Buttons
     buttonA = document.getElementById( 'keyA' ),
@@ -36,6 +39,9 @@
     buttonE1 = document.getElementById( 'keyE1' ),
     buttonE2 = document.getElementById( 'keyE2' ),
     buttonE3 = document.getElementById( 'keyE3' ),
+    buttonF1 = document.getElementById( 'keyF1' ),
+    buttonF2 = document.getElementById( 'keyF2' ),
+    buttonF3 = document.getElementById( 'keyF3' ),
 
     // Variables
     version = '1.7.1',
@@ -53,182 +59,282 @@
         // Get the object nodes
         api.getNodeMap( function ( err, nodes ) {
           if ( !err ) {
-            for ( var prop in nodes ) {
+            const chiesa = [];
+            const sezioni = [];
+            const mappaSatellitare = [];
+            const mappaAntica = [];
+
+            for ( let prop in nodes ) {
               if ( nodes.hasOwnProperty( prop ) ) {
                 //alert(nodes[prop].instanceID+" : "+nodes[prop].name+" : "+nodes[prop].nodeMask+" : "+nodes[prop].type+" : "+nodes[prop].localMatrix+" ; "+nodes[prop].worldMatrix);
-                if      ( nodes[ prop ].name === "Campanile sezione" )   { var node_campanile_sezione  = nodes[prop].instanceID; }
-                else if ( nodes[ prop ].name === "Chiesa planimetria" )  { var node_chiesa_planimetria = nodes[prop].instanceID; }
-                else if ( nodes[ prop ].name === "Chiesa Sezione1" )     { var node_chiesa_sezione1    = nodes[prop].instanceID; }
-                else if ( nodes[ prop ].name === "Chiesa Sezione2" )     { var node_chiesa_sezione2    = nodes[prop].instanceID; }
-                else if ( nodes[ prop ].name === "Chiesa Sezione3" )     { var node_chiesa_sezione3    = nodes[prop].instanceID; }
+                if ( nodes[ prop ].name === "Chiesa planimetria" ||
+                     nodes[ prop ].name === "Chiesa Sezione1" ||
+                     nodes[ prop ].name === "Chiesa Sezione2" ||
+                     nodes[ prop ].name === "Chiesa Sezione3" ||
+                     nodes[ prop ].name === "Campanile sezione") { sezioni.push(nodes[prop].instanceID); }
 
-                else if ( nodes[ prop ].name === "Campanile" )           { var node_campanile       = nodes[prop].instanceID; }
-                else if ( nodes[ prop ].name === "Campanile tetto" )     { var node_campanile_tetto = nodes[prop].instanceID; }
-                else if ( nodes[ prop ].name === "Chiesa" )              { var node_chiesa          = nodes[prop].instanceID; }
-                else if ( nodes[ prop ].name === "Facciata" )            { var node_facciata        = nodes[prop].instanceID; }
-                else if ( nodes[ prop ].name === "Piazza" )              { var node_piazza          = nodes[prop].instanceID; }
-                else if ( nodes[ prop ].name === "Pillars" )             { var node_pillars         = nodes[prop].instanceID; }
-                else if ( nodes[ prop ].name === "Portal" )              { var node_portal          = nodes[prop].instanceID; }
-                else if ( nodes[ prop ].name === "Tiburio1" )            { var node_tiburio1        = nodes[prop].instanceID; }
-                else if ( nodes[ prop ].name === "Tiburio2" )            { var node_tiburio2        = nodes[prop].instanceID; }
-                else if ( nodes[ prop ].name === "Tiburio3" )            { var node_tiburio3        = nodes[prop].instanceID; }
-                else if ( nodes[ prop ].name === "Tiburio4" )            { var node_tiburio4        = nodes[prop].instanceID; }
-                else if ( nodes[ prop ].name === "Timpano" )             { var node_timpano         = nodes[prop].instanceID; }
-                else if ( nodes[ prop ].name === "Windows" )             { var node_windows         = nodes[prop].instanceID; }
+                else if ( nodes[ prop ].name === "Campanile" ||
+                          nodes[ prop ].name === "Campanile tetto" ||
+                          nodes[ prop ].name === "Chiesa" ||
+                          nodes[ prop ].name === "Facciata" ||
+                          nodes[ prop ].name === "Piazza" ||
+                          nodes[ prop ].name === "Pillars" ||
+                          nodes[ prop ].name === "Portal" ||
+                          nodes[ prop ].name === "Tiburio1" ||
+                          nodes[ prop ].name === "Tiburio2" ||
+                          nodes[ prop ].name === "Tiburio3" ||
+                          nodes[ prop ].name === "Tiburio4" ||
+                          nodes[ prop ].name === "Timpano" ||
+                          nodes[ prop ].name === "Windows" ) { chiesa.push(nodes[prop].instanceID); }
 
-                else if ( nodes[ prop ].name === "Quartiere" )           { var node_quartiere   = nodes[prop].instanceID; }
-                else if ( nodes[ prop ].name === "Quartiere 3D" )        { var node_quartiere3d = nodes[prop].instanceID; }
-                else if ( nodes[ prop ].name === "Satellitare" )         { var node_satellitare = nodes[prop].instanceID; }
-                else if ( nodes[ prop ].name === "Text1" )               { var node_text1       = nodes[prop].instanceID; }
-                else if ( nodes[ prop ].name === "Text2" )               { var node_text2       = nodes[prop].instanceID; }
-                else if ( nodes[ prop ].name === "Text3" )               { var node_text3       = nodes[prop].instanceID; }
-                else if ( nodes[ prop ].name === "Text4" )               { var node_text4       = nodes[prop].instanceID; }
-                else if ( nodes[ prop ].name === "Text5" )               { var node_text5       = nodes[prop].instanceID; }
+                else if ( nodes[ prop ].name === "Satellitare" ||
+                          nodes[ prop ].name === "Text1" ||
+                          nodes[ prop ].name === "Text2" ||
+                          nodes[ prop ].name === "Text3" ) { mappaSatellitare.push(nodes[prop].instanceID); }
+
+                else if ( nodes[ prop ].name === "Quartiere" ||
+                          nodes[ prop ].name === "Text4" ||
+                          nodes[ prop ].name === "Text5" ) { mappaAntica.push(nodes[prop].instanceID); }
+
               }
             }
 
-            api.hide(node_campanile_sezione);
-            api.hide(node_chiesa_planimetria);
-            api.hide(node_chiesa_sezione1);
-            api.hide(node_chiesa_sezione2);
-            api.hide(node_chiesa_sezione3);
 
-            api.hide(node_satellitare);
-            api.hide(node_text1);
-            api.hide(node_text2);
-            api.hide(node_text3);
+            for (i = 0; i < sezioni.length; i++) {api.hide(sezioni[i]);}
+            for (i = 0; i < mappaSatellitare.length; i++) {api.hide(mappaSatellitare[i]);}
 
-            //buttonA.style.backgroundColor = "#888888";
+            buttonA.addEventListener( 'click', function() {switch(buttonA.innerHTML) {
+                  case "Chiesa":
+                      buttonA.innerHTML = " Chiesa ";
+                      buttonA.style.backgroundColor = "#888888";
+                      for (i = 0; i < chiesa.length; i++) {api.hide(chiesa[i]);}
+                      break;
+                  case " Chiesa ":
+                      buttonA.innerHTML = "Chiesa";
+                      buttonA.style.backgroundColor = "#1caad9";
+                      for (i = 0; i < chiesa.length; i++) {api.show(chiesa[i]);}
+                      break;
+            } });
 
-            if (node_chiesa) {buttonA.addEventListener( 'click', function() {switch(buttonA.innerHTML) {
-                  case "Chiesa": buttonA.innerHTML = " Chiesa "; buttonA.style.backgroundColor = "#888888";
-                      api.hide(node_campanile);
-                      api.hide(node_campanile_tetto);
-                      api.hide(node_chiesa);
-                      api.hide(node_facciata);
-                      api.hide(node_piazza);
-                      api.hide(node_pillars);
-                      api.hide(node_portal);
-                      api.hide(node_tiburio1);
-                      api.hide(node_tiburio2);
-                      api.hide(node_tiburio3);
-                      api.hide(node_tiburio4);
-                      api.hide(node_timpano);
-                      api.hide(node_windows);
+            buttonB.addEventListener( 'click', function() {switch(buttonB.innerHTML) {
+                  case "Sezioni":
+                      buttonB.innerHTML = " Sezioni ";
+                      buttonB.style.backgroundColor = "#888888";
+                      for (i = 0; i < sezioni.length; i++) {api.hide(sezioni[i]);}
                       break;
-                  case " Chiesa ": buttonA.innerHTML = "Chiesa"; buttonA.style.backgroundColor = "#1caad9";
-                      api.show(node_campanile);
-                      api.show(node_campanile_tetto);
-                      api.show(node_chiesa);
-                      api.show(node_facciata);
-                      api.show(node_piazza);
-                      api.show(node_pillars);
-                      api.show(node_portal);
-                      api.show(node_tiburio1);
-                      api.show(node_tiburio2);
-                      api.show(node_tiburio3);
-                      api.show(node_tiburio4);
-                      api.show(node_timpano);
-                      api.show(node_windows);
+                  case " Sezioni ":
+                      buttonB.innerHTML = "Sezioni";
+                      buttonB.style.backgroundColor = "#1caad9";
+                      for (i = 0; i < sezioni.length; i++) {api.show(sezioni[i]);}
                       break;
-            } }); }
+            } });
 
-            if (node_chiesa_planimetria) {buttonB.addEventListener( 'click', function() {switch(buttonB.innerHTML) {
-                  case "Sezioni": buttonB.innerHTML = " Sezioni "; buttonB.style.backgroundColor = "#888888";
-                      api.hide(node_campanile_sezione);
-                      api.hide(node_chiesa_planimetria);
-                      api.hide(node_chiesa_sezione1);
-                      api.hide(node_chiesa_sezione2);
-                      api.hide(node_chiesa_sezione3);
+            buttonC.addEventListener( 'click', function() {switch(buttonC.innerHTML) {
+                  case "Mappa XIX sec.":
+                      buttonC.innerHTML = " Mappa XIX sec. ";
+                      buttonC.style.backgroundColor = "#888888";
+                      for (i = 0; i < mappaAntica.length; i++) {api.hide(mappaAntica[i]);}
                       break;
-                  case " Sezioni ": buttonB.innerHTML = "Sezioni"; buttonB.style.backgroundColor = "#1caad9";
-                      api.show(node_campanile_sezione);
-                      api.show(node_chiesa_planimetria);
-                      api.show(node_chiesa_sezione1);
-                      api.show(node_chiesa_sezione2);
-                      api.show(node_chiesa_sezione3);
+                  case " Mappa XIX sec. ":
+                      buttonC.innerHTML = "Mappa XIX sec.";
+                      buttonC.style.backgroundColor = "#1caad9";
+                      for (i = 0; i < mappaAntica.length; i++) {api.show(mappaAntica[i]);}
                       break;
-            } }); }
+            } });
 
-            if (node_quartiere) {buttonC.addEventListener( 'click', function() {switch(buttonC.innerHTML) {
-                  case "Mappa Antica": buttonC.innerHTML = " Mappa Antica "; buttonC.style.backgroundColor = "#888888";
-                      api.hide(node_quartiere);
-                      api.hide(node_text4);
-                      api.hide(node_text5);
+            buttonD.addEventListener( 'click', function() {switch(buttonD.innerHTML) {
+                  case "Mappa Satellitare":
+                      buttonD.innerHTML = " Mappa Satellitare ";
+                      buttonD.style.backgroundColor = "#888888";
+                      for (i = 0; i < mappaSatellitare.length; i++) {api.hide(mappaSatellitare[i]);}
                       break;
-                  case " Mappa Antica ": buttonC.innerHTML = "Mappa Antica"; buttonC.style.backgroundColor = "#1caad9";
-                      api.show(node_quartiere);
-                      api.show(node_text4);
-                      api.show(node_text5);
+                  case " Mappa Satellitare ":
+                      buttonD.innerHTML = "Mappa Satellitare";
+                      buttonD.style.backgroundColor = "#1caad9";
+                      for (i = 0; i < mappaSatellitare.length; i++) {api.show(mappaSatellitare[i]);}
                       break;
-            } }); }
-
-            if (node_satellitare) {buttonD.addEventListener( 'click', function() {switch(buttonD.innerHTML) {
-                  case "Mappa Satellitare": buttonD.innerHTML = " Mappa Satellitare "; buttonD.style.backgroundColor = "#888888";
-                      api.hide(node_satellitare);
-                      api.hide(node_text1);
-                      api.hide(node_text2);
-                      api.hide(node_text3);
-                      break;
-                  case " Mappa Satellitare ": buttonD.innerHTML = "Mappa Satellitare"; buttonD.style.backgroundColor = "#1caad9";
-                      api.show(node_satellitare);
-                      api.show(node_text1);
-                      api.show(node_text2);
-                      api.show(node_text3);
-                      break;
-            } }); }
+            } });
 
             // Get the materials
+            const edifici3D = [];
             api.getMaterialList(function(err, materials){
               if ( !err ) {
 
-                for (var i=0; i<materials.length; i++){
+                for (let i=0; i<materials.length; i++){
                   if (materials[i].name.substring(0,9) == "GoogleMap") {
                     materials[i].channels.Opacity.enable = true
                     materials[i].channels.Opacity.factor = 0;
                     api.setMaterial(materials[i]);
+                    edifici3D.push(materials[i]);
                   };
                 }
-
-                // Add button event
-                buttonE1.addEventListener( 'click', function() {
-                  for (var i=0; i<materials.length; i++){
-                    if (materials[i].name.substring(0,9) == "GoogleMap") {
-                      materials[i].channels.Opacity.factor = 0;
-                      api.setMaterial(materials[i]);
-                    };
-                  }
-                  buttonE1.style.backgroundColor = "#1caad9";
-                  buttonE2.style.backgroundColor = "#888888";
-                  buttonE3.style.backgroundColor = "#888888";
-                });
-
-                buttonE2.addEventListener( 'click', function() {
-                  for (var i=0; i<materials.length; i++){
-                    if (materials[i].name.substring(0,9) == "GoogleMap") {
-                      materials[i].channels.Opacity.factor = 0.5;
-                      api.setMaterial(materials[i]);
-                    };
-                  }
-                  buttonE1.style.backgroundColor = "#888888";
-                  buttonE2.style.backgroundColor = "#1caad9";
-                  buttonE3.style.backgroundColor = "#888888";
-                });
-
-                buttonE3.addEventListener( 'click', function() {
-                  for (var i=0; i<materials.length; i++){
-                    if (materials[i].name.substring(0,9) == "GoogleMap") {
-                      materials[i].channels.Opacity.factor = 1;
-                      api.setMaterial(materials[i]);
-                    };
-                  }
-                  buttonE1.style.backgroundColor = "#888888";
-                  buttonE2.style.backgroundColor = "#888888";
-                  buttonE3.style.backgroundColor = "#1caad9";
-                });
-
               }
             });
+
+            // Add button event
+            buttonE1.addEventListener( 'click', function() {
+              for (i = 0; i < edifici3D.length; i++) {
+                edifici3D[i].channels.Opacity.factor = 0;
+                api.setMaterial(edifici3D[i]);
+              }
+              buttonE1.style.backgroundColor = "#1caad9";
+              buttonE2.style.backgroundColor = "#888888";
+              buttonE3.style.backgroundColor = "#888888";
+            });
+
+            buttonE2.addEventListener( 'click', function() {
+              for (i = 0; i < edifici3D.length; i++) {
+                edifici3D[i].channels.Opacity.factor = 0.5;
+                api.setMaterial(edifici3D[i]);
+              }
+              buttonE1.style.backgroundColor = "#888888";
+              buttonE2.style.backgroundColor = "#1caad9";
+              buttonE3.style.backgroundColor = "#888888";
+            });
+
+            buttonE3.addEventListener( 'click', function() {
+              for (i = 0; i < edifici3D.length; i++) {
+                edifici3D[i].channels.Opacity.factor = 1;
+                api.setMaterial(edifici3D[i]);
+              }
+              buttonE1.style.backgroundColor = "#888888";
+              buttonE2.style.backgroundColor = "#888888";
+              buttonE3.style.backgroundColor = "#1caad9";
+            });
+/*
+            //alternative block to display camera coordinates with button F1
+            buttonF1.addEventListener( 'click', function() {
+              api.getCameraLookAt(function(err, camera) {
+                const [x1, y1, z1] = camera.position;
+                const [x2, y2, z2] = camera.target;
+                alert(`[${x1.toFixed(3)}, ${y1.toFixed(3)}, ${z1.toFixed(3)}], [${x2.toFixed(3)}, ${y2.toFixed(3)}, ${z2.toFixed(3)}]`);
+              });
+            })
+*/
+            let viewN = 0;
+            const viewLast = 7;
+            let lockF2 = 0;
+            let timer = null;
+
+            buttonF1.addEventListener( 'click', function() {
+              if (lockF2) {
+                clearInterval(timer);
+                lockF2 = 0;
+              }
+              viewN = 1
+              setView(viewN);
+            })
+
+            buttonF2.addEventListener( 'click', function() {
+              if (!lockF2) {
+                if (viewN < viewLast) {viewN += 1}
+                setView(viewN);
+              }
+            })
+
+            buttonF3.addEventListener( 'click', function() {
+              if (lockF2) {
+                clearInterval(timer);
+                lockF2 = 0;
+              }
+              if (viewN > 1) {viewN -= 1}
+              setView(viewN);
+            })
+
+            function setView(viewN) { switch(viewN) {
+              case 1: //Mappa Satellitare
+                buttonF1.style.backgroundColor = "#1caad9"; buttonF2.style.backgroundColor = "#1caad9"; buttonF3.style.backgroundColor = "#888888";
+                for (i = 0; i < chiesa.length; i++) {api.hide(chiesa[i])};                     buttonA.style.backgroundColor = "#888888"; buttonA.innerHTML = " Chiesa ";
+                for (i = 0; i < sezioni.length; i++) {api.hide(sezioni[i])};                   buttonB.style.backgroundColor = "#888888"; buttonB.innerHTML = " Sezioni ";
+                for (i = 0; i < mappaAntica.length; i++) {api.hide(mappaAntica[i])};           buttonC.style.backgroundColor = "#888888"; buttonC.innerHTML = " Mappa XIX sec. ";
+                for (i = 0; i < mappaSatellitare.length; i++) {api.show(mappaSatellitare[i])}; buttonD.style.backgroundColor = "#1caad9"; buttonD.innerHTML = "Mappa Satellitare";
+                for (i = 0; i < edifici3D.length; i++) {edifici3D[i].channels.Opacity.factor = 0; api.setMaterial(edifici3D[i]);}
+                buttonE1.style.backgroundColor = "#1caad9"; buttonE2.style.backgroundColor = "#888888"; buttonE3.style.backgroundColor = "#888888";
+                api.setCameraLookAt([-78.556, -80.213, 170.580], [-4.690, 7.522, -2.491], 2, function(err) {});
+                break;
+              case 2: //Mappa Antica
+                buttonF1.style.backgroundColor = "#1caad9"; buttonF2.style.backgroundColor = "#1caad9"; buttonF3.style.backgroundColor = "#1caad9";
+                for (i = 0; i < chiesa.length; i++) {api.hide(chiesa[i])};                     buttonA.style.backgroundColor = "#888888"; buttonA.innerHTML = " Chiesa ";
+                for (i = 0; i < sezioni.length; i++) {api.hide(sezioni[i])};                   buttonB.style.backgroundColor = "#888888"; buttonB.innerHTML = " Sezioni ";
+                for (i = 0; i < mappaAntica.length; i++) {api.show(mappaAntica[i])};           buttonC.style.backgroundColor = "#1caad9"; buttonC.innerHTML = "Mappa XIX sec.";
+                for (i = 0; i < mappaSatellitare.length; i++) {api.show(mappaSatellitare[i])}; buttonD.style.backgroundColor = "#1caad9"; buttonD.innerHTML = "Mappa Satellitare";
+                for (i = 0; i < edifici3D.length; i++) {edifici3D[i].channels.Opacity.factor = 0; api.setMaterial(edifici3D[i]);}
+                buttonE1.style.backgroundColor = "#1caad9"; buttonE2.style.backgroundColor = "#888888"; buttonE3.style.backgroundColor = "#888888";
+                api.setCameraLookAt([-27.830, -101.923, 91.897], [-11.477, -4.207, -21.070], 2, function(err) {});
+                break;
+              case 3: //Sezioni
+                buttonF1.style.backgroundColor = "#1caad9"; buttonF2.style.backgroundColor = "#1caad9"; buttonF3.style.backgroundColor = "#1caad9";
+                for (i = 0; i < chiesa.length; i++) {api.hide(chiesa[i])};                     buttonA.style.backgroundColor = "#888888"; buttonA.innerHTML = " Chiesa ";
+                for (i = 0; i < sezioni.length; i++) {api.show(sezioni[i])};                   buttonB.style.backgroundColor = "#1caad9"; buttonB.innerHTML = "Sezioni";
+                for (i = 0; i < mappaAntica.length; i++) {api.show(mappaAntica[i])};           buttonC.style.backgroundColor = "#1caad9"; buttonC.innerHTML = "Mappa XIX sec.";
+                for (i = 0; i < mappaSatellitare.length; i++) {api.hide(mappaSatellitare[i])}; buttonD.style.backgroundColor = "#888888"; buttonD.innerHTML = " Mappa Satellitare ";
+                for (i = 0; i < edifici3D.length; i++) {edifici3D[i].channels.Opacity.factor = 0; api.setMaterial(edifici3D[i]);}
+                buttonE1.style.backgroundColor = "#1caad9"; buttonE2.style.backgroundColor = "#888888"; buttonE3.style.backgroundColor = "#888888";
+                api.setCameraLookAt([-13.413, -97.200, 58.561], [-21.067, -17.768, 4.325], 2, function(err) {});
+                break;
+              case 4: //Chiesa
+                buttonF1.style.backgroundColor = "#1caad9"; buttonF2.style.backgroundColor = "#1caad9"; buttonF3.style.backgroundColor = "#1caad9";
+                for (i = 0; i < chiesa.length; i++) {api.show(chiesa[i])};                     buttonA.style.backgroundColor = "#1caad9"; buttonA.innerHTML = "Chiesa";
+                for (i = 0; i < sezioni.length; i++) {api.hide(sezioni[i])};                   buttonB.style.backgroundColor = "#888888"; buttonB.innerHTML = " Sezioni ";
+                for (i = 0; i < mappaAntica.length; i++) {api.show(mappaAntica[i])};           buttonC.style.backgroundColor = "#1caad9"; buttonC.innerHTML = "Mappa XIX sec.";
+                for (i = 0; i < mappaSatellitare.length; i++) {api.hide(mappaSatellitare[i])}; buttonD.style.backgroundColor = "#888888"; buttonD.innerHTML = " Mappa Satellitare ";
+                for (i = 0; i < edifici3D.length; i++) {edifici3D[i].channels.Opacity.factor = 0; api.setMaterial(edifici3D[i]);}
+                buttonE1.style.backgroundColor = "#1caad9"; buttonE2.style.backgroundColor = "#888888"; buttonE3.style.backgroundColor = "#888888";
+                api.setCameraLookAt([-4.042, -97.100, 38.503], [-21.112, -25.163, 9.536], 2, function(err) {});
+                break;
+              case 5: //Edifici trasparenti
+                buttonF1.style.backgroundColor = "#1caad9"; buttonF2.style.backgroundColor = "#1caad9"; buttonF3.style.backgroundColor = "#1caad9";
+                for (i = 0; i < chiesa.length; i++) {api.show(chiesa[i])};                     buttonA.style.backgroundColor = "#1caad9"; buttonA.innerHTML = "Chiesa";
+                for (i = 0; i < sezioni.length; i++) {api.hide(sezioni[i])};                   buttonB.style.backgroundColor = "#888888"; buttonB.innerHTML = " Sezioni ";
+                for (i = 0; i < mappaAntica.length; i++) {api.show(mappaAntica[i])};           buttonC.style.backgroundColor = "#1caad9"; buttonC.innerHTML = "Mappa XIX sec.";
+                for (i = 0; i < mappaSatellitare.length; i++) {api.show(mappaSatellitare[i])}; buttonD.style.backgroundColor = "#1caad9"; buttonD.innerHTML = "Mappa Satellitare";
+                for (i = 0; i < edifici3D.length; i++) {edifici3D[i].channels.Opacity.factor = 0.5; api.setMaterial(edifici3D[i]);}
+                buttonE1.style.backgroundColor = "#888888"; buttonE2.style.backgroundColor = "#1caad9"; buttonE3.style.backgroundColor = "#888888";
+                api.setCameraLookAt([-35.310, -123.312, 99.685], [-6.203, -21.381, 14.233], 2, function(err) {});
+                break;
+              case 6: //Edifici solidi
+                buttonF1.style.backgroundColor = "#1caad9"; buttonF2.style.backgroundColor = "#1caad9"; buttonF3.style.backgroundColor = "#1caad9";
+                for (i = 0; i < chiesa.length; i++) {api.hide(chiesa[i])};                     buttonA.style.backgroundColor = "#888888"; buttonA.innerHTML = " Chiesa ";
+                for (i = 0; i < sezioni.length; i++) {api.hide(sezioni[i])};                   buttonB.style.backgroundColor = "#888888"; buttonB.innerHTML = " Sezioni ";
+                for (i = 0; i < mappaAntica.length; i++) {api.hide(mappaAntica[i])};           buttonC.style.backgroundColor = "#888888"; buttonC.innerHTML = " Mappa XIX sec. ";
+                for (i = 0; i < mappaSatellitare.length; i++) {api.show(mappaSatellitare[i])}; buttonD.style.backgroundColor = "#1caad9"; buttonD.innerHTML = "Mappa Satellitare";
+                for (i = 0; i < edifici3D.length; i++) {edifici3D[i].channels.Opacity.factor = 1; api.setMaterial(edifici3D[i]);}
+                buttonE1.style.backgroundColor = "#888888"; buttonE2.style.backgroundColor = "#888888"; buttonE3.style.backgroundColor = "#1caad9";
+                api.setCameraLookAt([-94.487, -114.934, 91.294], [-7.428, -3.609, 12.582], 2, function(err) {});
+                break;
+              case 7: //Panoramica
+                buttonF1.style.backgroundColor = "#1caad9"; buttonF2.style.backgroundColor = "#888888"; buttonF3.style.backgroundColor = "#1caad9";
+                for (i = 0; i < chiesa.length; i++) {api.show(chiesa[i])};                     buttonA.style.backgroundColor = "#1caad9"; buttonA.innerHTML = "Chiesa";
+                for (i = 0; i < sezioni.length; i++) {api.hide(sezioni[i])};                   buttonB.style.backgroundColor = "#888888"; buttonB.innerHTML = " Sezioni ";
+                for (i = 0; i < mappaAntica.length; i++) {api.show(mappaAntica[i])};           buttonC.style.backgroundColor = "#1caad9"; buttonC.innerHTML = "Mappa XIX sec.";
+                for (i = 0; i < mappaSatellitare.length; i++) {api.hide(mappaSatellitare[i])}; buttonD.style.backgroundColor = "#888888"; buttonD.innerHTML = " Mappa Satellitare ";
+                for (i = 0; i < edifici3D.length; i++) {edifici3D[i].channels.Opacity.factor = 0; api.setMaterial(edifici3D[i]);}
+                buttonE1.style.backgroundColor = "#1caad9"; buttonE2.style.backgroundColor = "#888888"; buttonE3.style.backgroundColor = "#888888";
+                start_timer();
+                break;
+            }}
+
+            function start_timer () {
+              lockF2 = 1;
+              const alpha = -1.3378;
+              let beta = 0;
+              const x2 = -21.1;
+              const y2 = -25.1;
+              const z2 = 9.5;
+              const R = 74;
+              timer = setInterval(function(){
+                beta += Math.PI/100;
+                let x1 = x2 + R * Math.cos(alpha + beta);
+                let y1 = y2 + R * Math.sin(alpha + beta);
+                let z1 = 38.5;
+                api.setCameraLookAt([x1, y1, z1], [x2, y2, z2], 0.1);
+                if ( beta >= 2*Math.PI ) {
+                  lockF2 = 0;
+                  clearInterval(timer);
+                  buttonF1.style.backgroundColor = "#1caad9"; buttonF2.style.backgroundColor = "#1caad9"; buttonF3.style.backgroundColor = "#1caad9";
+                }
+              }, 50); //time interval = 500 ms
+            }
 
           }
         });
@@ -279,7 +385,6 @@
       width: 140px;
       height: 30px;
       line-height: 21px;
-      text-transform: capitalize;
       color: white;
       opacity: 0.8;
       border: none;
@@ -299,5 +404,8 @@
     #keyE1 { background: #1caad9; width: 31%; display: inline; }
     #keyE2 { background: #888888; width: 32%; display: inline; }
     #keyE3 { background: #888888; width: 31%; display: inline; }
+    #keyF1 { background: #1caad9; width: 31%; display: inline; }
+    #keyF2 { background: #1caad9; width: 32%; display: inline; }
+    #keyF3 { background: #888888; width: 31%; display: inline; }
   </style>
 </body>
