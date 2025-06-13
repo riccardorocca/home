@@ -214,6 +214,7 @@
             let viewN = 0;
             const viewLast = 7;
             let lockF2 = 0;
+            let lockF3 = 1;
             let timer = null;
 
             buttonF1.addEventListener( 'click', function() {
@@ -237,82 +238,125 @@
                 clearInterval(timer);
                 lockF2 = 0;
               }
-              if (viewN > 1) {viewN -= 1}
-              setView(viewN);
+              if (!lockF3) {
+                if (viewN > 1) {viewN -= 1}
+                setView(viewN);
+              }
             })
 
             function setView(viewN) { switch(viewN) {
               case 1: //Mappa Satellitare
-                buttonF1.style.backgroundColor = "#1caad9"; buttonF2.style.backgroundColor = "#1caad9"; buttonF3.style.backgroundColor = "#888888";
-                for (i = 0; i < chiesa.length; i++) {api.hide(chiesa[i])};                     buttonA.style.backgroundColor = "#888888"; buttonA.innerHTML = " Chiesa ";
-                for (i = 0; i < sezioni.length; i++) {api.hide(sezioni[i])};                   buttonB.style.backgroundColor = "#888888"; buttonB.innerHTML = " Sezioni ";
-                for (i = 0; i < mappaAntica.length; i++) {api.hide(mappaAntica[i])};           buttonC.style.backgroundColor = "#888888"; buttonC.innerHTML = " Mappa XIX sec. ";
-                for (i = 0; i < mappaSatellitare.length; i++) {api.show(mappaSatellitare[i])}; buttonD.style.backgroundColor = "#1caad9"; buttonD.innerHTML = "Mappa Satellitare";
-                for (i = 0; i < edifici3D.length; i++) {edifici3D[i].channels.Opacity.factor = 0; api.setMaterial(edifici3D[i]);}
-                buttonE1.style.backgroundColor = "#1caad9"; buttonE2.style.backgroundColor = "#888888"; buttonE3.style.backgroundColor = "#888888";
+                setScene("#1caad9", "#1caad9", "#888888", 0, 0, 0, 1, 0); //setF1, setF2, setF3, setChiesa, setSezioni, setMappaAntica, setMappaSatellitare, setTrasparenza
                 api.setCameraLookAt([-78.556, -80.213, 170.580], [-4.690, 7.522, -2.491], 2, function(err) {});
                 break;
               case 2: //Mappa Antica
-                buttonF1.style.backgroundColor = "#1caad9"; buttonF2.style.backgroundColor = "#1caad9"; buttonF3.style.backgroundColor = "#1caad9";
-                for (i = 0; i < chiesa.length; i++) {api.hide(chiesa[i])};                     buttonA.style.backgroundColor = "#888888"; buttonA.innerHTML = " Chiesa ";
-                for (i = 0; i < sezioni.length; i++) {api.hide(sezioni[i])};                   buttonB.style.backgroundColor = "#888888"; buttonB.innerHTML = " Sezioni ";
-                for (i = 0; i < mappaAntica.length; i++) {api.show(mappaAntica[i])};           buttonC.style.backgroundColor = "#1caad9"; buttonC.innerHTML = "Mappa XIX sec.";
-                for (i = 0; i < mappaSatellitare.length; i++) {api.show(mappaSatellitare[i])}; buttonD.style.backgroundColor = "#1caad9"; buttonD.innerHTML = "Mappa Satellitare";
-                for (i = 0; i < edifici3D.length; i++) {edifici3D[i].channels.Opacity.factor = 0; api.setMaterial(edifici3D[i]);}
-                buttonE1.style.backgroundColor = "#1caad9"; buttonE2.style.backgroundColor = "#888888"; buttonE3.style.backgroundColor = "#888888";
+                setScene("#1caad9", "#1caad9", "#1caad9", 0, 0, 1, 1, 0); //setF1, setF2, setF3, setChiesa, setSezioni, setMappaAntica, setMappaSatellitare, setTrasparenza
                 api.setCameraLookAt([-27.830, -101.923, 91.897], [-11.477, -4.207, -21.070], 2, function(err) {});
                 break;
               case 3: //Sezioni
-                buttonF1.style.backgroundColor = "#1caad9"; buttonF2.style.backgroundColor = "#1caad9"; buttonF3.style.backgroundColor = "#1caad9";
-                for (i = 0; i < chiesa.length; i++) {api.hide(chiesa[i])};                     buttonA.style.backgroundColor = "#888888"; buttonA.innerHTML = " Chiesa ";
-                for (i = 0; i < sezioni.length; i++) {api.show(sezioni[i])};                   buttonB.style.backgroundColor = "#1caad9"; buttonB.innerHTML = "Sezioni";
-                for (i = 0; i < mappaAntica.length; i++) {api.show(mappaAntica[i])};           buttonC.style.backgroundColor = "#1caad9"; buttonC.innerHTML = "Mappa XIX sec.";
-                for (i = 0; i < mappaSatellitare.length; i++) {api.hide(mappaSatellitare[i])}; buttonD.style.backgroundColor = "#888888"; buttonD.innerHTML = " Mappa Satellitare ";
-                for (i = 0; i < edifici3D.length; i++) {edifici3D[i].channels.Opacity.factor = 0; api.setMaterial(edifici3D[i]);}
-                buttonE1.style.backgroundColor = "#1caad9"; buttonE2.style.backgroundColor = "#888888"; buttonE3.style.backgroundColor = "#888888";
+                setScene("#1caad9", "#1caad9", "#1caad9", 0, 1, 1, 0, 0); //setF1, setF2, setF3, setChiesa, setSezioni, setMappaAntica, setMappaSatellitare, setTrasparenza
                 api.setCameraLookAt([-13.413, -97.200, 58.561], [-21.067, -17.768, 4.325], 2, function(err) {});
                 break;
               case 4: //Chiesa
-                buttonF1.style.backgroundColor = "#1caad9"; buttonF2.style.backgroundColor = "#1caad9"; buttonF3.style.backgroundColor = "#1caad9";
-                for (i = 0; i < chiesa.length; i++) {api.show(chiesa[i])};                     buttonA.style.backgroundColor = "#1caad9"; buttonA.innerHTML = "Chiesa";
-                for (i = 0; i < sezioni.length; i++) {api.hide(sezioni[i])};                   buttonB.style.backgroundColor = "#888888"; buttonB.innerHTML = " Sezioni ";
-                for (i = 0; i < mappaAntica.length; i++) {api.show(mappaAntica[i])};           buttonC.style.backgroundColor = "#1caad9"; buttonC.innerHTML = "Mappa XIX sec.";
-                for (i = 0; i < mappaSatellitare.length; i++) {api.hide(mappaSatellitare[i])}; buttonD.style.backgroundColor = "#888888"; buttonD.innerHTML = " Mappa Satellitare ";
-                for (i = 0; i < edifici3D.length; i++) {edifici3D[i].channels.Opacity.factor = 0; api.setMaterial(edifici3D[i]);}
-                buttonE1.style.backgroundColor = "#1caad9"; buttonE2.style.backgroundColor = "#888888"; buttonE3.style.backgroundColor = "#888888";
+                setScene("#1caad9", "#1caad9", "#1caad9", 1, 0, 1, 0, 0); //setF1, setF2, setF3, setChiesa, setSezioni, setMappaAntica, setMappaSatellitare, setTrasparenza
                 api.setCameraLookAt([-4.042, -97.100, 38.503], [-21.112, -25.163, 9.536], 2, function(err) {});
                 break;
               case 5: //Edifici trasparenti
-                buttonF1.style.backgroundColor = "#1caad9"; buttonF2.style.backgroundColor = "#1caad9"; buttonF3.style.backgroundColor = "#1caad9";
-                for (i = 0; i < chiesa.length; i++) {api.show(chiesa[i])};                     buttonA.style.backgroundColor = "#1caad9"; buttonA.innerHTML = "Chiesa";
-                for (i = 0; i < sezioni.length; i++) {api.hide(sezioni[i])};                   buttonB.style.backgroundColor = "#888888"; buttonB.innerHTML = " Sezioni ";
-                for (i = 0; i < mappaAntica.length; i++) {api.show(mappaAntica[i])};           buttonC.style.backgroundColor = "#1caad9"; buttonC.innerHTML = "Mappa XIX sec.";
-                for (i = 0; i < mappaSatellitare.length; i++) {api.show(mappaSatellitare[i])}; buttonD.style.backgroundColor = "#1caad9"; buttonD.innerHTML = "Mappa Satellitare";
-                for (i = 0; i < edifici3D.length; i++) {edifici3D[i].channels.Opacity.factor = 0.5; api.setMaterial(edifici3D[i]);}
-                buttonE1.style.backgroundColor = "#888888"; buttonE2.style.backgroundColor = "#1caad9"; buttonE3.style.backgroundColor = "#888888";
+                setScene("#1caad9", "#1caad9", "#1caad9", 1, 0, 1, 1, 0.5); //setF1, setF2, setF3, setChiesa, setSezioni, setMappaAntica, setMappaSatellitare, setTrasparenza
                 api.setCameraLookAt([-35.310, -123.312, 99.685], [-6.203, -21.381, 14.233], 2, function(err) {});
                 break;
               case 6: //Edifici solidi
-                buttonF1.style.backgroundColor = "#1caad9"; buttonF2.style.backgroundColor = "#1caad9"; buttonF3.style.backgroundColor = "#1caad9";
-                for (i = 0; i < chiesa.length; i++) {api.hide(chiesa[i])};                     buttonA.style.backgroundColor = "#888888"; buttonA.innerHTML = " Chiesa ";
-                for (i = 0; i < sezioni.length; i++) {api.hide(sezioni[i])};                   buttonB.style.backgroundColor = "#888888"; buttonB.innerHTML = " Sezioni ";
-                for (i = 0; i < mappaAntica.length; i++) {api.hide(mappaAntica[i])};           buttonC.style.backgroundColor = "#888888"; buttonC.innerHTML = " Mappa XIX sec. ";
-                for (i = 0; i < mappaSatellitare.length; i++) {api.show(mappaSatellitare[i])}; buttonD.style.backgroundColor = "#1caad9"; buttonD.innerHTML = "Mappa Satellitare";
-                for (i = 0; i < edifici3D.length; i++) {edifici3D[i].channels.Opacity.factor = 1; api.setMaterial(edifici3D[i]);}
-                buttonE1.style.backgroundColor = "#888888"; buttonE2.style.backgroundColor = "#888888"; buttonE3.style.backgroundColor = "#1caad9";
+                setScene("#1caad9", "#1caad9", "#1caad9", 0, 0, 0, 1, 1); //setF1, setF2, setF3, setChiesa, setSezioni, setMappaAntica, setMappaSatellitare, setTrasparenza
                 api.setCameraLookAt([-94.487, -114.934, 91.294], [-7.428, -3.609, 12.582], 2, function(err) {});
                 break;
               case 7: //Panoramica
-                buttonF1.style.backgroundColor = "#1caad9"; buttonF2.style.backgroundColor = "#888888"; buttonF3.style.backgroundColor = "#1caad9";
-                for (i = 0; i < chiesa.length; i++) {api.show(chiesa[i])};                     buttonA.style.backgroundColor = "#1caad9"; buttonA.innerHTML = "Chiesa";
-                for (i = 0; i < sezioni.length; i++) {api.hide(sezioni[i])};                   buttonB.style.backgroundColor = "#888888"; buttonB.innerHTML = " Sezioni ";
-                for (i = 0; i < mappaAntica.length; i++) {api.show(mappaAntica[i])};           buttonC.style.backgroundColor = "#1caad9"; buttonC.innerHTML = "Mappa XIX sec.";
-                for (i = 0; i < mappaSatellitare.length; i++) {api.hide(mappaSatellitare[i])}; buttonD.style.backgroundColor = "#888888"; buttonD.innerHTML = " Mappa Satellitare ";
-                for (i = 0; i < edifici3D.length; i++) {edifici3D[i].channels.Opacity.factor = 0; api.setMaterial(edifici3D[i]);}
-                buttonE1.style.backgroundColor = "#1caad9"; buttonE2.style.backgroundColor = "#888888"; buttonE3.style.backgroundColor = "#888888";
+                setScene("#1caad9", "#888888", "#1caad9", 1, 0, 1, 0, 0); //setF1, setF2, setF3, setChiesa, setSezioni, setMappaAntica, setMappaSatellitare, setTrasparenza
                 start_timer();
                 break;
             }}
+
+            function setScene(setF1, setF2, setF3, setChiesa, setSezioni, setMappaAntica, setMappaSatellitare, setTrasparenza) {
+              buttonF1.style.backgroundColor = setF1;
+              buttonF2.style.backgroundColor = setF2;
+              buttonF3.style.backgroundColor = setF3;
+
+              if (setF3 == "#888888") { lockF3 = 1; }
+              else                    { lockF3 = 0; }
+
+              if (setChiesa) {
+                for (i = 0; i < chiesa.length; i++) {api.show(chiesa[i])};
+                buttonA.style.backgroundColor = "#1caad9";
+                buttonA.innerHTML = "Chiesa";
+              }
+              else {
+                for (i = 0; i < chiesa.length; i++) {api.hide(chiesa[i])};
+                buttonA.style.backgroundColor = "#888888";
+                buttonA.innerHTML = " Chiesa ";
+              }
+
+              if (setSezioni) {
+                for (i = 0; i < sezioni.length; i++) {api.show(sezioni[i])};
+                buttonB.style.backgroundColor = "#1caad9";
+                buttonB.innerHTML = "Sezioni";
+              }
+              else {
+                for (i = 0; i < sezioni.length; i++) {api.hide(sezioni[i])};
+                buttonB.style.backgroundColor = "#888888";
+                buttonB.innerHTML = " Sezioni ";
+              }
+
+              if (setMappaAntica) {
+                for (i = 0; i < mappaAntica.length; i++) {api.show(mappaAntica[i])};
+                buttonC.style.backgroundColor = "#1caad9";
+                buttonC.innerHTML = "Mappa XIX sec.";
+              }
+              else {
+                for (i = 0; i < mappaAntica.length; i++) {api.hide(mappaAntica[i])};
+                buttonC.style.backgroundColor = "#888888";
+                buttonC.innerHTML = " Mappa XIX sec. ";
+              }
+
+              if (setMappaSatellitare) {
+                for (i = 0; i < mappaSatellitare.length; i++) {api.show(mappaSatellitare[i])};
+                buttonD.style.backgroundColor = "#1caad9";
+                buttonD.innerHTML = "Mappa Satellitare";
+              }
+              else {
+                for (i = 0; i < mappaSatellitare.length; i++) {api.hide(mappaSatellitare[i])};
+                buttonD.style.backgroundColor = "#888888";
+                buttonD.innerHTML = " Mappa Satellitare ";
+              }
+
+              switch (setTrasparenza) {
+                case 0:
+                  for (i = 0; i < edifici3D.length; i++) {
+                    edifici3D[i].channels.Opacity.factor = 0;
+                    api.setMaterial(edifici3D[i]);
+                  }
+                  buttonE1.style.backgroundColor = "#1caad9";
+                  buttonE2.style.backgroundColor = "#888888";
+                  buttonE3.style.backgroundColor = "#888888";
+                  break;
+                case 0.5:
+                  for (i = 0; i < edifici3D.length; i++) {
+                    edifici3D[i].channels.Opacity.factor = 0.5;
+                    api.setMaterial(edifici3D[i]);
+                  }
+                  buttonE1.style.backgroundColor = "#888888";
+                  buttonE2.style.backgroundColor = "#1caad9";
+                  buttonE3.style.backgroundColor = "#888888";
+                  break;
+                case 1:
+                  for (i = 0; i < edifici3D.length; i++) {
+                    edifici3D[i].channels.Opacity.factor = 1;
+                    api.setMaterial(edifici3D[i]);
+                  }
+                  buttonE1.style.backgroundColor = "#888888";
+                  buttonE2.style.backgroundColor = "#888888";
+                  buttonE3.style.backgroundColor = "#1caad9";
+                  break;
+              }
+            }
 
             function start_timer () {
               lockF2 = 1;
